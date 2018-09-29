@@ -207,6 +207,13 @@
             <!--<version>4.11</version>-->
             <scope>test</scope>
         </dependency>
+        <!--允许不严格的html5格式出现-->
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.22</version>
+        </dependency>
+
         <!-- 添加热部署 -->
         <!--
        <dependency>
