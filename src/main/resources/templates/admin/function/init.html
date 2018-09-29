@@ -1,0 +1,626 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" ></meta>
+	<title>注册</title>
+	<link href="/static/css/gloab.css" rel="stylesheet"></link> 
+	<link href="/static/css/index.css" rel="stylesheet"></link> 
+	
+	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css" />
+	<link rel="stylesheet" href="/static/css/bootstrap-table.css" />
+	<link rel="stylesheet" href="/static/css/bootstrap-treeview.min.css" />
+	<link rel="stylesheet" href="/static/css/jquery.treegrid.min.css" />
+	<link rel="stylesheet" href="/static/font/Font-Awesome-master/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="/static/css/ionicons.min.css" />
+	<link rel="stylesheet" href="/static/assets/adminlte-2.3.7/css/skins/_all-skins.css" />
+	<link rel="stylesheet" href="/static/css/app.css" />
+
+	<script type="text/javascript" src="/static/js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/validateSubnet.js"></script>
+	<script type="text/javascript" src="/static/js/validateMtd.js"></script>
+	
+	<script type="text/javascript" src="/static/js/jquery.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-migrate.min.js"></script>
+	<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/static/js/bootstrap-table.min.js"></script>
+	<script type="text/javascript" src="/static/js/bootstrap-table-zh-CN.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.treegrid.min.js"></script>
+	<script type="text/javascript" src="/static/js/bootstrap-treeview.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="/static/js/additional-methods.min.js"></script>
+	<script type="text/javascript" src="/static/js/messages_zh.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.form.min.js"></script>
+	<script type="text/javascript" src="/static/layer/layer.js"></script>
+	<script type="text/javascript" src="/static/assets/adminlte-2.3.7/js/app.min.js"></script>
+	<script type="text/javascript" src="/static/js/common.js"></script>
+	<style type="text/css">	
+		body,#main-transparent-background::before{
+		   background:url(/static/img/blur-bg.jpg) 0 / cover fixed;
+		}
+		
+		#main-transparent-background{
+		   position:relative;
+		   margin:auto;
+		   width:800px;
+		   margin-top:50px;
+		   margin-bottom:50px;
+		   background:hsla(0,0%,100%,.3);
+   	       overflow:hidden;
+       	   box-shadow: 3px 3px 5px #222222
+		}
+		
+		#main-transparent-background::before {
+		   content:'';
+		   position:absolute;
+		   top:0;right:0;bottom:0;left:0;
+		   filter:blur(10px);
+		   margin:-30px;
+		}
+		.configuration_success
+		{
+			color:white;
+		}
+		.part1 .radioDnsNo
+		{
+			display:inline-block;
+			margin-left:100px;
+		}	
+		.part1 .radioDnsYes
+		{
+			display:inline-block;
+			margin-left:50px;
+		}	
+		
+	</style>
+</head>
+<body class="bgf4">
+	<div id="main-transparent-background" style="width:1100px;margin-left:150px;">
+	<div class="modal fade" id="ModalSubnet" tabindex="-1" role="dialog" aria-labelledby="ModalSubnetLabel"> 
+		<div class="modal-dialog" role="document">	
+			<div class="modal-content">		
+ 				<div class="modal-header">	
+ 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+ 					<h4 class="modal-title" id="ModalSubnetLabel">新增真实子网</h4>				
+ 				</div>	
+ 				<div class="modal-body reg-box" id="verifyCheckSubnet"> 
+ 					<form class="form-add-rip js-ajax-form" action="/admin/function/ripSave" method="post" >
+                        <input type="hidden" name="id" id="id" th:value="${rips.id}" />
+                        <input type="hidden" name="createTime" th:value="${rips.createTime}" />		
+                        				
+	 					<div class="form-group">
+		 					<label for="net">网络名称</label>
+		 					<input type="text" style="width:300px;" name="net" class="form-control requiredMY txt03" id="net" data-valid="isNonEmpty||between:4-20||isUname" data-error="网络名称不能为空||网络名称长度不满足要求||不是合法的网络名称" placeholder="网络名称" th:readonly="${!#strings.equals(rips.id,null)}" th:value="${rips.net}"/>
+                            <span class="ie8 icon-close close hide"></span>
+                            <label class="icon-sucessfill blank hide"></label>
+                            <label class="focus" style="top:38px;"><span>网络名称长度需满足4-20位，字母、数字、下划线的组合，以字母开头</span></label>
+                            <label class="focus valid" style="top:38px;"></label>	 					
+	 					</div>
+	 					<div class="form-group">
+	 						<label for="prefix">域名前缀</label>
+	 						<input type="text" style="width:300px;" name="prefix" class="form-control requiredMY txt03" id="prefix" data-valid="isNonEmpty||between:1-10||isUname" data-error="域名前缀不能为空||域名前缀长度不满足要求||不是合法的域名前缀" placeholder="域名前缀" th:readonly="${!#strings.equals(rips.prefix,null)}" th:value="${rips.prefix}" />
+                            <span class="ie8 icon-close close hide"></span>
+                            <label class="icon-sucessfill blank hide"></label>
+                            <label class="focus" style="margin-top:80px;"><span>域名前缀需满足1-10位，字母、数字、下划线的组合，以字母开头</span></label>
+                            <label class="focus valid" style="margin-top:83px;"></label>		 					
+	 					</div>
+	 					<div class="form-group">
+	 						<label for="startIpString">网络起始地址</label>
+	 						<input type="text" style="width:300px;" name="startIpString" class="form-control requiredMY txt03" id="startIpString" data-valid="isNonEmpty||isAddress" data-error="网络起始地址不能为空||不是合法的IP地址" placeholder="网络起始地址"/>
+                            <span class="ie8 icon-close close hide"></span>
+                            <label class="icon-sucessfill blank hide"></label>
+                            <label class="focus" style="margin-top:160px;"><span>请填写标准IP地址，如192.168.108.100</span></label>
+                            <label class="focus valid" style="margin-top:155px;"></label>		 					
+	 					</div>
+	 					<div class="form-group">	
+	 						<label for="endIpString">网络结束地址</label>	
+						 	<input type="text" name="endIpString"  style="width:300px;" class="form-control requiredMY txt03" id="endIpString"  data-valid="isNonEmpty||isAddress" data-error="网络结束地址不能为空||不是合法的IP地址" placeholder="网络结束地址"/>			
+                            <span class="ie8 icon-close close hide"></span>
+                            <label class="icon-sucessfill blank hide"></label>
+                            <label class="focus" style="margin-top:235px;"><span>请填写标准IP地址，如192.168.108.100</span></label>
+                            <label class="focus valid" style="margin-top:230px;"></label>			 					
+	 					</div>	
+	 					<div class="form-group">	
+	 						<label for="gateway">网关地址</label>	
+						 	<input type="text" name="gateway" style="width:300px;" class="form-control requiredMY txt03" id="gateway"  data-valid="isNonEmpty||isAddress" data-error="网关地址不能为空||不是合法的IP地址" placeholder="网关地址"/>			
+                            <span class="ie8 icon-close close hide"></span>
+                            <label class="icon-sucessfill blank hide"></label>
+                            <label class="focus" style="margin-top:310px;"><span>请填写标准IP地址，如192.168.108.100</span></label>
+                            <label class="focus valid" style="margin-top:305px;"></label>	
+	 					</div>	
+	 					<div class="form-group">	
+	 						<label for="period">真实子网租期</label>	
+						 	<input type="text" name="period"  style="width:300px;" class="form-control requiredMY txt03" id="period" data-valid="isNonEmpty||isInt" data-error="真实子网租期不能为空||不是合法的数字"  placeholder="真实子网租期"/>			
+                            <span class="ie8 icon-close close hide"></span>
+                            <label class="icon-sucessfill blank hide"></label>
+                            <label class="focus" style="margin-top:382px;"><span>请填写整数</span></label>
+                            <label class="focus valid" style="margin-top:377px;"></label>		 					
+	 					</div>	
+	 					<div class="form-group">	
+	 						<label for="virtualPeriod">虚拟地址跳变时间</label>	
+						 	<input type="text" name="virtualPeriod"  style="width:300px;" class="form-control requiredMY txt03" id="virtualPeriod" data-valid="isNonEmpty||isInt" data-error="虚拟地址跳变时间不能为空||不是合法的数字"  placeholder="虚拟地址跳变时间"/>			
+                            <span class="ie8 icon-close close hide"></span>
+                            <label class="icon-sucessfill blank hide"></label>
+                            <label class="focus" style="margin-top:458px;"><span>请填写整数</span></label>
+                            <label class="focus valid" style="margin-top:452px;"></label>		 					
+	 					</div>
+	 					
+	 					<div class="form-group">	
+	 						<label for="domainPeriod">域名跳变时间</label>	
+						 	<input type="text" name="domainPeriod"  style="width:300px;" class="form-control requiredMY txt03" id="domainPeriod" data-valid="isNonEmpty||isInt" data-error="域名跳变时间不能为空||不是合法的数字"  placeholder="域名跳变时间"/>			
+                            <span class="ie8 icon-close close hide"></span>
+                            <label class="icon-sucessfill blank hide"></label>
+                            <label class="focus" style="margin-top:529px;"><span>请填写整数</span></label>
+                            <label class="focus valid" style="margin-top:525px;"></label>		 					
+	 					</div>
+	 					
+	 					<div class="modal-footer">
+	 						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+	 						<button type="submit" id="submit-botton-subnet" class="btn btn-primary form-add-rip js-ajax-submit" >保存</button>
+	 					</div>	
+ 					</form>		
+ 				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="ModalBinding" tabindex="-1" role="dialog" aria-labelledby="ModalLabelBinding"> 
+		<div class="modal-dialog" role="document">	
+			<div class="modal-content">		
+ 				<div class="modal-header">	
+ 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+ 					<h4 class="modal-title" id="ModalLabelBinding">新增交换机绑定</h4>				
+ 				</div>	
+ 				<div class="modal-body reg-box " id="verifyCheckBinding"> 
+ 					<form class="form-add-rip js-ajax-form" action="/admin/function/bindingSave" method="post" >
+                        <input type="hidden" name="id" id="id" th:value="${binding.id}" />
+                        <input type="hidden" name="createTime" th:value="${binding.createTime}" />		
+                        
+                        <div class="form-group">
+                    		<label for="node" class="control-label">需要绑定的交换机</label>
+                   			<select class="form-control" name="node">
+                       		    <option>请选择交换机</option>
+                        		<option  th:each="listSwitch:${session.listSwitch}" th:value="${listSwitch.name}" th:text="${listSwitch.name}"></option>
+                   			</select>
+               		    </div>
+               		    
+               		    <div class="form-group">
+                    		<label for="subnet" class=" control-label">绑定的真实子网</label>
+                   			<select class="form-control" name="subnet">
+                       		    <option>请选择网络</option>
+                        		<option  th:each="listSubnet:${session.listSubnet}" th:value="${listSubnet.net}" th:text="${listSubnet.net}"></option>
+                   			</select>
+               		    </div>                      	
+	 					<div class="modal-footer">
+	 						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+	 						<button type="submit" id="submit-botton-binding" class="btn btn-primary form-add-binding js-ajax-submit" >保存</button>
+	 					</div>	
+ 					</form>		
+ 				</div>	
+			</div>
+		</div>
+	</div>
+	
+<div class="login-box f-mt10 f-pb50" >
+	<div class="main bgf" >    
+    	<div class="reg-box-pan display-inline" >  
+        	<div class="step" id="init-step" style="margin-left:110px;width:1200px;">        	
+                <ul>
+                    <li class="col-xs-2 on">
+                        <span class="num"><em class="f-r5"></em><i>1</i></span>                	
+                        <span class="line_bg lbg-r"></span>
+                        <p class="lbg-txt">配置真实子网</p>
+                    </li>
+                    <li class="col-xs-2">
+                        <span class="num"><em class="f-r5"></em><i>2</i></span>
+                        <span class="line_bg lbg-l"></span>
+                        <span class="line_bg lbg-r"></span>
+                        <p class="lbg-txt">绑定交换机</p>
+                    </li>
+                    <li class="col-xs-2">
+                        <span class="num"><em class="f-r5"></em><i>3</i></span>
+                        <span class="line_bg lbg-l"></span>
+                        <span class="line_bg lbg-r"></span>
+                        <p class="lbg-txt">配置dns</p>
+                    </li>
+                    <li class="col-xs-2">
+                        <span class="num"><em class="f-r5"></em><i>4</i></span>
+                        <span class="line_bg lbg-l"></span>
+                        <p class="lbg-txt">配置成功</p>
+                    </li>
+                </ul>
+            </div>
+        	<div class="reg-box" style="margin-top:30px;">
+            	<form class="form-horizontal js-ajax-form" action="/admin/function/init" method="post">                  	
+                	<div class="part1"> 
+                		<div class="col-xs-12" style="margin-left:-200px;margin-top:-30px;width:1000px;">
+                			<section class="content table-content" >
+						    	<table id="networkGrid"></table>
+							</section>
+							<div id="toolbar2">
+						    	<a href="javascript:;" class="btn-user-blue btn-add-subnet">添加真实子网</a>
+							</div>
+                		</div>
+	             		<div class="col-xs-12" style="margin-top:20px">
+                        	<span class="intelligent-label f-fl">&nbsp;</span>    
+                        	<div class="f-fl item-ifo">
+                           		<!--  <a href="javascript:;" class="btn btn-transparent" style="border:1px solid white;" id="btn_part1">下一步</a> -->
+                           		<a href="javascript:;">
+                           			<botton id="btn_part1" class="btn-user-red" style="margin-left:210px;">下一步</botton>
+                           		</a>                     
+                        	</div>
+                    	</div>  
+                		
+                	</div>
+                	<div class="part2" style="display:none">
+                		<div class="col-xs-12" style="margin-left:-200px;margin-top:-30px;width:1000px;">
+                			<section class="content table-content">
+						    	<table id="bindingGrid" ></table>
+							</section>
+							<div id="toolbar3">
+						    	<a href="javascript:;" class="btn-user-blue btn-add-binding ">添加交换机绑定</a>
+							</div>
+                		</div>
+                		<div class="col-xs-6" style="margin-top:20px;">
+                        	<span class="intelligent-label f-fl">&nbsp;</span>    
+                        	<div class="f-fl item-ifo">
+                           		<a href="javascript:;" style="margin-left:100px;" class="btn-user-red" id="btn_part2">下一步</a>                         
+                        	</div>
+                    	</div> 
+                    	<div class="col-xs-6" style="margin-top:20px;">
+                        	<span class="intelligent-label f-fl">&nbsp;</span>    
+                        	<div class="f-fl item-ifo">
+                           		<a href="javascript:;" style="margin-left:-10px;" class="btn-user-red btn_cancel" id="btn_part2_cancel">取消配置</a>                         
+                        	</div>
+                    	</div>                		
+                	</div> 
+            	    <div class="part3" id="verifyCheckMtd" style="display:none"> 
+	            		<div class="col-xs-12" style="margin-top:40px;">
+                       		<div class="f-fl item-ifo" style="margin-left:-80px;">     
+                       			<span style="font-size:15px;color:white;">内部DNS地址：&nbsp;&nbsp;</span><input type="text" style="background:rgba(0,0,0,0);" name="dnsAddress" class="txt03 f-r3 requiredMY" id="dnsAddress"  th:value="${dns.dnsAddress}"  data-valid="isNonEmpty||isAddress" data-error="内部DNS地址不能为空||不是合法的IP地址" placeholder="内部DNS地址"/>
+                       			<span class="ie8 icon-close close hide"></span>
+	                            <label class="icon-sucessfill blank hide"></label>
+	                            <label class="focus" style="margin-top:-25px;margin-left:30px;"><span>请填写标准IP地址，如192.168.108.100</span></label>
+	                            <label class="focus valid" style="margin-top:-30px;margin-left:30px;"></label>	 
+                       		</div>    
+	               		</div>	 			
+	             		<div class="col-xs-8" style="margin-top:40px;margin-left:65px;">
+		                        <input class="radioDnsYes radioDns" type="radio" name="openExternal" th:checked="${dns.openExternal == true}" value="true" /><span style="color:white;font-size:15px;">启用DNS转发</span>
+		                        <input class="radioDnsNo radioDns" type="radio" name="openExternal" th:checked="${dns.openExternal == false}" value="false" /><span style="color:white;font-size:15px;">不启用DNS转发</span>        				
+	             		</div>
+	             		<div class="col-xs-12 dns" style="margin-top:40px;">
+                        	<div class="f-fl item-ifo" style="margin-left:-85px;">   
+                        		<span style="font-size:15px;color:white;">DNS转发地址：&nbsp;&nbsp;</span> <input type="text" style="background:rgba(0,0,0,0);" name="dnsForwardAddress" class="txt03 f-r3 requiredMY" id="dnsForwardAddress"  th:value="${dns.dnsForwardAddress}" data-valid="isNonEmpty||isAddress" data-error="DNS转发地址不能为空||不是合法的IP地址" placeholder="DNS转发地址"/>
+                        		<span class="ie8 icon-close close hide"></span>
+	                            <label class="icon-sucessfill blank hide"></label>
+	                            <label class="focus" style="margin-left:30px;margin-top:-25px;"><span>请填写标准IP地址，如192.168.108.100</span></label>
+	                            <label class="focus valid" style="margin-left:30px;margin-top:-30px;"></label>	                        		
+                        	</div>	             			
+	             		</div>
+	             		<div class="col-xs-12 dns" style="margin-top:40px;">
+                        	<div class="f-fl item-ifo" style="margin-left:-68px;">   
+                        		<span style="font-size:15px;color:white;">外部IP地址：&nbsp;&nbsp;</span> <input type="text" style="background:rgba(0,0,0,0);" name="externalAddress" class="txt03 f-r3 requiredMY" id="externalAddress"  th:value="${dns.externalAddress}" data-valid="isNonEmpty||isAddress" data-error="外部地址不能为空||不是合法的IP地址" placeholder="外部地址"/>
+                        		<span class="ie8 icon-close close hide"></span>
+	                            <label class="icon-sucessfill blank hide"></label>
+	                            <label class="focus" style="margin-left:30px;margin-top:-25px;"><span>请填写标准IP地址，如192.168.108.100</span></label>
+	                            <label class="focus valid" style="margin-left:30px;margin-top:-30px;"></label>	                        		
+                        	</div>	             			
+	             		</div>
+	             		<div class="col-xs-12 dns" style="margin-top:40px;">
+                        	<div class="f-fl item-ifo" style="margin-left:-81px;">   
+                        		<span style="font-size:15px;color:white;">外部网关地址：&nbsp;&nbsp;</span><input type="text" style="background:rgba(0,0,0,0);" name="externalGateway" class="txt03 f-r3 requiredMY" id="externalGateway"  th:value="${dns.externalGateway}" data-valid="isNonEmpty||isAddress" data-error="外部网关地址不能为空||不是合法的IP地址" placeholder="外部网关地址"/>
+                        		<span class="ie8 icon-close close hide"></span>
+	                            <label class="icon-sucessfill blank hide"></label>
+	                            <label class="focus" style="margin-left:30px;margin-top:-25px;"><span>请填写标准IP地址，如192.168.108.100</span></label>
+	                            <label class="focus valid" style="margin-left:30px;margin-top:-30px;"></label>	                        		
+                        	</div>	             			
+	             		</div>
+	             		<div class="col-xs-12 dns" style="margin-top:40px;">
+                        	<div class="f-fl item-ifo" style="margin-left:-67px;">  
+                      		    <span style="font-size:15px;color:white;">外部交换机：&nbsp;&nbsp;</span>
+   	                   			<select class="form-control-switch" name="externalSwitch" id="externalSwitch" th:value="${dns.externalSwitch}" style="width:300px;margin-left:-5px;">
+	                       		    <option>请选择交换机</option>
+	                        		<option  th:each="listSwitch:${session.listSwitch}" th:value="${listSwitch.name}" th:text="${listSwitch.name}"></option>
+                   				</select> 
+                        		<!--  <span style="font-size:15px;color:white;">外部交换机：&nbsp;&nbsp;</span><input type="text" style="background:rgba(0,0,0,0);" name="externalSwitch" class="txt03 f-r3 requiredMY" id="externalSwitch"  th:value="${dns.externalSwitch}" data-valid="isNonEmpty" data-error="外部交换机不能为空" placeholder="外部交换机"/>
+                        		<span class="ie8 icon-close close hide"></span>
+	                            <label class="icon-sucessfill blank hide"></label>
+	                            <label class="focus" style="margin-left:30px;margin-top:-25px;"><span>请填写外部交换机ID，如openflow:1</span></label>
+	                            <label class="focus valid" style="margin-left:30px;margin-top:-30px;"></label>-->	                        		
+                        	</div>	             			
+	             		</div>
+	             		<div class="col-xs-12 dns" style="margin-top:40px">
+                        	<div class="f-fl item-ifo"  style="margin-left:-102px;">   
+                        		<span style="font-size:15px;color:white;">外部交换机端口：&nbsp;&nbsp;</span> <input type="text" style="background:rgba(0,0,0,0);" name="externalSwitchPort" class="txt03 f-r3 requiredMY" id="externalSwitchPort"  th:value="${dns.externalSwitchPort}" data-valid="isNonEmpty" data-error="外部交换机端口不能为空||不是整数" placeholder="外部交换机端口"/>
+                        		<span class="ie8 icon-close close hide"></span>
+	                            <label class="icon-sucessfill blank hide"></label>
+	                            <label class="focus" style="margin-left:30px;margin-top:-25px;"><span>请填写整数</span></label>
+	                            <label class="focus valid" style="margin-left:30px;margin-top:-30px;"></label>	                        		
+                        	</div>	             			
+	             		</div>
+	             		
+                		<div class="col-xs-6" style="margin-top:20px;">
+                        	<span class="intelligent-label f-fl">&nbsp;</span>    
+                        	<div class="f-fl item-ifo">
+                           		<!--  <a href="javascript:;" class="btn btn-blue f-r3" id="btn_part2">下一步</a>  -->
+                           		<a href="javascript:;">
+                           			<botton id="btn_part3" class="btn-user-red" style="margin-left:100px;">下一步</botton>
+                           		</a>                            
+                        	</div>
+                    	</div> 
+                    	<div class="col-xs-6" style="margin-top:20px;">
+                        	<span class="intelligent-label f-fl">&nbsp;</span>    
+                        	<div class="f-fl item-ifo">
+                           		<!--  <a href="javascript:;" class="btn btn-red f-r3 btn_cancel" id="btn_part2_cancel">取消配置</a>   -->   
+                           		<a href="javascript:;">
+                           			<botton id="btn_part3_cancel" class="btn-user-red btn_cancel" style="margin-left:-10px;">取消配置</botton>
+                           		</a>                     
+                        	</div>
+                    	</div>                 	                   	
+                	</div>  
+                	<div class="part4" style="display:none;margin-left:100px;"> 	
+                   		<div class="col-xs-12" style="margin-top:20px;margin-left:300px;">
+                   			<h3 class="configuration_success">控制器配置完毕！</h3> 		
+               			</div>
+               			<div class="col-xs-6" style="margin-top:20px;">
+                       		<span class="intelligent-label f-fl">&nbsp;</span>    
+                       		<div class="f-fl item-ifo">
+                       		    <button type="submit" id="init-finish"  style="margin-left:150px;"  class="btn-user-red js-ajax-submit">配置完成</button>                   
+                       		</div>
+                   		</div>
+                   		<div class="col-xs-6" style="margin-top:20px;">
+                        	<span class="intelligent-label f-fl">&nbsp;</span>    
+                        	<div class="f-fl item-ifo">
+                           		<a href="javascript:;" style="margin-left:30px;" class="btn-user-red btn_cancel" id="btn_part4_cancel">取消配置</a>                         
+                        	</div>
+                    	</div>  
+                    </div>         	               	                	             	                	
+            	</form> 
+            </div>
+        </div>
+    </div>
+</div>
+
+	<div th:include="console/footer"></div>
+	</div>
+	<script>
+    function operateFormatterSubnet(value, row, index) {
+               return [
+                   '<a class="remove" href="javascript:void(0);">',
+                   '<i class="glyphicon glyphicon-remove"></i>删除',
+                   '</a>'
+               ].join('');
+    }
+    
+    window.operateEventsSubnet = {
+        'click .remove': function (e, value, row, index) {
+            operaModel.delRow(row.id, '/admin/function/ripDelete', 'id');
+        }
+    };
+    
+    function operateFormatterBinding(value, row, index) {
+        return [
+            '<a class="remove" href="javascript:void(0);">',
+            '<i class="glyphicon glyphicon-remove"></i>删除',
+            '</a>'
+        ].join('');
+	}
+
+	window.operateEventsBinding = {
+	 	'click .remove': function (e, value, row, index) {
+	     operaModel.delRow(row.id, '/admin/function/bindingDelete', 'id');
+	 	}
+	};   
+	
+    $table_rip = $("#networkGrid");
+    $table_binding = $("#bindingGrid");
+	//<![CDATA[
+	window.onload = function()
+	{
+        initNetworkGrid();
+		$(".btn-add-subnet").click(function(){
+			$("#ModalSubnetLabel").text("新增真实子网");
+			$('#ModalSubnet').modal(); 
+		});
+		
+		$(".btn-add-binding").click(function(){
+			$("#ModalBindingLabel").text("新增交换机绑定");
+			$('#ModalBinding').modal(); 
+		});
+		
+		$("#submit-botton-subnet").click(function(){
+			if(!verifyCheckSubnet._click()) {
+				return false;
+			}
+		});
+			
+		var submit = document.getElementById("init-finish");
+		submit.onclick = function()
+		{
+			window.sessionStorage.setItem("page",0);
+			$(".step li").eq(4).addClass("on");
+			$(".step li").eq(3).addClass("on");
+			$(".step li").eq(2).addClass("on");
+			$(".step li").eq(1).addClass("on");		
+		}
+		var page = window.sessionStorage.getItem("page");
+		if (page == 0){
+	        initNetworkGrid();
+		}
+		if (page == 2){
+			//var frame = document.getElementById("main-transparent-background");
+			//frame.style.width = "1100px";
+			//var step = document.getElementById("init-step");
+			//step.style.cssText = "margin-left:260px;"; 
+			$(".part1").hide();
+			$(".part2").show();
+			$(".step li").eq(1).addClass("on");
+	        initBindingGrid();			
+		}else if (page == 3){
+			$(".part1").hide();
+			$(".part3").show();
+			$(".step li").eq(2).addClass("on");
+			$(".step li").eq(1).addClass("on");
+	        initBindingGrid();			
+		}else if (page == 4){
+			$(".part1").hide();
+			$(".part4").show();
+			$(".step li").eq(3).addClass("on");
+			$(".step li").eq(2).addClass("on");
+			$(".step li").eq(1).addClass("on");		
+		}
+		var select = document.getElementsByClassName("radioDns");
+		for (var i = 0; i < select.length; i++){
+			select[i].onchange = function()
+			{
+				if (this.checked){
+					if (this.value == "true"){
+						$(".dns").show();
+						var dnsForwardAddress = document.getElementbyId("dnsForwardAddress");
+						dnsForwardAddress.setAttribute("class","txt03 f-r3 requiredMY");
+						dnsForwardAddress.setAttribute("data-valid","isNonEmpty||isAddress");
+						dnsForwardAddress.setAttribute("data-error","DNS转发地址不能为空||不是合法的IP地址");						
+				
+					}
+					else{
+						$(".dns").hide();	
+						var dnsForwardAddress = document.getElementbyId("dnsForwardAddress");
+						dnsForwardAddress.removeAttribute("class");
+						dnsForwardAddress.removeAttribute("data-valid");
+						dnsForwardAddress.removeAttribute("data-error");		
+					}				
+				}	
+			};	
+		}
+		$("#btn_part1").click(function(){
+			//var frame = document.getElementById("main-transparent-background");
+			//frame.style.width = "1100px";
+			//var step = document.getElementById("init-step");
+			//step.style.cssText = "margin-left:260px;"; 
+			$(".part1").hide();
+			$(".part2").show();
+			$(".step li").eq(1).addClass("on");
+			window.sessionStorage.setItem("page",2);
+	        initBindingGrid();
+		});
+		
+		$("#btn_part2").click(function(){
+			$(".part2").hide();
+			$(".part3").show();
+			$(".step li").eq(2).addClass("on");
+			window.sessionStorage.setItem("page",3);
+	        //initBindingGrid();
+		});
+		
+		$("#btn_part3").click(function(){
+			if(!verifyCheckMtd._click()) {
+				return false;
+			}
+			$(".part3").hide();
+			$(".part4").show();
+			$(".step li").eq(3).addClass("on");
+			window.sessionStorage.setItem("page",4);
+		});
+		
+		$(".btn_cancel").click(function(){
+			var page = window.sessionStorage.getItem("page");
+			//var frame = document.getElementById("main-transparent-background");
+			//frame.style.width = "800px";
+			//var step = document.getElementById("init-step");
+			//step.style.cssText = "margin:auto;"; 
+			if(page == 2){
+				$(".part1").show();
+				$(".part2").hide();
+				$(".step li").eq(1).removeClass("on");
+				window.sessionStorage.setItem("page",0);
+
+			}else if (page == 3){
+				$(".part1").show();
+				$(".part3").hide();
+				$(".step li").eq(2).removeClass("on");
+				$(".step li").eq(1).removeClass("on");
+				window.sessionStorage.setItem("page",0);
+			}else if (page == 4){
+				$(".part1").show();
+				$(".part4").hide();
+				$(".step li").eq(3).removeClass("on");
+				$(".step li").eq(2).removeClass("on");
+				$(".step li").eq(1).removeClass("on");
+				window.sessionStorage.setItem("page",0);
+			}
+		});
+	}
+	//]]>
+	
+	   function initNetworkGrid(){
+	        $table_rip.bootstrapTable({
+	            height : tableModel.getHeight()-280,
+	            idField : "id",
+	            columns : [[
+	                {title: "网络名称", field: "net"},  
+	                {title: "域名前缀", field: "prefix"},               
+	                {title: "真实网络起始地址", field: "startIpString"},
+	                {title: "真实网络结束地址", field: "endIpString"},
+	                {title: "网关地址", field: "gateway"},
+	                {title: "真实IP租期", field: "period"},
+	                {title: "虚拟地址跳变时间", field: "virtualPeriod"},
+	                {title: "域名跳变时间", field: "domainPeriod"},
+	                {title: "操作", field: "operate", align: 'center', events: operateEventsSubnet, formatter: operateFormatterSubnet}
+	            ]],
+	            url : '/admin/function/ripList',
+	            queryParams: function(params){
+	               return params;
+	            },
+	            method: "get", //请求格式
+	            responseHandler : function (res) {
+	                return {
+	                    rows : res.result.pageInfo.list,
+	                    total : res.result.pageInfo.total
+	                }
+	            },
+	            sortName : 'createTime',
+	            sortOrder : 'asc',
+	            sidePagination : 'server',
+	            pagination : true,
+	            pageSize: 20,
+	            pageList : [20, 40, 50, 100],
+	            toolbar : "#toolbar",
+	            showRefresh : true,
+	        });
+	    }
+	   
+	   function initBindingGrid(){
+	        $table_binding.bootstrapTable({
+	            height : tableModel.getHeight(),
+	            idField : "id",
+	            columns : [[
+	                {title: "交换机ID", field: "node"},
+	                {title: "子网名称", field: "subnet"},
+	                {title: "创建时间", field: "createTime", sortable: true},
+	                {title: "操作", field: "operate", align: 'center', events: operateEventsBinding, formatter: operateFormatterBinding}
+	            ]],
+	            url : '/admin/function/bindingList',
+	            queryParams: function(params){
+	               return params;
+	            },
+	            method: "get", //请求格式
+	            responseHandler : function (res) {
+	                return {
+	                    rows : res.result.pageInfo.list,
+	                    total : res.result.pageInfo.total
+	                }
+	            },
+	            sortName : 'createTime',
+	            sortOrder : 'asc',
+	            pagination : true,
+	            sidePagination : 'server',
+	            pageSize: 20,
+	            pageList : [20, 40, 50, 100],
+	            toolbar : "#toolbar",
+	            showRefresh : true,
+	        });
+	    }
+	
+	</script>
+	<script type="text/javascript" color="255,192,203" opacity="0.9" zindex="-1" count="400" src="/static/js/canvas-nest.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geekcattle.mapper.console.SwitchMapper">
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.console.Switches">
+      <id column="id" jdbcType="VARCHAR" property="id" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
+      <result column="create_time" jdbcType="DATE" property="createTime" />
+  </resultMap>
+  
+  <!--根据用户名获取用户信息-->
+  <select id="selectAllSwitches" parameterType="String" resultMap="BaseResultMap">
+    select * from switches ;
+  </select>
+  
+  <!--根据用户名获取用户信息-->
+  <select id="insertSwitch" parameterType="Switches">
+    insert into switches(id, name,create_time)  values(#{id}, #{name}, #{createTime});
+  </select>
+
+  <!--删除用户和用户关联表-->
+  <delete id="deleteById" parameterType="String">
+    delete from switches where id = #{id};
+  </delete>
+  
+  <delete id="deleteAll" parameterType="String">
+    delete from switches;
+  </delete>
+  
+  <!--删除用户和用户关联表-->
+  <select id="findById" parameterType="String" resultMap="BaseResultMap">
+    select * from switches where id = #{id};
+  </select>
+
+</mapper>

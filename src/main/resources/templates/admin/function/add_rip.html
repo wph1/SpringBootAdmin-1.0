@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title" th:text="'管理员'+${#strings.isEmpty(rips.id)?'添加':'修改'}"></h3>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal js-ajax-form" action="/admin/function/ripSave" method="post">
+                        <input type="hidden" name="id" id="id" th:value="${rips.id}" />
+                        <input type="hidden" name="createTime" th:value="${rips.createTime}" />
+                        
+                        <div class="form-group">
+                            <label for="net" class="col-sm-2 control-label">网络名字</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="net" class="form-control" id="net" th:readonly="${!#strings.equals(rips.id,null)}" th:value="${rips.net}" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="prefix" class="col-sm-2 control-label">域名前缀</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="prefix" class="form-control" id="prefix" th:readonly="${!#strings.equals(rips.prefix,null)}" th:value="${rips.prefix}" />
+                            </div>
+                        </div>
+                                                                
+                        <div class="form-group">
+                            <label for="startIpString" class="col-sm-2 control-label">网络起始地址</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="startIpString" class="form-control" id="startIpString" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="endIpString" class="col-sm-2 control-label">网络结束地址</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="endIpString" class="form-control" id="endIpString" />
+                            </div>
+                        </div>
+                        
+                       	<div class="form-group">
+                            <label for="gateway" class="col-sm-2 control-label">网关地址</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="gateway" class="form-control" id="gateway" />
+                            </div>
+                        </div>
+                   
+                        <div class="form-group">
+                            <label for="period" class="col-sm-2 control-label">真实IP租期</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="period" class="form-control" id="period" />
+                            </div>
+                        </div>                       
+                   
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default js-ajax-submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:include="console/footer"></div>
+</body>
+</html>

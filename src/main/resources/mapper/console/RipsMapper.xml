@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geekcattle.mapper.console.RipsMapper">
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.console.Rips">
+      <id column="id" jdbcType="VARCHAR" property="id" />
+      <result column="net" jdbcType="VARCHAR" property="net" />
+      <result column="domain_prefix" jdbcType="VARCHAR" property="prefix" />
+      <result column="start_ip" jdbcType="INTEGER" property="startIp" />
+      <result column="end_ip" jdbcType="INTEGER" property="endIp" />
+      <result column="gateway" jdbcType="VARCHAR" property="gateway" />
+      <result column="global_period" jdbcType="INTEGER" property="period" />
+      <result column="virtual_period" jdbcType="INTEGER" property="virtualPeriod" />
+      <result column="domain_period" jdbcType="INTEGER" property="domainPeriod" />      
+      <result column="create_time" jdbcType="DATE" property="createTime" />
+  </resultMap>
+
+  <select id="selectByname" parameterType="String" resultMap="BaseResultMap">
+    select *  from rips where net = #{net};
+  </select>
+  
+  <select id="selectAllRips" parameterType="String" resultMap="BaseResultMap">
+    select id, net, domain_prefix,start_ip, end_ip, global_period,create_time, gateway,virtual_period,domain_period  from rips ;
+  </select>
+  
+  <select id="insertRips" parameterType="Rips">
+    insert into rips(id, net, domain_prefix,start_ip, end_ip, global_period,create_time,gateway,virtual_period,domain_period)  values(#{id}, #{net}, #{prefix},#{startIp}, #{endIp}, #{period},#{createTime},#{gateway},#{virtualPeriod},#{domainPeriod});
+  </select>
+  
+  <select id="selectCountByNet" parameterType="String"  resultType="java.lang.Integer">
+  	select count(*) from rips where net = #{net};
+  </select>
+  
+  <delete id="deleteById" parameterType="String">
+    delete from rips where id = #{id};
+  </delete>
+  
+  <select id="findById" parameterType="String" resultMap="BaseResultMap">
+    select * from rips where id = #{id};
+  </select>
+
+</mapper>

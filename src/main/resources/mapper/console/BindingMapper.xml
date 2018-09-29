@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geekcattle.mapper.console.BindingMapper">
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.console.Binding">
+      <id column="id" jdbcType="VARCHAR" property="id" />
+      <result column="node" jdbcType="VARCHAR" property="node" />
+      <result column="subnet" jdbcType="VARCHAR" property="subnet" />
+      <result column="create_time" jdbcType="DATE" property="createTime" />
+  </resultMap>
+  
+  <!--根据用户名获取用户信息-->
+  <select id="selectAllBindings" parameterType="String" resultMap="BaseResultMap">
+    select * from binding ;
+  </select>
+  
+  <select id="selectCountByNode" parameterType="String"  resultType="java.lang.Integer">
+  	  	select count(*) from binding where node = #{node};
+  </select>
+  
+  <!--根据用户名获取用户信息-->
+  <select id="insertBinding" parameterType="Binding">
+    insert into binding(id, node, subnet,create_time)  values(#{id}, #{node}, #{subnet},  #{createTime});
+  </select>
+
+  <!--删除用户和用户关联表-->
+  <delete id="deleteById" parameterType="String">
+    delete from binding where id = #{id};
+  </delete>
+  
+  <!--删除用户和用户关联表-->
+  <select id="findById" parameterType="String" resultMap="BaseResultMap">
+    select * from binding where id = #{id};
+  </select>
+
+</mapper>

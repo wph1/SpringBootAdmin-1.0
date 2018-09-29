@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geekcattle.mapper.console.LinksMapper">
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.console.Links">
+      <id column="id" jdbcType="VARCHAR" property="id" />
+      <id column="src_id" jdbcType="VARCHAR" property="srcId" />
+      <id column="target_id" jdbcType="VARCHAR" property="targetId" />
+      <id column="src_port" jdbcType="INTEGER" property="srcPort" />
+      <id column="dist_port" jdbcType="INTEGER" property="distPort" />
+      <id column="bandwidth" jdbcType="INTEGER" property="bandwidth" />      
+  </resultMap>
+
+  <!--根据用户名获取用户信息-->
+  <select id="selectAllLinks" parameterType="String" resultMap="BaseResultMap">
+    select id, src_id, target_id, src_port, dist_port, bandwidth from links 
+  </select>
+  
+</mapper>

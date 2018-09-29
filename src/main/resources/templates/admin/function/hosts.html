@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>终端信息</h1>
+</section>
+<section class="content table-content">
+    <table id="hostGrid"></table>
+</section>
+<div th:include="console/footer"></div>
+</body>
+<script type="text/javascript">
+    $table = $("#hostGrid");
+    $(function () {
+        initHostGrid();
+    });
+    function initHostGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "id",
+            columns : [[
+                {title: "节点类型", field: "typeOutput"},
+            	{title: "真实IP", field: "ripString"},
+            	{title: "真实MAC", field: "rmac"},
+                {title: "虚拟IP", field: "vipString"},
+                {title: "虚拟域名", field: "vdomain"},
+                {title: "虚拟IP周期", field: "vipTime"},
+                {title: "虚拟域名周期", field: "vdomainTime"},               
+                {title: "创建时间", field: "createTime", sortable: true},
+            ]],
+            url : '/console/function/hostsList',
+            queryParams: function(params){
+               return params;
+            },
+            method: "get", //请求格式
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            search : true,
+            searchOnEnterKey : true,
+            sortName : 'createTime',
+            sortOrder : 'asc',
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            toolbar : "#toolbar",
+            showRefresh : true,
+            showToggle : true
+        });
+    }   
+</script>
+</html>

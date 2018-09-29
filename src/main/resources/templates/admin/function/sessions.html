@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>会话信息</h1>
+</section>
+<section class="content table-content">
+    <table id="hostGrid"></table>
+</section>
+<div th:include="console/footer"></div>
+</body>
+<script type="text/javascript">
+    $table = $("#hostGrid");
+    $(function () {
+        initHostGrid();
+    });
+    function initHostGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "id",
+            columns : [[
+                {title: "源节点ID", field: "srcId"},
+            	{title: "目的节点ID", field: "targetId"},
+            	{title: "源端口号", field: "srcPort"},
+                {title: "目的端口号", field: "distPort"},             
+            ]],
+            url : '/console/function/sessionsList',
+            queryParams: function(params){
+               return params;
+            },
+            method: "get", //请求格式
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            search : true,
+            searchOnEnterKey : true,
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            toolbar : "#toolbar",
+            showRefresh : true,
+            showToggle : true
+        });
+    }   
+</script>
+</html>

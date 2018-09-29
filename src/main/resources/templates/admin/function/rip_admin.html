@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>真实网络管理</h1>
+</section>
+<section class="content table-content">
+    <table id="networkGrid"></table>
+</section>
+<div id="toolbar">
+    <a href="/console/function/init" class="btn btn-primary">添加真实网络</a>
+</div>
+<div th:include="console/footer"></div>
+</body>
+<script type="text/javascript">
+    $table = $("#networkGrid");
+    $(function () {
+        initNetworkGrid();
+    });
+    function initNetworkGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "id",
+            columns : [[
+                {title: "真实网络名字", field: "net"},
+                {title: "域名前缀", field: "prefix"},               
+                {title: "真实网络起始地址", field: "startIpString"},
+                {title: "真实网络结束地址", field: "endIpString"},
+                {title: "真实IP租期", field: "period"},
+                {title: "创建时间", field: "createTime", sortable: true},
+                {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
+            ]],
+            url : '/console/function/ripList',
+            queryParams: function(params){
+               return params;
+            },
+            method: "get", //请求格式
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            search : true,
+            searchOnEnterKey : true,
+            sortName : 'createTime',
+            sortOrder : 'asc',
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            toolbar : "#toolbar",
+            showRefresh : true,
+            showToggle : true
+        });
+    }
+    
+    function operateFormatter(value, row, index) {
+     //   if(row.isSystem == 0){
+            return [
+                '<a class="remove" href="javascript:void(0);">',
+                '<i class="glyphicon glyphicon-remove"></i>删除',
+                '</a>'
+            ].join('');
+      //  }
+    }
+
+    window.operateEvents = {
+        'click .remove': function (e, value, row, index) {
+            operaModel.delRow(row.id, '/console/function/ripDelete', 'id');
+        }
+    };
+    
+</script>
+</html>

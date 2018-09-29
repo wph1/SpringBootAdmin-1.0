@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>虚拟网络管理</h1>
+</section>
+<section class="content table-content">
+    <table id="networkGrid"></table>
+</section>
+<div th:include="console/footer"></div>
+</body>
+<script type="text/javascript">
+    $table = $("#networkGrid");
+    $(function () {
+        initNetworkGrid();
+    });
+    function initNetworkGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight(),
+            idField : "uid",
+            columns : [[
+            	{title: "对应真实网络名", field: "ripName"},
+            	{title: "虚拟网络起始地址", field: "startIpString"},
+                {title: "虚拟网络结束地址", field: "endIpString"},
+                {title: "虚拟地址跳变时间（秒）", field: "vipTime"},
+                {title: "虚拟域名跳变时间（秒）", field: "vdomainTime"},
+                {title: "创建时间", field: "createTime", sortable: true}, 
+            ]],
+            url : '/console/function/vipList',
+            queryParams: function(params){
+               return params;
+            },
+            method: "get", //请求格式
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            search : true,
+            searchOnEnterKey : true,
+            sortName : 'createTime',
+            sortOrder : 'asc',
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+            toolbar : "#toolbar",
+            showRefresh : true,
+            showToggle : true
+        });
+    }
+    
+</script>
+</html>

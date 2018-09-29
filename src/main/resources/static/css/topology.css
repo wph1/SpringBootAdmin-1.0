@@ -1,0 +1,105 @@
+.static{
+    stroke: #000;
+    stroke-width: 3px;
+}
+.dynamic{
+	  transition: all 1s linear;
+    animation-name: ring;
+    animation-duration: 60s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+@keyframes ring {
+    from {
+        stroke-dashoffset:10000;
+    }
+    to {
+        stroke-dashoffset:0;
+    }
+}   
+.nodetext, .linetext {
+	/*
+    font: 12px sans-serif;
+    -webkit-user-select:none;
+    -moze-user-select:none;
+    text-anchor: middle;*/
+    color:white;
+}
+.node a {
+    fill: rgb(113, 157, 171);
+    stroke: rgb(113, 157, 171);
+}
+.nodeCircle {
+    stroke: #000000;
+    stroke-width: 1px;
+    fill: #ffffff;
+}
+.node.fixed .nodeCircle {
+    stroke: #000000;
+    fill: #aaaaaa;
+}
+#markerStart {
+    fill:transparent;
+}
+
+#markerEnd {
+    fill:transparent;
+}
+
+#container {
+    width:1400px;
+    height:1000px;
+    border-radius:5px;
+    position:relative;
+    margin:0 auto;
+}
+.tooltip {
+    position: absolute;
+    width: 200px;
+    line-height: 20px;
+    padding: 10px;
+    font: 12px sans-serif;
+    color: rgb(0, 0, 0);
+    background: rgb(255, 255, 255);
+    border: 5px solid rgb(255, 255, 255);
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px 0px;
+    opacity: 0;
+    display: none;
+}
+.tooltip:after {
+    content:"";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent #FFFFFF transparent transparent;
+    top: 10px;
+    left: -25px;
+}
+.tooltip .head {
+    font: 12px sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+.tooltip .closeBtn {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 5px;
+}
+.tooltip.locked .closeBtn {
+    color: #000;
+    text-decoration: none;
+    display: block;
+}
+.srcPortTxt{
+	fill:#ffffff;
+}
+.dstPortTxt{
+	fill:#ffffff;
+}
+.nameText{
+	fill:#ffffff;
+}

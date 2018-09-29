@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<main style="margin-left:500px;">
+	<section class="content-header" style="margin-left:50px;">
+	    <h1 class="head">用户管理</h1>
+	</section>
+	<section class="content table-content" style="width:700px;margin-top:20px;">
+	    <table id="dataGrid"></table>
+	</section>
+	<div th:include="console/footer"></div>
+</main>
+</body>
+<script type="text/javascript">
+    $table = $("#dataGrid");
+    $(function () {
+        initDataGrid();
+    });
+    function initDataGrid(){
+        $table.bootstrapTable({
+            height : tableModel.getHeight()*0.7,
+            idField : "uid",
+            columns : [[
+                {title: "用户名", field: "username" },
+                {title: "角色", field: "role" , formatter: getRole},
+                {title: "创建时间", field: "createTime", sortable: true},
+                {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
+            ]],
+            url : '/admin/function/memberList',
+            queryParams: function(params){
+                return params;
+            },
+            responseHandler : function (res) {
+                return {
+                    rows : res.result.pageInfo.list,
+                    total : res.result.pageInfo.total
+                }
+            },
+            sortName : 'createTime',
+            sortOrder : 'asc',
+            pagination : true,
+            sidePagination : 'server',
+            pageSize: 20,
+            pageList : [20, 40, 50, 100],
+        });
+    }
+
+    function operateFormatter(value, row, index) {
+        if(row.role == 2){
+            return [
+                '<a href="/admin/function/memberEdit?uid='+row.uid+'" >',
+                '<i class="glyphicon glyphicon-edit"></i>提高权限',
+                '</a>  ',
+                '<a class="remove" href="javascript:void(0);">',
+                '<i class="glyphicon glyphicon-remove"></i>删除',
+                '</a>'
+            ].join('');
+        }
+        
+    }
+    function getRole(value, row, index) {
+        if(row.role == 1){
+            return ["管理员"].join(',');
+        }
+        else if(row.role == 2){
+            return ["普通用户"].join(',');
+        }
+        else {
+            return ["运维人员"].join(',');
+        }
+  }
+
+
+    window.operateEvents = {
+        'click .remove': function (e, value, row, index) {
+            operaModel.delRow(row.uid, '/admin/function/memberDelete', 'uid');
+            //window.location.href("/admin/function/memberList")
+        }
+    
+    };
+</script>
+</html>

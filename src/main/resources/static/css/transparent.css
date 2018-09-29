@@ -1,0 +1,42 @@
+body,main::before{
+   background:url(/static/img/blur-bg.jpg) 0 / cover fixed;
+   /* background-size:100% 100%; */
+}
+
+main{
+   position:relative;
+   /*
+   margin-top:50px;
+   margin-left:280px;
+   margin-right:280px;
+   margin-bottom:250px;*/
+   margin:auto;
+   width:800px;
+   margin-top:50px;
+   margin-bottom:50px;
+
+   overflow:hidden;
+   box-shadow: 3px 3px 5px #222222
+   /*-webkit-filter: blur(10px);*/
+   /*filter:blur(10px);
+   z-index:-1;*/
+}
+/*
+main::before {
+	content:'';
+	position:absolute;
+	top:0;right:0;bottom:0;left:0;
+	filter:blur(20px);
+	margin:-15px;
+}*/
+
+main::before {
+	content:'';
+	position:absolute;
+	top:0;right:0;bottom:0;left:0;
+	filter:blur(10px);
+	margin:-30px;
+
+}
+
+.head{color:white;}
