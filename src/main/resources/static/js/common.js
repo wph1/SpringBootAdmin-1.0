@@ -112,61 +112,72 @@ var operaModel = (function () {
             }
         });
 
-        ajaxForm_list.each(function(){
-            $(this).validate({
-                debug:true,
-                //是否在获取焦点时验证
-                //onfocusout : false,
-                //当鼠标掉级时验证
-                //onclick : false,
-                //给未通过验证的元素加效果,闪烁等
-                //highlight : false,
-                onkeyup : function( element, event ){
-                  return;
-                },
-                showErrors:function(errorMap, errorArr){
-                    if(parseInt(errorArr.length) > 0){
-                        $(errorArr[0].element).focus();
-                        layer.msg(errorArr[0].message, {icon: 2});
-                    }
-                },
-                submitHandler:function(form){
-                    var $form= $(form);
-                    $form.ajaxSubmit({
-                        url: $btn.data('action') ? $btn.data('action') : $form.attr('action'),
-                        dataType: 'json',
-                        beforeSubmit: function (arr, $form, options) {
-                            $btn.data("loading",true);
-                            var text = $btn.text();
-                            $btn.text(text + '中...').prop('disabled', true).addClass('disabled');
-                        },
-                        success: function (data, statusText, xhr, $form) {
-                            var text = $btn.text();
-                            $btn.removeClass('disabled').prop('disabled', false).text(text.replace('中...', '')).parent().find('span').remove();
-                            if (data.state === 'success') {
-                                layer.msg(data.msg, {icon: 1}, function () {
-                                    if (data.referer) {
-                                        operaModel.redirect(data.referer);//返回带跳转地址
-                                    } else {
-                                        if (data.state === 'success') {
-                                            operaModel.reloadPage(window);//刷新当前页
-                                        }
-                                    }
-                                });
-                            }else if(data.state === 'error'){
-                                layer.msg(data.msg, {icon: 2});
-                            }
-                        },
-                        error:function(xhr,e,statusText){
-                            console.log(statusText);
-                            operaModel.reloadPage(window);//刷新当前页
-                        },
-                        complete: function(){
-                            $btn.data("loading",false);
-                        }
-                    });
-                }
-            });
-        });
+        // ajaxForm_list.each(function(){
+        //     $(this).validate({
+        //         debug:true,
+        //         //是否在获取焦点时验证
+        //         //onfocusout : false,
+        //         //当鼠标掉级时验证
+        //         //onclick : false,
+        //         //给未通过验证的元素加效果,闪烁等
+        //         //highlight : false,
+        //         onkeyup : function( element, event ){
+        //           return;
+        //         },
+        //         showErrors:function(errorMap, errorArr){
+        //             // if(parseInt(errorArr.length) > 0){
+        //             //     $(errorArr[0].element).focus();
+        //             //     layer.msg(errorArr[0].message, {icon: 2});
+        //             // }
+        //             $.each(errorArr, function (i, v) {
+        //                 //在此处用了layer的方法,显示效果更美观
+        //                 if($(v.element)[0].tagName.indexOf("SELECT")>-1){ // 针对于select2  控件做了调整
+        //                     layer.tips(v.message, $(v.element).next(), {icon: 2 , time: 2000 });
+        //                 }else{
+        //                     layer.tips(v.message, v.element, {icon: 2 , time: 2000 });
+        //                 }
+        //                 return false;
+        //             });
+        //         },
+        //         submitHandler:function(form){
+        //             alert("提交");
+        //             var $form= $(form);
+        //             $form.ajaxSubmit({
+        //                 url: $btn.data('action') ? $btn.data('action') : $form.attr('action'),
+        //                 dataType: 'json',
+        //                 beforeSubmit: function (arr, $form, options) {
+        //                     alert("提交之前");
+        //                     // $btn.data("loading",true);
+        //                     // var text = $btn.text();
+        //                     // $btn.text(text + '中...').prop('disabled', true).addClass('disabled');
+        //                 },
+        //                 success: function (data, statusText, xhr, $form) {
+        //                     // var text = $btn.text();
+        //                     // $btn.removeClass('disabled').prop('disabled', false).text(text.replace('中...', '')).parent().find('span').remove();
+        //                     if (data.state === 'success') {
+        //                         layer.msg(data.msg, {icon: 1}, function () {
+        //                             if (data.referer) {
+        //                                 operaModel.redirect(data.referer);//返回带跳转地址
+        //                             } else {
+        //                                 if (data.state === 'success') {
+        //                                     operaModel.reloadPage(window);//刷新当前页
+        //                                 }
+        //                             }
+        //                         });
+        //                     }else if(data.state === 'error'){
+        //                         layer.msg(data.msg, {icon: 2});
+        //                     }
+        //                 },
+        //                 error:function(xhr,e,statusText){
+        //                     console.log(statusText);
+        //                     operaModel.reloadPage(window);//刷新当前页
+        //                 },
+        //                 complete: function(){
+        //                     // $btn.data("loading",false);
+        //                 }
+        //             });
+        //         }
+        //     });
+        // });
     }
 })();

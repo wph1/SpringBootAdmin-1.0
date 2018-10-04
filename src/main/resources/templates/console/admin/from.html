@@ -12,7 +12,7 @@
                     <h3 class="box-title" th:text="'管理员'+${#strings.isEmpty(admin.uid)?'添加':'修改'}"></h3>
                 </div>
                 <div class="box-body">
-                    <form class="form-horizontal js-ajax-form" action="/console/admin/save" method="post">
+                    <form id="dataForm" class="form-horizontal js-ajax-form" action="/console/admin/save" method="post">
                         <input type="hidden" name="uid" id="uid" th:value="${admin.uid}" />
                         <input type="hidden" name="createdAt" th:value="${admin.createdAt}" />
                         <input type="hidden" name="updatedAt" th:value="${admin.updatedAt}" />
@@ -20,7 +20,7 @@
                         <div class="form-group">
                             <label for="username" class="col-sm-2 control-label">用户名</label>
                             <div class="col-sm-10">
-                                <input required  type="text" name="username" class="form-control" id="username" th:readonly="${!#strings.equals(admin.uid,null)}" th:value="${admin.username}" />
+                                <input   type="text" name="username" class="form-control" id="username" th:readonly="${!#strings.equals(admin.uid,null)}" th:value="${admin.username}" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -47,11 +47,11 @@
 
                             </div>
                         </div>
-                        <div class="form-group">
+                     <!--   <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-default js-ajax-submit">提交</button>
+                                <button type="submit"  class="btn btn-default js-ajax-submit">提交</button>&lt;!&ndash;style="display:none;" &ndash;&gt;
                             </div>
-                        </div>
+                        </div>-->
                     </form>
                 </div>
             </div>
@@ -59,5 +59,11 @@
     </div>
 </section>
 <div th:include="console/footer"></div>
+<script type="text/javascript">
+    $(function(){
+
+    });
+
+</script>
 </body>
 </html>

@@ -58,7 +58,7 @@ public class AdminService {
 //    	Object  savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
 //    	try {
             adminMapper.insert(admin);
-          int a=2/0;
+//          int a=2/0;
 //		} catch (Exception e) {
 ////			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //			TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);

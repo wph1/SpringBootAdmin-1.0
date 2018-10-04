@@ -6,91 +6,167 @@
 </head>
 <body>
 <section class="content-header">
-    <h1>管理员管理</h1>
-    <small>列表管理</small>
+    <h1>用户管理</h1>
+    <!--<small>列表管理</small>-->
 </section>
 <section class="content table-content">
     <table id="dataGrid"></table>
 </section>
 <div id="toolbar">
-    <button shiro:hasPermission="admin:save" type="button" class="btn  btn-primary" onclick="add()">
-        <i class="btn btn-primary" aria-hidden="true"></i>添加用户
+    <button shiro:hasPermission="admin:save" type="button" class="btn  btn-primary" onclick="AdminIndex.add()">
+        添加
     </button>
+    <button type="button" class="btn btn-warning" onclick="AdminIndex.edit()">修改</button>
+    <button type="button" class="btn btn-danger" onclick="AdminIndex.del()">删除</button>
     <!--<a href="/console/admin/from" class="btn btn-primary">添加用户</a>-->
 </div>
 <div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=1011"></script>
+<!-- 加载产品JS组件 -->
+<!--<script type="text/javascript" src="./include.web.ui.app.js?dm=60"></script>-->
 </body>
 <script type="text/javascript">
-    $table = $("#dataGrid");
-    $(function () {
-        initDataGrid();
-    });
-    function initDataGrid(){
-        $table.bootstrapTable({
-            height : tableModel.getHeight(),
-            idField : "uid",
-            columns : [[
-                {title: "用户名", field: "username" },
-                {title: "角色", field: "roleList", formatter : getRole},
-                {title: "状态", field: "state",formatter : tableModel.getState},
-                {title: "创建时间", field: "createdAt", sortable: true},
-                {title: "更新日期", field: "updatedAt", sortable: true},
-                {title: "操作", field: "operate", align: 'center', events: operateEvents, formatter: operateFormatter}
-            ]],
-            url : '/console/admin/list',
-            queryParams: function(params){
-                return params;
-            },
-            responseHandler : function (res) {
-                return {
-                    rows : res.result.pageInfo.list,
-                    total : res.result.pageInfo.total
-                }
-            },
-            search : true,
-            searchOnEnterKey : true,
-            sortName : 'createdAt',
-            sortOrder : 'asc',
-            pagination : true,
-            sidePagination : 'server',
-            pageSize: 20,
-            pageList : [20, 40, 50, 100],
-            toolbar : "#toolbar",
-            showRefresh : true,
-            showToggle : true
-        });
-    }
-
-    function getRole(value,row,index) {
-        if(row.isSystem == 1){
-            return "超级管理（不受角色限制）"
-        }else{
-            return $.map(value,function (v) {
-                return v.roleName;
-            }).join(",");
-        }
-
-    }
-
-    function operateFormatter(value, row, index) {
-        if(row.isSystem == 0){
-            return [
-                '<a href="/console/admin/from?uid='+row.uid+'" >',
-                '<i class="glyphicon glyphicon-edit"></i>修改',
-                '</a>  ',
-                '<a class="remove" href="javascript:void(0);">',
-                '<i class="glyphicon glyphicon-remove"></i>删除',
-                '</a>'
-            ].join('');
-        }
-    }
-    function add(){
-        window.location.href="/console/admin/from";
-    }
-    window.operateEvents = {
-        'click .remove': function (e, value, row, index) {
-            operaModel.delRow(row.uid, '/console/admin/delete', 'uid');
-        }
-    };
+//    $table = $("#dataGrid");
+//    $(function () {
+//        initDataGrid();
+//    });
+//
+//
+//    function getRole(value, row, index) {
+//        if (row.isSystem == 1) {
+//            return "超级管理（不受角色限制）"
+//        } else {
+//            return $.map(value, function (v) {
+//                return v.roleName;
+//            }).join(",");
+//        }
+//
+//    }
+//
+//    function operateFormatter(value, row, index) {
+//        if (row.isSystem == 0) {
+//            return [
+//                '<a href="/console/admin/from?uid=' + row.uid + '" >',
+//                '<i class="glyphicon glyphicon-edit"></i>修改',
+//                '</a>  ',
+//                '<a class="remove" href="javascript:void(0);">',
+//                '<i class="glyphicon glyphicon-remove"></i>删除',
+//                '</a>'
+//            ].join('');
+//        }
+//    }
+//    function add() {
+//        layer.open({
+//                    type: 2,
+////            title: '添加用户',
+//                    shadeClose: false,
+//                    shade: 0.8,
+//                    maxmin: true, //开启最大化最小化按钮
+//                    area: ['500px', '600px'],
+//                    content: '/console/admin/from',
+//                btn: ['确定', '取消'] //只是为了演示
+//                , yes : function (index,layero) {//layero 是弹出来的窗口对象
+//                var body = layer.getChildFrame('body', index);
+//                var formId = body.find("#dataForm");
+//                var rules = {
+//                        username:{
+//                        required:true
+//                        },
+//                        password:{
+//                            required:true
+//                        }
+//                    };
+//                    var messages={
+//                        username:{
+//                        required:"用户名不能为空"
+//                        },
+//                        password:{
+//                            required:"没密码怎么登陆"
+//                        }
+//                    };
+//                baseTools.validateForm($(formId),rules,messages);
+//                if (! $(formId).valid()) {
+//                    return;
+//                }
+//                baseTools.ajaxSubmitForm($(formId),formId.attr('action'));
+//                } ,
+//                 btn2: function () {
+//              layer.closeAll();
+//            }
+//    })
+//        ;
+////        window.location.href = "/console/admin/from";
+//    }
+    //实现删除数据的方法
+//    function del() {
+//        var ids = "";//得到用户选择的数据的ID
+//        var rows = $table.bootstrapTable('getSelections');
+//        if (rows.length == 0) {
+//            layer.alert("请最少选择一行！");
+//            return;
+//        }
+//        for (var i = 0; i < rows.length; i++) {
+//            ids += rows[i].ID + ',';
+//        }
+//        ids = ids.substring(0, ids.length - 1);
+//
+////                     DeleteByIds(ids);
+//    }
+    //编辑
+//    function edit() {
+//        var rows = $table.bootstrapTable('getSelections');
+//        if (rows.length == 0) {
+//            layer.alert("请选择一行！");
+//            return;
+//        }
+//
+//        layer.open({
+//            type: 2,
+////            title: '角色授权',
+//            shadeClose: true,
+//            shade: 0.8,
+//            maxmin: true, //开启最大化最小化按钮
+//            btn: ['确定', '取消'],
+//            area: ['500px', '600px'],
+//            content: '/console/admin/from?uid='+rows[0].uid,
+//
+////            end:function(){//关闭窗口事件（不管是取消还是保存都会执行）
+////                alert("关闭窗口");
+////               // window.parent.location.reload();//刷新父页面(连菜单等刷新了)
+////               // parent.$('.btn-refresh').click();//刷新父页面
+////                location.reload();//重新加载当前页面
+////            }
+//            yes : function (index,layero) {
+//                var body = layer.getChildFrame('body', index);
+//                var formId = body.find("#dataForm");
+//                var rules = {
+//                    username:{
+//                        required:true
+//                    },
+//                    password:{
+//                        required:true
+//                    }
+//                };
+//                var messages={
+//                    username:{
+//                        required:"用户名不能为空"
+//                    },
+//                    password:{
+//                        required:"没密码怎么登陆"
+//                    }
+//                };
+//                baseTools.validateForm($(formId),rules,messages);
+//                if (! $(formId).valid()) {
+//                    return;
+//                }
+//                baseTools.ajaxSubmitForm($(formId),formId.attr('action'));
+//            }
+//        });
+//    }
+//    window.operateEvents = {
+//        'click .remove': function (e, value, row, index) {
+//            operaModel.delRow(row.uid, '/console/admin/delete', 'uid');
+//        }
+//    };
 </script>
 </html>
