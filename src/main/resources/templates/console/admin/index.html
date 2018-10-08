@@ -16,8 +16,8 @@
     <button shiro:hasPermission="admin:save" type="button" class="btn  btn-primary" onclick="AdminIndex.add()">
         添加
     </button>
-    <button type="button" class="btn btn-warning" onclick="AdminIndex.edit()">修改</button>
-    <button type="button" class="btn btn-danger" onclick="AdminIndex.del()">删除</button>
+    <button shiro:hasPermission="admin:edit" type="button"  class="btn btn-warning" onclick="AdminIndex.edit()">修改</button>
+    <button  shiro:hasPermission="admin:delete" type="button" class="btn btn-danger" onclick="AdminIndex.del()">删除</button>
     <!--<a href="/console/admin/from" class="btn btn-primary">添加用户</a>-->
 </div>
 <div th:include="console/footer"></div>
