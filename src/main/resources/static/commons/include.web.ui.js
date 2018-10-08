@@ -1,6 +1,5 @@
 /**
  * <ol>
- * date:14-4-11 editor:yanghongjian
  * <li>创建文档</li>
  * <li>应用平台构建的APP按需使用编码加载业务组件辅助工具类</li>
  * </ol>
