@@ -12,7 +12,7 @@
                     <h3 class="box-title" th:text="'管理员'+${#strings.isEmpty(admin.uid)?'添加':'修改'}"></h3>
                 </div>
                 <div class="box-body">
-                    <form id="dataForm" class="form-horizontal js-ajax-form" action="/console/admin/save" method="post">
+                    <form id="dataForm" class="form-horizontal" action="/console/admin/save" method="post">
                         <input type="hidden" name="uid" id="uid" th:value="${admin.uid}" />
                         <input type="hidden" name="createdAt" th:value="${admin.createdAt}" />
                         <input type="hidden" name="updatedAt" th:value="${admin.updatedAt}" />
