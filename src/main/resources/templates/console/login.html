@@ -48,5 +48,12 @@
 	</main>
 <script src="/static/js/vendor-65ff2a3b75.js"></script>
 <script type="text/javascript" color="255,192,203" opacity="0.9" zindex="-1" count="400" src="/static/js/canvas-nest.min.js"></script>
+	<script >
+        $(function () {
+            if (top.location !== location) {
+                top.location.href = self.location.href;
+            }
+        });
+	</script>
 </body>
 </html>
