@@ -32,6 +32,8 @@ var baseTools2 = (function () {
         validateForm: function (formId, rules, messages) {
             // curSeg.onQuery();
             $(formId).validate({
+                onfocusin:false,
+                onfocusout:false,
                 rules: rules,
                 messages: messages,
                 showErrors: function (errorMap, errorList) {
