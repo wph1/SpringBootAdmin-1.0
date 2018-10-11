@@ -67,6 +67,11 @@ public class AdminController {
 //        }
 //        return null;
 //    }
+    @RequestMapping(value = "/fromother", method = {RequestMethod.GET})
+    public String fromother(Model model) {
+    return "console/admin/fromother";
+}
+
     @RequiresPermissions("admin:index")
     @RequestMapping(value = "/index", method = {RequestMethod.GET})
     public String index(Model model) {

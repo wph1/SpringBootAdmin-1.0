@@ -160,6 +160,28 @@ var AdminIndex = (function () {
                 });
             });
         },
+        editother : function () {
+
+            layer.open({
+                type: 2,
+//            title: '角色授权',
+                shadeClose: true,
+                shade: 0.8,
+                maxmin: true, //开启最大化最小化按钮
+                btn: ['确定', '取消'],
+                area: ['500px', '600px'],
+                content: '/console/admin/fromother',
+
+//            end:function(){//关闭窗口事件（不管是取消还是保存都会执行）
+//                alert("关闭窗口");
+//               // window.parent.location.reload();//刷新父页面(连菜单等刷新了)
+//               // parent.$('.btn-refresh').click();//刷新父页面
+//                location.reload();//重新加载当前页面
+//            }
+                yes: function (index, layero) {
+                }
+            });
+        },
         edit: function () {
             var rows = $table.bootstrapTable('getSelections');
             if (rows.length == 0) {
