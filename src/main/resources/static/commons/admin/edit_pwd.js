@@ -1,19 +1,54 @@
 $(document).ready(function () {
-
+    EditPwd.onLoad();
 });
 
 
 var EditPwd = (function () {
     //私有属性
-    var curSeg, formSearch, $table;
-    // var tbList, tplTbList, curPage = 1, pageSize = 20;
-    //私有方法
+    var curSeg, rules,messages,formId,body;
     //初始化页面UI
     var initLayout = function () {
         curSeg = EditPwd;
+        rules = {
+            oldPassword: {
+                required: true,
+            //     remote: {
+            //         url: "/console/validateOldPwd",
+            //         type: "post",
+            //         data: {
+            //             username: function() {
+            //                 return $("formId input[name='oldPassword']").val();
+            //             }
+            //         }
+            // }
+            },
+            password: {
+                required: true,
+            },
+            confirmPassword:{
+                required: true,
+            }
+
+        };
+        messages = {
+            oldPassword: {
+                required: "请输入原密码",
+                // remote:"原密码不正确"
+            },
+            password: {
+                required: "请输入新密码"
+            },
+            confirmPassword:{
+                required: "请再次输入新密码",
+            }
+        };
+
     };
     //公有方法
     return {
+        onLoad: function () {
+            initLayout();
+        },
         editother : function () {
             layer.open({
                 type: 2,
@@ -24,126 +59,38 @@ var EditPwd = (function () {
                 area: ['500px', '600px'],
                 content: '/console/admin/fromother',
                 yes: function (index, layero) {
-                    var body = layer.getChildFrame('body', index);
-                    var formId = body.find("#dataForm");
-                    var rules = {
-                        username: {
-                            required: true
-                        },
-                        password: {
-                            required: true
-                        }
-                    };
-                    var messages = {
-                        username: {
-                            required: "用户名不能为空"
-                        },
-                        password: {
-                            required: "没密码怎么登陆"
-                        }
-                    };
+                     body = layer.getChildFrame('body', index);
+                     formId = body.find("#dataForm");
                     baseTools2.validateForm($(formId), rules, messages);
                     if (!$(formId).valid()) {
                         return;
                     }
-                    baseTools2.ajaxSubmitForm($(formId), "/console/admin/savepwd");
+                    var oldPwd =  body.find("#oldPassword").val();
+                    var uid =  body.find("#uid").val();
+                    $.ajax({
+                        type:'post',
+                        url:'/console/admin/validateOldPwd',
+                        data:{uid:uid,oldPassword:oldPwd},
+                        cache:false,
+                        dataType:'json',
+                        success:function(data){
+                           if(data){
+                               var pwd =  body.find("#password").val();
+                               var pwd2 =  body.find("#confirmPassword").val();
+                               if(pwd!=pwd2){
+                                   layer.msg("两次输入的密码不一致", {icon: 2});
+                                   return
+                               }
+                               baseTools2.ajaxSubmitForm($(formId), "/console/admin/savepwd");
+                           }else{
+                               layer.msg("原密码错误", {icon: 2});
+                           }
+
+                        }
+                    });
+
                 }
             });
-        },
-        edit: function () {
-            var rows = $table.bootstrapTable('getSelections');
-            if (rows.length == 0) {
-                layer.alert("请选择一行！");
-                return;
-            }
-
-            layer.open({
-                type: 2,
-//            title: '角色授权',
-                shadeClose: true,
-                shade: 0.8,
-                maxmin: true, //开启最大化最小化按钮
-                btn: ['确定', '取消'],
-                area: ['500px', '600px'],
-                content: '/console/admin/from?uid=' + rows[0].uid,
-
-//            end:function(){//关闭窗口事件（不管是取消还是保存都会执行）
-//                alert("关闭窗口");
-//               // window.parent.location.reload();//刷新父页面(连菜单等刷新了)
-//               // parent.$('.btn-refresh').click();//刷新父页面
-//                location.reload();//重新加载当前页面
-//            }
-                yes: function (index, layero) {
-                    var body = layer.getChildFrame('body', index);
-                    var formId = body.find("#dataForm");
-                    var rules = {
-                        username: {
-                            required: true
-                        },
-                        password: {
-                            required: true
-                        }
-                    };
-                    var messages = {
-                        username: {
-                            required: "用户名不能为空"
-                        },
-                        password: {
-                            required: "没密码怎么登陆"
-                        }
-                    };
-                    baseTools2.validateForm($(formId), rules, messages);
-                    if (!$(formId).valid()) {
-                        return;
-                    }
-                    baseTools2.ajaxSubmitForm($(formId), formId.attr('action'));
-                }
-            });
-        }
-        ,
-        toPage: function (id) {
-
-        },
-        //查询数据
-        onQuery: function () {
-
-        },
-        //添加、新增
-        onAdd: function () {
-
-        },
-        //编辑
-        onEdit: function () {
-
-        },
-        //添加、编辑
-        onAndOrEdit: function (params) {
-
-        },
-        //支持按钮或者记录行的更新状态、有效标志
-        onUpdateYxbz: function (yxbz) {
-            // var rows = [];
-            // $("input:checkbox[name='IDS']:checked", tbList).each(function () {
-            //     rows.push({ID: this.value});
-            // });
-            // if (rows.length === 0) {
-            //     alert("请选择记录!");
-            //     return;
-            // }
-            //
-            // if (!confirm("确定要修改状态吗?")) {
-            //     return;
-            // }
-            // var ids = jsonPath(rows, "$..ID");
-            // baseTools.ajaxPost({
-            //     url: "/crm/hyzc/onUpdateYxbz",
-            //     params: {IDS: ids.join(','), YXBZ: yxbz},
-            //     callback: [curSeg.pageFlowControl]
-            // });
-        },
-        //支持按钮或者记录行的删除
-        onDelete: function () {
-
         }
     };
 })();

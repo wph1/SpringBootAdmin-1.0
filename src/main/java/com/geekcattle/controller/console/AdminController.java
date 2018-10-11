@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -57,7 +58,8 @@ public class AdminController {
     private RoleService roleService;
 
     private RedisTemplate redisTemplate;
-//    @Autowired
+
+    //    @Autowired
 //	private UserServiceImpl userService;
 //    
 //    @RequestMapping(value = "/ss", method = {RequestMethod.POST})
@@ -73,18 +75,43 @@ public class AdminController {
 //        }
 //        return null;
 //    }
+
+    /**
+     * 修改密码，校验原密码是否正确
+     * @param uid
+     * @param oldPassword
+     * @return true 一致  false 不一致
+     */
+    @PostMapping("/validateOldPwd")
+    @ResponseBody
+    public boolean validateOldPwd(String uid,String oldPassword) {
+        if (StringUtils.isBlank(uid)||StringUtils.isBlank(oldPassword)) {
+            return false;
+        }
+       Admin admin = adminService.getById(uid);
+        if(null!=admin){
+            oldPassword = PasswordUtil.createAdminPwd(oldPassword, admin.getCredentialsSalt());
+            if(StringUtils.isNotEmpty(oldPassword)&&StringUtils.isNotEmpty(admin.getPassword())){
+               if(oldPassword.equals(admin.getPassword())){
+                    return true;
+               }
+            }
+        }
+        return false;
+    }
+
     @RequestMapping(value = "/fromother", method = {RequestMethod.GET})
     public String fromother(Admin admin, Model model) {
         //获取当前登录用户信息
-        Admin obj = (Admin)SecurityUtils.getSubject().getPrincipal();
+        Admin obj = (Admin) SecurityUtils.getSubject().getPrincipal();
         if (!StringUtils.isEmpty(obj.getUid())) {
             admin = adminService.getById(obj.getUid());
-        }else {
+        } else {
             admin.setIsSystem(0);
         }
         model.addAttribute("admin", admin);
-    return "console/admin/fromother";
-}
+        return "console/admin/fromother";
+    }
 
     @RequiresPermissions("admin:index")
     @RequestMapping(value = "/index", method = {RequestMethod.GET})
@@ -109,7 +136,7 @@ public class AdminController {
                 }
                 checkRoleId = String.join(",", checkRoleIds);
             }
-        }else {
+        } else {
             admin.setIsSystem(0);
         }
         model.addAttribute("checkRoleId", checkRoleId);
@@ -170,7 +197,7 @@ public class AdminController {
                 admin.setCreatedAt(DateUtil.getCurrentTime());
                 admin.setUpdatedAt(DateUtil.getCurrentTime());
                 adminService.insert(admin);
-              
+
             } else {//修改
                 Admin updateAdmin = adminService.getById(admin.getUid());
                 if (!"null".equals(updateAdmin)) {
@@ -195,7 +222,7 @@ public class AdminController {
                     adminRole.setRoleId(roleid);
                     adminRoleService.insert(adminRole);
                 }
-            }else{
+            } else {
                 adminRoleService.deleteAdminId(admin.getUid());
             }
             return ReturnUtil.Success("操作成功", null, "/console/admin/index");
@@ -207,7 +234,6 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/savepwd", method = {RequestMethod.POST})
-    @ResponseBody
     public ModelMap editPwd(String uid, String password) {
         try {
             if (StringUtils.isNotEmpty(uid) && StringUtils.isNotEmpty(password)) {
