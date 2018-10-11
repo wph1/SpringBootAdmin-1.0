@@ -16,6 +16,9 @@ var includeTools = {
             case  11:
                 path.push('<script src="/static/commons/admin/admin_index.js" type="text/javascript"></scr' + 'ipt>');
             break;
+            case  13:
+                path.push('<script src="/static/commons/admin/edit_pwd.js" type="text/javascript"></scr' + 'ipt>');
+                break;
             case  12://统计图标组件
                 path.push('<script src="/static/commons/chart/Chart.min.js" type="text/javascript"></scr' + 'ipt>');
 

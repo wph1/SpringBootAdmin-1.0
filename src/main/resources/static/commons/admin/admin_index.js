@@ -179,6 +179,29 @@ var AdminIndex = (function () {
 //                location.reload();//重新加载当前页面
 //            }
                 yes: function (index, layero) {
+                    var body = layer.getChildFrame('body', index);
+                    var formId = body.find("#dataForm");
+                    var rules = {
+                        username: {
+                            required: true
+                        },
+                        password: {
+                            required: true
+                        }
+                    };
+                    var messages = {
+                        username: {
+                            required: "用户名不能为空"
+                        },
+                        password: {
+                            required: "没密码怎么登陆"
+                        }
+                    };
+                    baseTools2.validateForm($(formId), rules, messages);
+                    if (!$(formId).valid()) {
+                        return;
+                    }
+                    baseTools2.ajaxSubmitForm($(formId), formId.attr('action'));
                 }
             });
         },

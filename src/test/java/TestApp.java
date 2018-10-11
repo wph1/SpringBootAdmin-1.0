@@ -30,8 +30,9 @@ public class TestApp extends TestCase {
 
     @Test
     public void testRedis(){
-        redisTemplate.boundValueOps("geekcattle").set("df1111111111111");
-        System.out.println(redisTemplate.opsForValue().get("geekcattle"));
+//        redisTemplate.boundValueOps("geekcattle").set("df1111111111111");
+        System.out.println("拿去redisd的值");
+        System.out.println(redisTemplate.opsForValue().get("shiro-redis-session:be01d223-9a14-4087-810a-3b86829c7ae7"));
     }
 
 

@@ -3,14 +3,18 @@ package com.geekcattle.controller.console;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.Subject;
 import javax.validation.Valid;
 
+import com.geekcattle.core.shiro.ShiroMd5Util;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -51,6 +55,8 @@ public class AdminController {
 
     @Autowired
     private RoleService roleService;
+
+    private RedisTemplate redisTemplate;
 //    @Autowired
 //	private UserServiceImpl userService;
 //    
@@ -68,7 +74,15 @@ public class AdminController {
 //        return null;
 //    }
     @RequestMapping(value = "/fromother", method = {RequestMethod.GET})
-    public String fromother(Model model) {
+    public String fromother(Admin admin, Model model) {
+        //获取当前登录用户信息
+        Admin obj = (Admin)SecurityUtils.getSubject().getPrincipal();
+        if (!StringUtils.isEmpty(obj.getUid())) {
+            admin = adminService.getById(obj.getUid());
+        }else {
+            admin.setIsSystem(0);
+        }
+        model.addAttribute("admin", admin);
     return "console/admin/fromother";
 }
 
@@ -136,7 +150,7 @@ public class AdminController {
                 for (ObjectError er : result.getAllErrors())
                     return ReturnUtil.Error(er.getDefaultMessage(), null, null);
             }
-            if (StringUtils.isEmpty(admin.getUid())) {
+            if (StringUtils.isEmpty(admin.getUid())) {//保存
                 Example example = new Example(Admin.class);
                 example.createCriteria().andCondition("username = ", admin.getUsername());
                 Integer userCount = adminService.getCount(example);
@@ -157,7 +171,7 @@ public class AdminController {
                 admin.setUpdatedAt(DateUtil.getCurrentTime());
                 adminService.insert(admin);
               
-            } else {
+            } else {//修改
                 Admin updateAdmin = adminService.getById(admin.getUid());
                 if (!"null".equals(updateAdmin)) {
                     admin.setSalt(updateAdmin.getSalt());
@@ -192,7 +206,6 @@ public class AdminController {
         }
     }
 
-    @RequiresPermissions("admin:editpwd")
     @RequestMapping(value = "/savepwd", method = {RequestMethod.POST})
     @ResponseBody
     public ModelMap editPwd(String uid, String password) {
@@ -200,11 +213,13 @@ public class AdminController {
             if (StringUtils.isNotEmpty(uid) && StringUtils.isNotEmpty(password)) {
                 Admin admin = adminService.getById(uid);
                 if (!"null".equals(admin)) {
-                    String newPassword = PasswordUtil.createAdminPwd(password, admin.getSalt());
+//                    String newPassword = PasswordUtil.createAdminPwd(password, admin.getSalt());
+                    String newPassword = PasswordUtil.createAdminPwd(password, admin.getCredentialsSalt());
+//                    String newPassword = ShiroMd5Util.SysMd5(uid,password);
                     Admin pwdAdmin = new Admin();
                     pwdAdmin.setPassword(newPassword);
                     Example example = new Example(Admin.class);
-                    example.createCriteria().andCondition("uid", uid);
+                    example.createCriteria().andCondition("uid=", uid);
                     adminService.updateExample(pwdAdmin, example);
                     return ReturnUtil.Success("操作成功", null, null);
                 } else {
