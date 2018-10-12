@@ -90,6 +90,53 @@ var AdminIndex = (function () {
             }
 
         },
+        ceshi: function () {
+            layer.open({
+                type: 2,
+//            title: '添加用户',
+                shadeClose: false,
+                shade: 0.8,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['500px', '600px'],
+                content: '/console/admin/from',
+                btn: ['确定', '取消'] //只是为了演示
+                , yes: function (index, layero) {//layero 是弹出来的窗口对象
+                    var body = layer.getChildFrame('body', index);
+                    var formId = body.find("#formBtn");
+                    formId.click();
+                    // var rules = {
+                    //     username: {
+                    //         required: true
+                    //     },
+                    //     password: {
+                    //         required: true,
+                    //         equalTo: "#username"
+                    //     }
+                    // };
+                    // var messages = {
+                    //     username: {
+                    //         required: "用户名不能为空",
+                    //     },
+                    //     password: {
+                    //         required: "没密码怎么登陆",
+                    //         equalTo:"输入的信息不一致"
+                    //     }
+                    // };
+                    // baseTools2.validateForm($(formId), rules, messages);
+                    // if (!$(formId).valid()) {
+                    //     return;
+                    // }
+                    // console.log("校验通过");
+                    // return;
+                    // baseTools2.ajaxSubmitForm($(formId), formId.attr('action'));
+                },
+                btn2: function () {
+                    layer.closeAll();
+                }
+            })
+            ;
+//        window.location.href = "/console/admin/from";
+        },
         add: function () {
             layer.open({
                 type: 2,
@@ -158,51 +205,6 @@ var AdminIndex = (function () {
                         layer.msg(ret.msg, {icon: 2});
                     }
                 });
-            });
-        },
-        editother : function () {
-
-            layer.open({
-                type: 2,
-//            title: '角色授权',
-                shadeClose: true,
-                shade: 0.8,
-                maxmin: true, //开启最大化最小化按钮
-                btn: ['确定', '取消'],
-                area: ['500px', '600px'],
-                content: '/console/admin/fromother',
-
-//            end:function(){//关闭窗口事件（不管是取消还是保存都会执行）
-//                alert("关闭窗口");
-//               // window.parent.location.reload();//刷新父页面(连菜单等刷新了)
-//               // parent.$('.btn-refresh').click();//刷新父页面
-//                location.reload();//重新加载当前页面
-//            }
-                yes: function (index, layero) {
-                    var body = layer.getChildFrame('body', index);
-                    var formId = body.find("#dataForm");
-                    var rules = {
-                        username: {
-                            required: true
-                        },
-                        password: {
-                            required: true
-                        }
-                    };
-                    var messages = {
-                        username: {
-                            required: "用户名不能为空"
-                        },
-                        password: {
-                            required: "没密码怎么登陆"
-                        }
-                    };
-                    baseTools2.validateForm($(formId), rules, messages);
-                    if (!$(formId).valid()) {
-                        return;
-                    }
-                    baseTools2.ajaxSubmitForm($(formId), formId.attr('action'));
-                }
             });
         },
         edit: function () {

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title" th:text="'管理员'+${#strings.isEmpty(admin.uid)?'添加':'修改'}"></h3>
+                </div>
+                <div class="box-body">
+                    <form id="dataForm" class="form-horizontal" action="/console/admin/save" method="post">
+                        <input type="hidden" name="uid" id="uid" th:value="${admin.uid}" />
+                        <input type="hidden" name="createdAt" th:value="${admin.createdAt}" />
+                        <input type="hidden" name="updatedAt" th:value="${admin.updatedAt}" />
+                        <input type="hidden" name="isSystem" th:value="${admin.isSystem}" />
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label">用户名</label>
+                            <div class="col-sm-10">
+                                <input   type="text" name="username" class="form-control" id="username" th:readonly="${!#strings.equals(admin.uid,null)}" th:value="${admin.username}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label">密码</label>
+                            <div class="col-sm-10">
+                                <input type="password" name="password" class="form-control" id="password" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label">状态</label>
+                            <div class="col-sm-10">
+                                <select name="state" class="form-control" id="state">
+                                    <option th:selected="${#strings.equals(admin.state, 1)}" value="1">正常</option>
+                                    <option th:selected="${#strings.equals(admin.state, 0)}" value="0">禁用</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label">角色</label>
+                            <div class="col-sm-10">
+                                <label class="checkbox-inline" th:each="role:${roleLists}">
+                                    <input type="checkbox" name="roleId" th:checked="${#strings.contains(checkRoleId, role.roleId)}" th:value="${role.roleId}" th:text="${role.roleName}" />
+                                </label>
+
+                            </div>
+                        </div>
+                       <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="button" id="formBtn" style="display: none" onclick="btn()" class="btn btn-default ">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=10"></script>
+<script type="text/javascript">
+    $(function(){
+        var rules = {
+            username: {
+                required: true,
+                    remote: {
+                        url: "/console/admin/validateOldPwd",
+                        type: "post",
+                        data: {
+                            username: function() {
+                                return $("#username").val();
+                            }
+                        }
+                }
+            },
+            password: {
+                required: true,
+                equalTo: "#username"
+            }
+        };
+        var messages = {
+            username: {
+                required: "用户名不能为空",
+                remote:"用户名已存在"
+            },
+            password: {
+                required: "没密码怎么登陆",
+                equalTo:"输入的信息不一致"
+            }
+        };
+      var d=  $("#dataForm");
+        baseTools2.validateForm($(d), rules, messages);
+    });
+function btn(){
+    var d=  $("#dataForm");
+    if (!$(d).valid()) {
+        return;
+    }
+    console.log("校验通过");
+}
+
+</script>
+</body>
+</html>
