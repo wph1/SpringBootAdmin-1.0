@@ -234,6 +234,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/savepwd", method = {RequestMethod.POST})
+    @ResponseBody
     public ModelMap editPwd(String uid, String password) {
         try {
             if (StringUtils.isNotEmpty(uid) && StringUtils.isNotEmpty(password)) {
@@ -247,7 +248,7 @@ public class AdminController {
                     Example example = new Example(Admin.class);
                     example.createCriteria().andCondition("uid=", uid);
                     adminService.updateExample(pwdAdmin, example);
-                    return ReturnUtil.Success("操作成功", null, null);
+                    return ReturnUtil.Success("操作成功,退出重新登录", null, "/console/logout");
                 } else {
                     return ReturnUtil.Error("对像不存在，修改失败", null, null);
                 }

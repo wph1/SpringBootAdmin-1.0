@@ -4,6 +4,7 @@
 
 package com.geekcattle.controller.console;
 
+import com.geekcattle.core.JsonHelp;
 import com.geekcattle.core.LoginEnum;
 import com.geekcattle.core.shiro.CustomerAuthenticationToken;
 import com.geekcattle.model.valid.ValidAdmin;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,7 +37,7 @@ public class Public2Controller {
     private LogService logService;
 
     @RequestMapping(value="/login", method=RequestMethod.GET)
-    public String loginForm(){
+    public String loginForm(Model model){
         try {
             Boolean isAuth = SecurityUtils.getSubject().isAuthenticated();
             if(isAuth){

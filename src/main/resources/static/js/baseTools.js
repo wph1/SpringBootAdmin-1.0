@@ -79,6 +79,7 @@ var baseTools2 = (function () {
 //                        $btn.removeClass('disabled').prop('disabled', false).text(text.replace('中...', '')).parent().find('span').remove();
                     if (data.state === 'success') {
                         layer.msg(data.msg, {icon: 1}, function () {
+                            debugger;
                             if (data.referer) {
                                 operaModel.redirect(data.referer);//返回带跳转地址
                             } else {

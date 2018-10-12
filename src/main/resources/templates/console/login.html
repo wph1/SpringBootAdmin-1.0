@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+	  xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8"></meta>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
@@ -17,6 +18,7 @@
 		<div class="auth-block">
 			<h1>通信网主动防御系统</h1>
 			<form class="form-horizontal" action="/console/login" method="post">
+				<h5 class="box-title" style="color: red;" th:text="${#strings.isEmpty(message)?'':message}"></h5>
 				<div class="form-group">
 					<label for="username" class="col-sm-2 control-label">用户名</label>
 					<div class="col-sm-10">
@@ -48,7 +50,10 @@
 	</main>
 <script src="/static/js/vendor-65ff2a3b75.js"></script>
 <script type="text/javascript" color="255,192,203" opacity="0.9" zindex="-1" count="400" src="/static/js/canvas-nest.min.js"></script>
+	<script type="text/javascript" src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=10"></script>
 	<script >
+        baseTools2.delCookie("WEBID");
         $(function () {
             if (top.location !== location) {
                 top.location.href = self.location.href;

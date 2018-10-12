@@ -12,6 +12,7 @@ var includeTools = {
         switch (parseInt(dm, 10)) {
             case 10: //基础类css/JS
                 path.push('<script src="/static/js/baseTools.js" type="text/javascript"></scr' + 'ipt>');
+                path.push('<script src="/static/commons/base/jquery.cookie.js" type="text/javascript"></scr' + 'ipt>');
                 break;
             case  11:
                 path.push('<script src="/static/commons/admin/admin_index.js" type="text/javascript"></scr' + 'ipt>');
