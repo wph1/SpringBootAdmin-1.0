@@ -25,26 +25,17 @@ public class IndexController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
-//    @RequestMapping
-//    public String index(Model model) {
-//        return "index";
-//    }
-   
     @RequestMapping
     public String index(Model model) {
         return "redirect:/console/login";
     }
-    @RequestMapping(value = "/test",method = {RequestMethod.GET})
-    public String test(Model model){
+
+    @RequestMapping(value = "/test", method = {RequestMethod.GET})
+    public String test(Model model) {
         logger.debug("This is a debug message");
         logger.info("This is an info message");
         logger.warn("This is a warn message");
         logger.error("This is an error message");
-
-
-
-
         String rq = DateUtil.getCurrentTime();
         System.out.println(rq);
         model.addAttribute("rq", rq);
@@ -52,17 +43,14 @@ public class IndexController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/testPost",method = {RequestMethod.POST})
-    public String testpost(HttpServletRequest request){
+    @RequestMapping(value = "/testPost", method = {RequestMethod.POST})
+    public String testpost(HttpServletRequest request) {
         return request.getParameter("rq");
     }
 
-
-
     @RequestMapping("/403")
-    public String forbidden(){
-        return "403";
+    public String forbidden() {
+        return "/console/error/500";
     }
-
 
 }

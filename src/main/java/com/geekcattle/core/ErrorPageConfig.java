@@ -20,16 +20,23 @@ public class ErrorPageConfig {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Bean
-    public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer(){
-        return new MyCustomizer();
+    public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer() {
+        return new EmbeddedServletContainerCustomizer() {
+            public void customize(ConfigurableEmbeddedServletContainer container) {
+                ErrorPage error400Page = new ErrorPage(HttpStatus.BAD_REQUEST, "/error/400.htm");
+                ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/error/401.htm");
+                ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/403");
+                ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/403");
+
+                container.addErrorPages(error400Page, error401Page, error404Page, error500Page);
+            }
+        };
     }
 
-    private static class MyCustomizer implements EmbeddedServletContainerCustomizer {
-
-        @Override
-        public void customize(ConfigurableEmbeddedServletContainer container) {
-            container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, "/403"));
-        }
-
-    }
 }
+
+
+
+
+
+
