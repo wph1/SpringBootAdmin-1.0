@@ -1,3 +1,11 @@
+//对browser支持
+$.browser = {};
+$.browser.mozilla = /firefox/.test(navigator.userAgent.toLowerCase());
+$.browser.webkit = /webkit/.test(navigator.userAgent.toLowerCase());
+$.browser.opera = /opera/.test(navigator.userAgent.toLowerCase());
+$.browser.msie = /msie/.test(navigator.userAgent.toLowerCase());
+
+
 var baseTools2 = (function () {
     // //私有属性
     // var curSeg, formSearch;
@@ -235,7 +243,60 @@ var baseTools2 = (function () {
         }
     };
 })();
-
+/**
+ * 对Date的扩展，将 Date 转化为指定格式的String
+ * 月(M)、日(d)、12小时(h)、24小时(H)、分(m)、秒(s)、周(E)、季度(q) 可以用 1-2 个占位符
+ * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+ * 例如:
+ * var str = "2014/01/01 01:01:01" // yyyy/mm/dd这种格式转化成日期对像可以用new Date(str);在转换成指定格式
+ * alert("格式化字符串\n" + str + " 为日期格式 \n" + new Date(str).format('yyyy-MM-dd hh:mm:ss'))
+ *
+ * var str1 = "2014-12-31 00:55:55" // yyyy-mm-dd这种格式的字符串转化成日期对象可以用new Date(Date.parse(str.replace(/-/g,"/")));
+ * var saveDate = new Date(str1.replace(/-/g, "/"));
+ *
+ * var saveDate = new Date(Date.parse(str1.replace(/-/g, "/")));
+ *
+ * (new Date()).format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+ * (new Date()).format("yyyy-MM-dd E HH:mm:ss") ==> 2009-03-10 二 20:09:04
+ * (new Date()).format("yyyy-MM-dd EE hh:mm:ss") ==> 2009-03-10 周二 08:09:04
+ * (new Date()).format("yyyy-MM-dd EEE hh:mm:ss") ==> 2009-03-10 星期二 08:09:04
+ * (new Date()).format("yyyy-M-d h:m:s.S") ==> 2006-7-2 8:9:4.18
+ */
+Date.prototype.format = function (fmt) {
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours() % 12 == 0 ? 12 : this.getHours() % 12, //小时
+        "H+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    var week = {
+        "0": "/u65e5",
+        "1": "/u4e00",
+        "2": "/u4e8c",
+        "3": "/u4e09",
+        "4": "/u56db",
+        "5": "/u4e94",
+        "6": "/u516d"
+    };
+    if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    if (/(E+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "/u661f/u671f" : "/u5468") : "") + week[this.getDay() + ""]);
+    }
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        }
+    }
+    return fmt;
+};
+baseTools2.seq = 0;
+baseTools2.MAX_PRE_SECOND = 1000;
 /**
  *生成15位的数字流水号(16位以后会出现科学计数影响业务操作)
  */
@@ -247,4 +308,18 @@ baseTools2.getNextSeq = function () {
     var temSeq = "000";
     //return curDate + (temSeq.substring(strSeq.length) + strSeq);
     return curDate + this.lpad(strSeq, 3, "0");
+};
+/**
+ * 左填充
+ * @param str 字符串
+ * @param len 需要的长度
+ * @param pad 需要填充的字符
+ */
+baseTools2.lpad = function (str, len, pad) {
+    if (str.trim() == '') return '';
+    var ret = '';
+    for (var i = 1; i < len - str.length + 1; i++)
+        ret += pad;
+
+    return ret + str;
 };
