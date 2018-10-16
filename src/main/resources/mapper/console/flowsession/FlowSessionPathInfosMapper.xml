@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.flowsession.FlowSessionPathInfosMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.flowsession.FlowSessionPathInfos" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="path_info_id" property="pathInfoId" jdbcType="VARCHAR" />
+    <result column="node" property="node" jdbcType="VARCHAR" />
+    <result column="src_nc" property="srcNc" jdbcType="VARCHAR" />
+    <result column="dst_nc" property="dstNc" jdbcType="VARCHAR" />
+    <result column="flow_session_path_id" property="flowSessionPathId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

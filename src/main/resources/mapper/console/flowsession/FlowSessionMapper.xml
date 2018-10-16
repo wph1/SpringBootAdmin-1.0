@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.flowsession.FlowSessionMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.flowsession.FlowSession" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="sessionId" property="sessionid" jdbcType="VARCHAR" />
+    <result column="src_v_mac" property="srcVMac" jdbcType="VARCHAR" />
+    <result column="dst_mac" property="dstMac" jdbcType="VARCHAR" />
+    <result column="dst_port" property="dstPort" jdbcType="VARCHAR" />
+    <result column="proto" property="proto" jdbcType="VARCHAR" />
+    <result column="dst_v_ip" property="dstVIp" jdbcType="VARCHAR" />
+    <result column="dst_v_mac" property="dstVMac" jdbcType="VARCHAR" />
+    <result column="src_mac" property="srcMac" jdbcType="VARCHAR" />
+    <result column="dst_ip" property="dstIp" jdbcType="VARCHAR" />
+    <result column="s_type" property="sType" jdbcType="VARCHAR" />
+    <result column="src_ip" property="srcIp" jdbcType="VARCHAR" />
+    <result column="topo_mutation" property="topoMutation" jdbcType="VARCHAR" />
+    <result column="src_port" property="srcPort" jdbcType="VARCHAR" />
+    <result column="ttl" property="ttl" jdbcType="VARCHAR" />
+    <result column="src_v_ip" property="srcVIp" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

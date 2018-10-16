@@ -26,7 +26,17 @@
 
         <javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}" type="XMLMAPPER" />
 
-        <table tableName="user_test"  domainObjectName="UserTest">
+       <!-- <table tableName="user_test"  domainObjectName="UserTest">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>-->
+
+        <table tableName="flow_session"  domainObjectName="FlowSession">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+        <table tableName="flow_session_path"  domainObjectName="FlowSessionPath">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+        <table tableName="flow_session_path_infos"  domainObjectName="FlowSessionPathInfos">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>

@@ -91,7 +91,17 @@ public class IPConfigurationController {
         }
         return 3;//IP输入为空
     }
-    
+
+    /**
+     * 点击菜单，先走这里
+     * @param dns
+     * @param rip
+     * @param bind
+     * @param model
+     * @param switches_in
+     * @param httpSession
+     * @return
+     */
     @RequestMapping(value = "/admin/function/init", method = {RequestMethod.GET})
     public String Initial(MtdConfig dns,Rips rip,Binding bind,Model model,Switches switches_in,HttpSession httpSession) {
     	String url = "http://192.168.125.183:8181/restconf/config/dip-config:mtd-config";//获取交换机之间的链路信息
@@ -161,8 +171,10 @@ public class IPConfigurationController {
             model.addAttribute("rip",rip);           
             model.addAttribute("binding",bind);
             List<Rips> listSubnet = ripsService.getPageList(rip);
+            //真实子网信息
             httpSession.setAttribute("listSubnet",listSubnet);
             List<Switches> listSwitch = switchService.getPageList(switches_in);
+            //交换机信息
             httpSession.setAttribute("listSwitch",listSwitch);
         	return "/admin/function/init";
         }
@@ -177,7 +189,14 @@ public class IPConfigurationController {
     		return "/admin/function/display";
         }
     }
-    
+
+
+    /**
+     * 配置完成，向odl发送请求
+     * @param mtd
+     * @param result
+     * @return
+     */
 	@Transactional
 	@RequestMapping(value = "/admin/function/init", method = {RequestMethod.POST})
 	@ResponseBody
@@ -338,8 +357,12 @@ public class IPConfigurationController {
         httpSession.setAttribute("listSwitch",listSwitch);
         return "admin/function/add_binding";
     }
-    
-    //展示交换机绑定列表
+
+    /**
+     * 绑定过的交换机的列表展示
+     * @param bind
+     * @return
+     */
     @RequestMapping(value = "/admin/function/bindingList", method = {RequestMethod.GET})
     @ResponseBody
     public ModelMap bindingList(Binding bind) {
@@ -350,8 +373,12 @@ public class IPConfigurationController {
         map.put("pageInfo", new PageInfo<Binding>(Lists));
         return ReturnUtil.Success("加载成功", map, null);
     }
-    
-    //展示真实网络列表
+
+    /**
+     * 真实子网列表
+     * @param rip
+     * @return
+     */
     @RequestMapping(value = "/admin/function/ripList", method = {RequestMethod.GET})
     @ResponseBody
     public ModelMap ripList(Rips rip) {
@@ -365,7 +392,13 @@ public class IPConfigurationController {
         map.put("pageInfo", new PageInfo<Rips>(Lists));
         return ReturnUtil.Success("加载成功", map, null);
     }
-    
+
+    /**
+     * 给真实子网添加交换机
+     * @param bind
+     * @param result
+     * @return
+     */
     @Transactional
     @RequestMapping(value = "/admin/function/bindingSave", method = {RequestMethod.POST})
     @ResponseBody
@@ -392,7 +425,13 @@ public class IPConfigurationController {
             bindService.insert(bind);
             return ReturnUtil.Success("操作成功", null, "/admin/function/init");
     }
-    
+
+    /**
+     * 保存真实子网
+     * @param rips
+     * @param result
+     * @return
+     */
     @Transactional
     @RequestMapping(value = "/admin/function/ripSave", method = {RequestMethod.POST})
     @ResponseBody
@@ -430,7 +469,12 @@ public class IPConfigurationController {
                 return ReturnUtil.Error("操作失败", null, null);
             }
     }
-    
+
+    /**
+     * 真实子网删除
+     * @param ids
+     * @return
+     */
     @RequestMapping(value = "/admin/function/ripDelete", method = {RequestMethod.GET})
     @ResponseBody
     public ModelMap ripsDelete(String[] ids) {  //真实网络删除函数

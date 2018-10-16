@@ -14,11 +14,14 @@ var includeTools = {
                 path.push('<script src="/static/js/baseTools.js" type="text/javascript"></scr' + 'ipt>');
                 path.push('<script src="/static/commons/base/jquery.cookie.js" type="text/javascript"></scr' + 'ipt>');
                 break;
-            case  11:
+            case  11://用户管理首页
                 path.push('<script src="/static/commons/admin/admin_index.js" type="text/javascript"></scr' + 'ipt>');
             break;
-            case  13:
+            case  13://修改密码
                 path.push('<script src="/static/commons/admin/edit_pwd.js" type="text/javascript"></scr' + 'ipt>');
+                break;
+            case  14://回话信息
+                path.push('<script src="/static/commons/flowsession/flowsession_index.js" type="text/javascript"></scr' + 'ipt>');
                 break;
             case  12://统计图标组件
                 path.push('<script src="/static/commons/chart/Chart.min.js" type="text/javascript"></scr' + 'ipt>');

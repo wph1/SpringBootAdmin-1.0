@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>会话信息</h1>
+    <!--<small>列表管理</small>-->
+</section>
+<section class="content table-content">
+    <div id="toolbar">
+        <button  type="button" class="btn  btn-primary" onclick="FlowSessionIndex.toDetails()">
+            查看详情
+        </button>
+
+    </div>
+    <table id="dataGrid"></table>
+</section>
+
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=1014"></script>
+</body>
+<script type="text/javascript">
+
+</script>
+</html>
