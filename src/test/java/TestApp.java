@@ -31,13 +31,22 @@ public class TestApp extends TestCase {
         System.out.println("拿去redisd的值");
         System.out.println(redisTemplate.opsForValue().get("shiro-redis-session:be01d223-9a14-4087-810a-3b86829c7ae7"));
     }
-
-
     public static void main(String[] args) {
         logger.debug("debug");
         logger.info("info");
         logger.warn("warn");
         logger.error("error");
+    }
+    //测试添加
+    @Test
+    public static void testSelect() {
+        logger.debug("debug");
+        logger.info("info");
+        logger.warn("warn");
+        logger.error("error");
+
+
+
     }
 
 
