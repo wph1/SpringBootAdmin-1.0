@@ -82,6 +82,7 @@ public class TopologyController {
 		List<String> recordList = new ArrayList<>();//避免链路重复画两次，凡是画过得节点都记录一下，每次再画链路的时候，比较源和目的节点是否记录过。
         List<Node> listSwitchNodes = hostdata.getNodes().getNode();    
         for(Node switchNodes : listSwitchNodes) {
+        	//交换机实体数据map开始
         	Map<String,Object>switchData = new HashMap<String,Object>();
         	switchData.put("id", switchNodes.getId());
         	switchData.put("rip", "");
@@ -94,7 +95,9 @@ public class TopologyController {
         	switchData.put("create_time", "");
         	switchData.put("type", "/static/img/switch");//拓扑中显示的图片
         	switchData.put("type_output", "switch");
-            nodeList.add(switchData);  
+			//交换机实体数据map结束
+            nodeList.add(switchData);
+            //交换机连接信息开始
             List<NodeConnector>listNodeConnectors = switchNodes.getNodeConnector();
             for(NodeConnector nodeConnector : listNodeConnectors) {//遍历所有的交换机的所有端口
             	long old_packet_received = 0;
@@ -106,8 +109,7 @@ public class TopologyController {
             		packetAdd.setOldPacketReceived(nodeConnector.getPortStatistics().getPackets().getReceived());
             		packetAdd.setOldPacketTransmitted(nodeConnector.getPortStatistics().getPackets().getTransmitted());
             		oldPacketList.add(packetAdd);
-            	}
-            	else { //如果历史数据端口列表中有数据，则判断列表中是否有和当前遍历的端口id一致的端口信息，有的话，提取历史数据进行比对，没有的话建立新的
+            	}else { //如果历史数据端口列表中有数据，则判断列表中是否有和当前遍历的端口id一致的端口信息，有的话，提取历史数据进行比对，没有的话建立新的
             		tag = 0;  //用于判断oldPacketList中是否存在有和当前connector一样的ID
             		for(OldPacket packetAdd : oldPacketList) {
             			if(packetAdd.getConnector().equals(nodeConnector.getId())) {
@@ -122,18 +124,22 @@ public class TopologyController {
             				continue;
             		}
             	}
+            	//tag==0 代表没有一样的
             	if(tag == 0) {
             		OldPacket packetAdd = new OldPacket();
             		packetAdd.setConnector(nodeConnector.getId());
             		packetAdd.setOldPacketReceived(nodeConnector.getPortStatistics().getPackets().getReceived());
             		packetAdd.setOldPacketTransmitted(nodeConnector.getPortStatistics().getPackets().getTransmitted());
             		oldPacketList.add(packetAdd);
-            	}       		      	
+            	}
+            	//当前最新的端口流量
             	long current_packet_received = nodeConnector.getPortStatistics().getPackets().getReceived();
                 long current_packet_transmitted = nodeConnector.getPortStatistics().getPackets().getTransmitted();                         
             	if ((current_packet_received - old_packet_received > 5) || (current_packet_transmitted - old_packet_transmitted > 5)) {//端口有流量
         			nodeConnector.setTag(1);
+        			//该端口有数据流量包，并且添加到list中
         			dynamicList.add(nodeConnector.getId());
+        			//判断源端口
             		if ((current_packet_transmitted - old_packet_transmitted)>=(current_packet_received - old_packet_received)) {//该端口是源端口
             			nodeConnector.setTagSource(1);//激活源端口标识
             			sourceList.add(nodeConnector.getId());
@@ -187,6 +193,7 @@ public class TopologyController {
             	}
             }
         }
+        //节点信息
 		data.put("nodes", nodeList);
 		//System.out.println(data);
 		/*获取交换机之间的链路信息*/
@@ -264,6 +271,7 @@ public class TopologyController {
 	            linkData.put("bandwidth", "");                    
 	            linkList.add(linkData);
 			}
+			//链路信息
 			data.put("links", linkList);
 			System.out.println(data+"\n");
 	}      

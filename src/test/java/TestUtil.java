@@ -3,10 +3,7 @@ import com.geekcattle.util.DateUtil;
 import com.geekcattle.util.UuidUtil;
 import org.junit.Test;
 
-/**
- * author geekcattle
- * date 2017/1/11 0011 下午 14:08
- */
+
 public class TestUtil{
 
     @Test
