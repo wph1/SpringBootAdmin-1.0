@@ -1,10 +1,15 @@
 package com.geekcattle.model.flowsession;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.geekcattle.model.BaseEntity;
+
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "flow_session_path")
-public class FlowSessionPath {
+public class FlowSessionPath extends BaseEntity implements Serializable {
     /**
      * 路径id
      */
@@ -25,7 +30,31 @@ public class FlowSessionPath {
      * 创建时间
      */
     @Column(name = "create_at")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createAt;
+    @Transient
+    @JsonIgnore
+    private String sort = "";
+
+    @Transient
+    @JsonIgnore
+    private String order = "";
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public String getOrder() {
+        return order;
+    }
 
     /**
      * 获取路径id

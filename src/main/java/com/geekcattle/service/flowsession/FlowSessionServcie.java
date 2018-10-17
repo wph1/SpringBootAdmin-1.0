@@ -14,4 +14,12 @@ public interface FlowSessionServcie {
      * @return
      */
      List<FlowSession> getPageList(FlowSession flowSession);
+
+    /**
+     * 通过主键id进行查询某一条记录
+     * @param id
+     * @return
+     */
+     FlowSession getByPrimaryKey(String id);
+
 }

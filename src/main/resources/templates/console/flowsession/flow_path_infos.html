@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>路径详情</h1>
+    <!--<small>列表管理</small>-->
+</section>
+<section class="content table-content">
+    <table id="pathInfosGrid"></table>
+</section>
+
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=1014"></script>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        FlowSessionPathInfos.onLoad();
+    });
+
+
+    var FlowSessionPathInfos = (function () {
+        //私有属性
+        var curSeg, formSearch, $table;
+        //私有方法
+        //初始化页面UI
+        var initLayout = function () {
+            curSeg = FlowSessionPathInfos;
+            $table = $("#pathInfosGrid");
+        };
+        //公有方法
+        return {
+            onLoad: function () {
+                initLayout();
+                curSeg.initDataGrid();
+                // curSeg.onQuery();
+            },
+            //初始化表格数据
+            initDataGrid: function () {
+                $table.bootstrapTable({
+                    height: tableModel.getHeight(),
+                    idField: "pathInfoId",
+                    columns: [[
+                        // {
+                        //     field: 'checked',
+                        //     checkbox: true
+                        // },
+                        {title: "路径id", field: "id"},
+                        {title: "交换机节点名称", field: "node"},
+                        {title: "数据包接收端口", field: "srcNc"},
+                        {title: "数据包传送端口", field: "dstNc"},
+                        {title: "创建时间", field: "createAt", sortable: true},
+                    ]],
+                    url: '/nework/flowsession/pathInfosList',
+                    queryParams: function (params) {
+                        return params;
+                    },
+                    responseHandler: function (res) {
+                        return {
+                            rows: res.result.pageInfo.list,
+                            total: res.result.pageInfo.total
+                        }
+                    },
+                    search: false,
+                    searchOnEnterKey: false,
+                    sortName: 'createAt',
+                    sortOrder: 'asc',
+                    pagination: true,
+                    sidePagination: 'server',
+                    pageSize: 5,
+                    pageList: [20, 40, 50, 100],
+                    toolbar: "#toolbar",
+                    showRefresh: false,
+                    showToggle: false,
+                    checkbox: true
+                });
+            }
+        };
+    })();
+</script>
+</html>

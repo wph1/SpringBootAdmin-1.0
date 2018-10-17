@@ -24,4 +24,14 @@ public class FlowSessionServcieImpl implements FlowSessionServcie {
         PageHelper.offsetPage(flowSession.getOffset(), flowSession.getLimit(), CamelCaseUtil.toUnderlineName(flowSession.getSort())+" "+flowSession.getOrder());
         return flowSessionMapper.selectAll();
     }
+
+    /**
+     * 通过主键id查询一条数据
+     * @param id
+     * @return
+     */
+    @Override
+    public FlowSession getByPrimaryKey(String id) {
+        return flowSessionMapper.selectByPrimaryKey(id);
+    }
 }
