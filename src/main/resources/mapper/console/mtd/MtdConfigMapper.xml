@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.mtd.MtdConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.mtd.MtdConfig2" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="mtd_id" property="mtdId" jdbcType="VARCHAR" />
+    <result column="honeypot_path_idle" property="honeypotPathIdle" jdbcType="VARCHAR" />
+    <result column="k_path" property="kPath" jdbcType="VARCHAR" />
+    <result column="path_ttl" property="pathTtl" jdbcType="VARCHAR" />
+    <result column="is_mtd_mode" property="isMtdMode" jdbcType="INTEGER" />
+    <result column="session_idle" property="sessionIdle" jdbcType="VARCHAR" />
+    <result column="external_address" property="externalAddress" jdbcType="VARCHAR" />
+    <result column="is_path_mutation" property="isPathMutation" jdbcType="INTEGER" />
+    <result column="dns_forward_address" property="dnsForwardAddress" jdbcType="VARCHAR" />
+    <result column="dns_address" property="dnsAddress" jdbcType="VARCHAR" />
+    <result column="external_switch_port" property="externalSwitchPort" jdbcType="VARCHAR" />
+    <result column="use_honeypot" property="useHoneypot" jdbcType="INTEGER" />
+    <result column="external_gateway" property="externalGateway" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

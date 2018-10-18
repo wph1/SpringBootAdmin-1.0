@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.mtd.FixedPortMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.mtd.FixedPort" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="fixed_port_id" property="fixedPortId" jdbcType="VARCHAR" />
+    <result column="switch_port" property="switchPort" jdbcType="VARCHAR" />
+    <result column="mtd_id" property="mtdId" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>
