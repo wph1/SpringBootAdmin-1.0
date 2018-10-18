@@ -50,7 +50,8 @@ public class FlowSessionController {
      * @return
      */
     @GetMapping(value = "/toPathInfos")
-    public String toPathInfos() {
+    public String toPathInfos(Model model,String pathId) {
+        model.addAttribute("flowSessionPathId",pathId);
         return "/console/flowsession/flow_path_infos";
     }
     /**
@@ -108,16 +109,18 @@ public class FlowSessionController {
 
     /**
      * 某个路径下的节点信息
-     * @param flowSessionPath
+     * @param flowSessionPathInfos
      * @return
      */
     @GetMapping(value = "/pathInfosList")
     @ResponseBody
-    public ModelMap pathInfosList(FlowSessionPathInfos flowSessionPath) {
+    public ModelMap pathInfosList(FlowSessionPathInfos flowSessionPathInfos) {
         ModelMap map = new ModelMap();
-        List<FlowSessionPathInfos> Lists = flowSessionPathInfosServcie.getPageList(flowSessionPath);
+        Example example = new Example(FlowSession.class);
+        example.createCriteria().andCondition("flow_session_path_id = ", flowSessionPathInfos.getFlowSessionPathId());
+        List<FlowSessionPathInfos> Lists = flowSessionPathInfosServcie.getPageList(flowSessionPathInfos,example);
         map.put("pageInfo", new PageInfo<FlowSessionPathInfos>(Lists));
-        map.put("queryParam", flowSessionPath);
+        map.put("queryParam", flowSessionPathInfos);
         return ReturnUtil.Success("加载成功", map, null);
     }
 
