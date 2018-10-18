@@ -23,6 +23,9 @@ var includeTools = {
             case  14://回话信息
                 path.push('<script src="/static/commons/flowsession/flowsession_index.js" type="text/javascript"></scr' + 'ipt>');
                 break;
+            case  15://真实子网配置
+                path.push('<script src="/static/commons/rip/rip_index.js" type="text/javascript"></scr' + 'ipt>');
+                break;
             case  12://统计图标组件
                 path.push('<script src="/static/commons/chart/Chart.min.js" type="text/javascript"></scr' + 'ipt>');
 
