@@ -26,6 +26,9 @@ var includeTools = {
             case  15://真实子网配置
                 path.push('<script src="/static/commons/rip/rip_index.js" type="text/javascript"></scr' + 'ipt>');
                 break;
+            case  16://mtd配置
+                path.push('<script src="/static/commons/mtd/mtd_index.js" type="text/javascript"></scr' + 'ipt>');
+                break;
             case  12://统计图标组件
                 path.push('<script src="/static/commons/chart/Chart.min.js" type="text/javascript"></scr' + 'ipt>');
 

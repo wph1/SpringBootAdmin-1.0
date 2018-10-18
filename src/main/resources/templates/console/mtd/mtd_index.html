@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>mtd配置管理</h1>
+</section>
+<section class="content table-content">
+    <div id="toolbar">
+        <button  type="button" class="btn  btn-primary" onclick="MtdIndex.add()">
+            添加
+        </button>
+        <button  type="button" class="btn btn-danger" onclick="MtdIndex.del()">删除</button>
+        <!--<a href="/console/admin/from" class="btn btn-primary">添加用户</a>-->
+    </div>
+    <table id="mtdGrid"></table>
+</section>
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=1016"></script>
+</body>
+</html>
