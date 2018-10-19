@@ -323,3 +323,25 @@ baseTools2.lpad = function (str, len, pad) {
 
     return ret + str;
 };
+
+//Jquery中有serialize方法，可以将表单序列化为一个“&”连接的字符串;
+// 在该基础上供序列化为Json的方法
+(function ($) {
+    $.fn.serializeJson = function () {
+        var serializeObj = {};
+        var array = this.serializeArray();
+        //var str = this.serialize();
+        $(array).each(function () {
+            if (serializeObj[this.name]) {
+                if ($.isArray(serializeObj[this.name])) {
+                    serializeObj[this.name].push(this.value);
+                } else {
+                    serializeObj[this.name] = [serializeObj[this.name], this.value];
+                }
+            } else {
+                serializeObj[this.name] = this.value;
+            }
+        });
+        return serializeObj;
+    };
+})(jQuery);

@@ -24,56 +24,56 @@
 
                             <div class="col-sm-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="mtd" id="mtd1" checked="checked" value="1" check-type="group">启用
+                                    <input type="radio" name="isMtdMode" id="isMtdMode1" checked="checked" value="1" check-type="group">启用
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="mtd" id="mtd2" value="0" check-type="group">禁用
+                                    <input type="radio" name="isMtdMode" id="isMtdMode2" value="0" check-type="group">禁用
                                 </label>
                             </div>
                         </div>
                         <div id="mtdDiv">
                         <div class="form-group">
-                            <label for="ZC_TEL" class="col-sm-2 control-label">流表最大空闲时间</label>
+                            <label for="sessionIdle" class="col-sm-2 control-label">流表最大空闲时间</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="ZC_TEL" id="ZC_TEL"
+                                <input type="text" class="form-control" name="sessionIdle" id="sessionIdle"
                                        placeholder=""
                                        check-type="required mobileTel" msg="必填项">
                             </div>
 
-                            <label for="ZC_MC" class="col-sm-2 control-label">访问外网的地址</label>
+                            <label for="externalAddress" class="col-sm-2 control-label">访问外网的地址</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="ZC_MC" id="ZC_MC"
+                                <input type="text" class="form-control" name="externalAddress" id="externalAddress"
                                        placeholder=""
                                        check-type="required" msg="必填项">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="ZC_TEL" class="col-sm-2 control-label">dns服务器地址</label>
+                            <label for="dnsForwardAddress" class="col-sm-2 control-label">dns服务器地址</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="ZC_TEL" id="ZC_TEL"
+                                <input type="text" class="form-control" name="dnsForwardAddress" id="dnsForwardAddress"
                                        placeholder=""
                                        check-type="required mobileTel" msg="必填项">
                             </div>
 
-                            <label for="ZC_MC" class="col-sm-2 control-label">内部dns服务器地址</label>
+                            <label for="dnsAddress" class="col-sm-2 control-label">内部dns服务器地址</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="ZC_MC" id="ZC_MC"
+                                <input type="text" class="form-control" name="dnsAddress" id="dnsAddress"
                                        placeholder=""
                                        check-type="required" msg="必填项">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="ZC_TEL" class="col-sm-2 control-label">出外网的端口</label>
+                            <label for="externalSwitchPort" class="col-sm-2 control-label">出外网的端口</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="ZC_TEL" id="ZC_TEL"
+                                <input type="text" class="form-control" name="externalSwitchPort" id="externalSwitchPort"
                                        placeholder=""
                                        check-type="required mobileTel" msg="必填项">
                             </div>
 
-                            <label for="ZC_MC" class="col-sm-2 control-label">出外网的网关</label>
+                            <label for="externalGateway" class="col-sm-2 control-label">出外网的网关</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="ZC_MC" id="ZC_MC"
+                                <input type="text" class="form-control" name="externalGateway" id="externalGateway"
                                        placeholder=""
                                        check-type="required" msg="必填项">
                             </div>
@@ -87,27 +87,28 @@
 
                             <div class="col-sm-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="miguan" id="miguan1" checked="checked" value="1" check-type="group">启用
+                                    <input type="radio" name="useHoneypot" id="useHoneypot1" checked="checked" value="1" check-type="group">启用
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="miguan" id="miguan2" value="0" check-type="group">禁用
+                                    <input type="radio" name="useHoneypot" id="useHoneypot2" value="0" check-type="group">禁用
                                 </label>
                             </div>
                         </div>
+                        <div id="miGuanDiv">
                         <div class="form-group">
-                            <label for="ZC_TEL" class="col-sm-2 control-label">蜜罐流表空闲时间</label>
+                            <label for="honeypotPathIdle" class="col-sm-2 control-label">蜜罐流表空闲时间</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="ZC_TEL" id="ZC_TEL"
+                                <input type="text" class="form-control" name="honeypotPathIdle" id="honeypotPathIdle"
                                        placeholder=""
                                        check-type="required mobileTel" msg="必填项">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                            <table class="table table-bordered">
+                            <table id="mGTable" class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>蜜罐id</th>
+                                    <th>蜜罐ip</th>
                                     <th>蜜罐服务器mac地址</th>
                                     <th>蜜罐所接交换机及端口</th>
                                     <th>操作</th>
@@ -115,39 +116,11 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td><input type="text" class="form-control" ></td>
-                                    <td><input type="text" class="form-control" ></td>
+                                    <td><input type="text" class="form-control" name="honeypotIp" ></td>
+                                    <td><input type="text" class="form-control" name="honeypotMac" ></td>
                                     <td>
-                                        <select id="JZD1" name="JZD1"  >
+                                        <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
                                         <option value=''>请选择交换机</option>
-                                        </select>
-                                    </td>
-                                    <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
-                                                           onclick="onAddRow(this);"></i>&nbsp;&nbsp;
-                                        <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
-                                           onclick="onDelRow(this);"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="text" class="form-control" ></td>
-                                    <td><input type="text" class="form-control" ></td>
-                                    <td>
-                                        <select id="JZD1" name="JZD1"  >
-                                            <option value=''>请选择交换机</option>
-                                        </select>
-                                    </td>
-                                    <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
-                                                           onclick="onAddRow(this);"></i>&nbsp;&nbsp;
-                                        <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
-                                           onclick="onDelRow(this);"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="text" class="form-control" ></td>
-                                    <td><input type="text" class="form-control" ></td>
-                                    <td>
-                                        <select id="JZD1" name="JZD1"  >
-                                            <option value=''>请选择交换机</option>
                                         </select>
                                     </td>
                                     <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
@@ -160,6 +133,7 @@
                             </table>
                             </div>
                         </div>
+                        </div>
                         <div class="box-header with-border">
                             <h3 class="box-title" ><strong>>路径跳变配置</strong></h3>
                         </div>
@@ -168,29 +142,30 @@
 
                             <div class="col-sm-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="YXBZ" id="YXBZ1" value="1" checked="checked" check-type="group">启用
+                                    <input type="radio" name="isPathMutation" id="isPathMutation1" value="1" checked="checked" check-type="group">启用
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="YXBZ" id="YXBZ2" value="0" check-type="group">禁用
+                                    <input type="radio" name="isPathMutation" id="isPathMutation2" value="0" check-type="group">禁用
                                 </label>
                             </div>
                         </div>
+                        <div id="luJingTiaoBianDiv">
                         <div class="form-group">
-                            <label for="ZC_TEL" class="col-sm-2 control-label">可跳变的最大路径数</label>
+                            <label for="kPath" class="col-sm-2 control-label">可跳变的最大路径数</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="ZC_TEL" id="ZC_TEL"
+                                <input type="text" class="form-control" name="kPath" id="kPath"
                                        placeholder=""
                                        check-type="required mobileTel" msg="必填项">
                             </div>
 
-                            <label for="ZC_MC" class="col-sm-2 control-label">路径跳变周期</label>
+                            <label for="pathTtl" class="col-sm-2 control-label">路径跳变周期</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="ZC_MC" id="ZC_MC"
+                                <input type="text" class="form-control" name="pathTtl" id="pathTtl"
                                        placeholder=""
                                        check-type="required" msg="必填项">
                             </div>
                         </div>
-
+                        </div>
 
 
                         <div class="box-header with-border">
@@ -198,7 +173,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <select id="JZD1" name="JZD1" class="col-sm-6" >
+                                <select id="switchPort" name="switchPort" class="col-sm-6" >
                                     <option value=''>请选择交换机</option>
                                 </select>
                             </div>
@@ -240,15 +215,35 @@
             layer.closeAll();
         });
     }
-    $("input[name='mtd']").change(
+    //是否开启mtd配置按钮
+    $("input[name='isMtdMode']").change(
         function() {
-            var id = $("input[name='mtd']:checked").val();
+            var id = $("input[name='isMtdMode']:checked").val();
             if (id == 1) {
                 $("#mtdDiv").show();
             }else if (id == 0){
                 $("#mtdDiv").hide();
             }
         });
+    $("input[name='useHoneypot']").change(
+        function() {
+            var id = $("input[name='useHoneypot']:checked").val();
+            if (id == 1) {
+                $("#miGuanDiv").show();
+            }else if (id == 0){
+                $("#miGuanDiv").hide();
+            }
+        });
+    //是否开启路径跳变
+    $("input[name='isPathMutation']").change(
+    function() {
+        var id = $("input[name='isPathMutation']:checked").val();
+        if (id == 1) {
+            $("#luJingTiaoBianDiv").show();
+        }else if (id == 0){
+            $("#luJingTiaoBianDiv").hide();
+        }
+    });
 </script>
 </body>
 

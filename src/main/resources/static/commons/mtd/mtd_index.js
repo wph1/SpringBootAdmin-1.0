@@ -21,7 +21,7 @@ var MtdIndex = (function () {
         initDataGrid: function () {
             $table.bootstrapTable({
                 height : tableModel.getHeight(),
-                idField : "id",
+                idField : "mtdId",
                 columns : [[
                     {
                         field: 'checked',
@@ -59,7 +59,7 @@ var MtdIndex = (function () {
                 search : true,
                 searchOnEnterKey : true,
                 sortName : 'create_at',
-                sortOrder : 'asc',
+                sortOrder : 'desc',
                 pagination : true,
                 sidePagination : 'server',
                 pageSize: 20,
@@ -81,36 +81,55 @@ var MtdIndex = (function () {
                 btn: ['确定', '取消'] //只是为了演示
                 , yes: function (index, layero) {//layero 是弹出来的窗口对象
                     var body = layer.getChildFrame('body', index);
-                    var btn = body.find("#ripForm");
-                    var rules = {
-                        net: {
-                            required: true
-                        },
-                        prefix: {
-                            required: true
-                        }
-                    };
-                    var messages = {
-                        net: {
-                            required: "用户名不能为空"
-                        },
-                        prefix: {
-                            required: "没密码怎么登陆"
-                        }
-                    };
-                    baseTools2.validateForm($(btn), rules, messages);
-                   // $(btn).click();
-                    if (!$(btn).valid()) {
-                        return;
-                    }
-                    console.log("校验通过");
-                    baseTools2.ajaxSubmitForm($(btn), $(btn).attr('action'));
+                    var mtdForm = body.find("#mtdForm");
+                 var jsonData =    mtdForm.serializeJson();
+                    //组装分期数据结构
+                    jsonData.mgList = [];
+                    var mgTr = mtdForm.find("#mGTable").find("tbody > tr"),
+                        mg;
+                    mgTr.each(function () {
+                        mg = $(this);
+                        jsonData.mgList.push({
+                            honeypotIp: mg.find(":input[name='honeypotIp']")[0].value,
+                            honeypotMac: mg.find(":input[name='honeypotMac']")[0].value,
+                            honeypotSwitchPort: mg.find(":input[name='honeypotSwitchPort']")[0].value
+                        })
+                    });
+                 console.log(jsonData);
+                    baseTools2.ajaxPost({
+                        bShow:false,
+                        url: "/functionView/mtd/mtdSave",
+                        params: {  'STR_JSON': JSON.stringify(jsonData) },
+                        callback: [curSeg.pageFlowControl]
+                    });
                 },
                 btn2: function () {
                     layer.closeAll();
                 }
             })
             ;
+        },
+        /**
+         * 需要的时候可以覆盖该方法
+         * 在ajax调用中，在得到数据时调用该方法
+         */
+        pageFlowControl: function (jsonObj, xhrArgs) {
+            switch (parseInt(jsonObj.status)) {
+                //失败
+                case 0:
+                    layer.alert(jsonObj.msg, {icon: 1},function () {
+                        layer.closeAll();
+                    });
+                    break;
+                //成功
+                case 1:
+                    layer.alert(jsonObj.msg, {icon: 1},function () {
+                        layer.closeAll();
+                        $table.bootstrapTable('refresh',  {url: '/functionView/mtd/mtdList'});
+                    });
+                    break;
+                default:
+            }
         },
         del: function () {
             var ids = "";//得到用户选择的数据的ID
@@ -120,17 +139,17 @@ var MtdIndex = (function () {
                 return;
             }
             for (var i = 0; i < rows.length; i++) {
-                ids += rows[i].id + ',';
+                ids += rows[i].mtdId + ',';
             }
             ids = ids.substring(0, ids.length - 1);
-            curSeg.delRow(ids, '/functionView/rip/ripDelete', 'uid');
+            curSeg.delRow(ids, '/functionView/mtd/mtdDelete', 'mtdId');
         },
         delRow : function (rowid,url,field) {
             layer.confirm('确定删除吗?', function(){
                 $.getJSON(url, {ids:rowid}, function(ret){
                     if (ret.status){
                         layer.msg(ret.msg, {icon: 1});
-                        $table.bootstrapTable('refresh',  {url: '/admin/function/ripList'});
+                        $table.bootstrapTable('refresh',  {url: '/functionView/mtd/mtdList'});
                     } else {
                         layer.msg(ret.msg, {icon: 2});
                     }

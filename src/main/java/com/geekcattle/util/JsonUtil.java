@@ -38,4 +38,13 @@ public class JsonUtil {
         mp.put("result", obj);
         return toJson(mp);
     }
+    /**
+     * 通过json字符串生成Map对象
+     *
+     * @param strJson json字符串
+     * @return 返回Map对象
+     */
+    public static Map getMapByJson(String strJson) {
+        return strJson.isEmpty() ? null : JSON.parseObject(strJson, Map.class);
+    }
 }

@@ -1,29 +1,30 @@
 package com.geekcattle.controller.functionview;
 
 
-import com.geekcattle.model.console.Rips;
+import com.alibaba.fastjson.JSON;
+import com.geekcattle.model.mtd.HoneypotConfig;
 import com.geekcattle.model.mtd.MtdConfig2;
 import com.geekcattle.service.console.RipsService;
+import com.geekcattle.service.mtd.FixedPortService;
+import com.geekcattle.service.mtd.HoneypotConfigService;
 import com.geekcattle.service.mtd.MtdConfigService;
-import com.geekcattle.util.DateUtil;
+import com.geekcattle.util.JsonUtil;
 import com.geekcattle.util.ReturnUtil;
-import com.geekcattle.util.UuidUtil;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * mtd功能controller
@@ -37,6 +38,10 @@ public class MtdController {
 
     @Autowired
     private MtdConfigService mtdConfigService;
+    @Autowired
+    private HoneypotConfigService honeypotConfigService;
+    @Autowired
+    private FixedPortService fixedPortService;
     /**
      * mtd配置列表页跳转
      * @return
@@ -72,43 +77,40 @@ public class MtdController {
     }
 
     /**
-     * 添加真实子网
-     * @param rips
-     * @param result
+     * 添加mtd配置
+     * @param
      * @return
      */
     @Transactional
-    @RequestMapping(value = "/ripSave", method = {RequestMethod.POST})
+    @RequestMapping(value = "/mtdSave", method = {RequestMethod.POST})
     @ResponseBody
-    public ModelMap RipsSave(@Valid Rips rips, BindingResult result) {
+    public ModelMap RipsSave(@RequestParam("STR_JSON")String strJson) {
+        Map<String,Object> map = JsonUtil.getMapByJson(strJson);
         try {
-            if (result.hasErrors()) {
-                for (ObjectError er : result.getAllErrors())
-                    return ReturnUtil.Error(er.getDefaultMessage(), null, null);
+            //mtd配置
+            MtdConfig2   mtdConfig2 = JSON.parseObject(JSON.toJSONString(map), MtdConfig2.class);
+            mtdConfig2.setCreateAt(new Date());
+            mtdConfigService.insert(mtdConfig2);
+            //蜜罐配置
+            List<Map> mapList = (List)MapUtils.getObject(map,"mgList",new ArrayList<>());
+            for(Map m:mapList){
+                HoneypotConfig honeypotConfig=new HoneypotConfig();
+                BeanUtils.populate(honeypotConfig,m);
+                honeypotConfig.setCreateAt(new Date());
+                honeypotConfigService.insert(honeypotConfig);
             }
-            Integer netCount = ripsService.getCountByNet(rips.getNet());
-            if(netCount>0) {
-                return  ReturnUtil.Error("网络名称重复！", null, null);
-            }
-            rips.IPV42Integer_startIp(rips.getStartIpString());
-            rips.IPV42Integer_endIp(rips.getEndIpString());
-            if((rips.getEndIp()-rips.getStartIp())<= 0){
-                return ReturnUtil.Error("结束地址IP必须大于起始地址IP！", null, null);
-            }
-            String Id = UuidUtil.getUUID();
-            rips.setId(Id);
-            rips.setNet(rips.getNet());
-            rips.setVirtualPeriod(rips.getVirtualPeriod());
-            rips.setGateway(rips.getGateway());
-            String rips_start_str = rips.getStartIpString();
-            String rips_end_str = rips.getEndIpString();
-            rips.IPV42Integer_startIp(rips_start_str);
-            rips.IPV42Integer_endIp(rips_end_str);
-            rips.setCreateTime(DateUtil.getCurrentTime());
-            System.out.println("test="+rips.getVirtualPeriod());
+            //静态ip配置
+//            List<Map> mapList = (List)MapUtils.getObject(map,"mpList",new ArrayList<>());
+//            for(Map m:mapList){
+//                HoneypotConfig honeypotConfig = new HoneypotConfig();
+//                BeanUtils.populate(honeypotConfig,m);
+//                honeypotConfigService.insert(honeypotConfig);
+//            }
 
-            ripsService.insert(rips);
-            return ReturnUtil.Success("操作成功", null, "/functionView/rip/index");
+
+
+
+            return ReturnUtil.Success("操作成功", null, "/functionView/mtd/mtdIndex");
         }catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -117,18 +119,18 @@ public class MtdController {
     }
 
     /**
-     * 真实子网删除
+     * mtd配置删除
      * @param ids
      * @return
      */
-    @RequestMapping(value = "/ripDelete", method = {RequestMethod.GET})
+    @RequestMapping(value = "/mtdDelete", method = {RequestMethod.GET})
     @ResponseBody
     public ModelMap ripDelete(String ids) {  //真实网络删除函数
         try {
             if (StringUtils.isNotEmpty(ids)) {
                String[] idList =  ids.split(",");
                     for (String id : idList) {
-                        ripsService.deleteById(id);
+                        mtdConfigService.deleteByPrimaryKey(id);
                 }
                 return ReturnUtil.Success("删除成功", null, null);
             } else {
@@ -136,6 +138,7 @@ public class MtdController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ReturnUtil.Error("删除失败", null, null);
         }
     }

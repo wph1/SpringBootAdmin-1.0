@@ -23,4 +23,22 @@ public class MtdConfigServiceImpl implements MtdConfigService {
         PageHelper.offsetPage(mtdConfig2.getOffset(), mtdConfig2.getLimit(), CamelCaseUtil.toUnderlineName(mtdConfig2.getSort())+" "+ mtdConfig2.getOrder());
         return mtdConfigMapper.selectAll();
     }
+
+    /**
+     * 掺入数据
+     * @param mtdConfig2
+     */
+    @Override
+    public void insert(MtdConfig2 mtdConfig2) {
+        mtdConfigMapper.insert(mtdConfig2);
+    }
+
+    /**
+     * 通过主键id删除
+     * @param id
+     */
+    @Override
+    public void deleteByPrimaryKey(String id) {
+        mtdConfigMapper.deleteByPrimaryKey(id);
+    }
 }
