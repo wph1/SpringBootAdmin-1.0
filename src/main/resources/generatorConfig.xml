@@ -30,14 +30,14 @@
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>-->
 
-        <table tableName="fixed_port"  domainObjectName="FixedPort">
+       <!-- <table tableName="fixed_port"  domainObjectName="FixedPort">
             <generatedKey column="fixed_port_id" sqlStatement="Mysql" identity="true"/>
         </table>
         <table tableName="honeypot_config"  domainObjectName="HoneypotConfig">
             <generatedKey column="honeypot_config_id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="mtd_config"  domainObjectName="MtdConfig">
-            <generatedKey column="mtd_id" sqlStatement="Mysql" identity="true"/>
+        </table>-->
+        <table tableName="virtual_ip_conf"  domainObjectName="VirtualIpConf">
+            <generatedKey column="virtual_ip_conf_id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>
