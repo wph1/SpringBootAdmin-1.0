@@ -3,7 +3,7 @@ $(document).ready(function () {
 });
 var MtdIndex = (function () {
     //私有属性
-    var curSeg, formSearch, $table;
+    var curSeg, formSearch, $table,click = false;
     var initLayout = function () {
         curSeg = MtdIndex;
         $table = $("#mtdGrid");
@@ -12,8 +12,35 @@ var MtdIndex = (function () {
     return {
         onLoad: function () {
             initLayout();
+            curSeg.initValidate();
             curSeg.initDataGrid();
             // curSeg.onQuery();
+        },
+        //多个name属性校验
+        initValidate:function () {
+            if ($.validator) {
+                $.validator.prototype.elements = function () {
+                    var validator = this,
+                        rulesCache = {};
+                    // select all valid inputs inside the form (no submit or reset buttons)
+                    return $([]).add($(this.currentForm)
+                        .find("input, select, textarea")
+                        .not(":submit, :reset, :image, [disabled]")
+                        .not(this.settings.ignore)
+                        .filter(function () {
+                            if (!this.name && validator.settings.debug && window.console) {
+                                console.error("%o has no name assigned", this);
+                            }
+                            //注释这行代码
+                            // select only the first element for each name, and only those with rules specified
+                            //if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+                            //    return false;
+                            //}
+                            rulesCache[this.name] = true;
+                            return true;
+                        }));
+                }
+            }
         },
         //初始化表格数据
         initDataGrid: function () {
@@ -81,12 +108,40 @@ var MtdIndex = (function () {
                         })
                     });
                  console.log(jsonData);
-                    baseTools2.ajaxPost({
-                        bShow:false,
-                        url: "/functionView/vip/vipSave",
-                        params: {  'STR_JSON': JSON.stringify(jsonData) },
-                        callback: [curSeg.pageFlowControl]
-                    });
+                    var rules = {
+                        startIp:{
+                            required: true,
+                            validateIpAddress:true
+                        },
+                        endIp:{
+                            required: true,
+                            validateIpAddress:true
+                        }
+                    };
+                    var messages = {
+
+                        startIp:{
+                            required: "开始ip不能为空"
+                        },
+                        endIp:{
+                            required: "结束ip不能为空",
+                        }
+
+                    };
+                    baseTools2.validateForm($(mtdForm), rules, messages);
+                    if (!$(mtdForm).valid()) {
+                        return;
+                    }
+                    // if(!click) {
+                    //     click = true;
+
+                        baseTools2.ajaxPost({
+                            // bShow:false,
+                            url: "/functionView/vip/vipSave",
+                            params: {'STR_JSON': JSON.stringify(jsonData)},
+                            callback: [curSeg.pageFlowControl]
+                        });
+                    // }
                 },
                 btn2: function () {
                     layer.closeAll();
@@ -130,7 +185,7 @@ var MtdIndex = (function () {
             curSeg.delRow(ids, '/functionView/vip/vipDelete', 'virtualIpConfId');
         },
         delRow : function (rowid,url,field) {
-            layer.confirm('确定删除吗?', function(){
+            layer.confirm('确定删除吗?', function(index){
                 $.getJSON(url, {ids:rowid}, function(ret){
                     if (ret.status){
                         layer.msg(ret.msg, {icon: 1});

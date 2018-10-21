@@ -243,7 +243,7 @@ var MtdIndex = (function () {
 
 
                     baseTools2.ajaxPost({
-                        bShow:false,
+                        // bShow:false,
                         url: "/functionView/mtd/mtdSave",
                         params: {  'STR_JSON': JSON.stringify(jsonData) },
                         callback: [curSeg.pageFlowControl]

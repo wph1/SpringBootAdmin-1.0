@@ -205,9 +205,11 @@ var baseTools2 = (function () {
             //         , '-webkit-border-radius': '10px', '-moz-border-radius': '10px', opacity: .5
             //     }
             // });
+            var maskObj = layer.load(0, {shade: 0.1});
+            return maskObj;
         },
         hideMash: function (maskObj) {
-            $.unblockUI();
+           layer.close(maskObj);
         },
         /**
          * 在ajax请求时添加其他参数(需要在主体软件中重载)
