@@ -33,7 +33,7 @@ public class TestUserTest extends TestCase {
    private UserTestServiceImpl userTestService;
     //测试添加
     @Test
-    public static void testSelect() {
+    public  void testSelect() {
         UserTest test= new UserTest();
         test.setName("王鹏豪");
         test.setPassword("123456");
