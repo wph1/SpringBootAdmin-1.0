@@ -13,9 +13,6 @@
                 </div>
                 <div class="box-body">
                     <form class="form-horizontal" name="mtdForm" id="mtdForm" role="form">
-                        <!--<input type="hidden" name="ZC_ID" value="">-->
-                        <!--<input type="hidden" name="JG_DM" value="">-->
-                        <!--<input type="hidden" id="ZCLY" name="ZCLY" value="PC"/>-->
                         <div class="box-header with-border">
                             <h3 class="box-title" ><strong>>Mtd配置</strong></h3>
                         </div>
@@ -36,15 +33,15 @@
                             <label for="sessionIdle" class="col-sm-2 control-label">流表最大空闲时间</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="sessionIdle" id="sessionIdle"
-                                       placeholder=""
-                                       check-type="required mobileTel" msg="必填项">
+                                       placeholder="整数，如10"
+                                       >
                             </div>
 
                             <label for="externalAddress" class="col-sm-2 control-label">访问外网的地址</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="externalAddress" id="externalAddress"
-                                       placeholder=""
-                                       check-type="required" msg="必填项">
+                                       placeholder="ip地址，如192.168.1.1"
+                                      >
                             </div>
                         </div>
 
@@ -52,30 +49,30 @@
                             <label for="dnsForwardAddress" class="col-sm-2 control-label">dns服务器地址</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="dnsForwardAddress" id="dnsForwardAddress"
-                                       placeholder=""
-                                       check-type="required mobileTel" msg="必填项">
+                                       placeholder="ip地址，如192.168.1.1"
+                                       >
                             </div>
 
                             <label for="dnsAddress" class="col-sm-2 control-label">内部dns服务器地址</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="dnsAddress" id="dnsAddress"
-                                       placeholder=""
-                                       check-type="required" msg="必填项">
+                                       placeholder="ip地址，如192.168.1.1"
+                                       >
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="externalSwitchPort" class="col-sm-2 control-label">出外网的端口</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="externalSwitchPort" id="externalSwitchPort"
-                                       placeholder=""
-                                       check-type="required mobileTel" msg="必填项">
+                                       placeholder="整数，如80"
+                                       >
                             </div>
 
                             <label for="externalGateway" class="col-sm-2 control-label">出外网的网关</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="externalGateway" id="externalGateway"
-                                       placeholder=""
-                                       check-type="required" msg="必填项">
+                                       placeholder="ip地址，如192.168.1.1"
+                                      >
                             </div>
                         </div>
                         </div>
@@ -99,8 +96,8 @@
                             <label for="honeypotPathIdle" class="col-sm-2 control-label">蜜罐流表空闲时间</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="honeypotPathIdle" id="honeypotPathIdle"
-                                       placeholder=""
-                                       check-type="required mobileTel" msg="必填项">
+                                       placeholder="整数，如10"
+                                       >
                             </div>
                         </div>
                         <div class="form-group">
@@ -116,8 +113,8 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td><input type="text" class="form-control" name="honeypotIp" ></td>
-                                    <td><input type="text" class="form-control" name="honeypotMac" ></td>
+                                    <td><input type="text" class="form-control" name="honeypotIp"  placeholder="ip地址，如192.168.1.1"></td>
+                                    <td><input type="text" class="form-control" name="honeypotMac"  placeholder="mac地址"></td>
                                     <td>
                                         <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
                                         <option value=''>请选择交换机</option>
@@ -154,15 +151,15 @@
                             <label for="kPath" class="col-sm-2 control-label">可跳变的最大路径数</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="kPath" id="kPath"
-                                       placeholder=""
-                                       check-type="required mobileTel" msg="必填项">
+                                       placeholder="整数，如10"
+                                       >
                             </div>
 
                             <label for="pathTtl" class="col-sm-2 control-label">路径跳变周期</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" name="pathTtl" id="pathTtl"
-                                       placeholder=""
-                                       check-type="required" msg="必填项">
+                                       placeholder="整数，如10"
+                                      >
                             </div>
                         </div>
                         </div>

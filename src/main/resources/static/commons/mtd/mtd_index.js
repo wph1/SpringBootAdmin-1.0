@@ -13,9 +13,37 @@ var MtdIndex = (function () {
     //公有方法
     return {
         onLoad: function () {
+
             initLayout();
+            curSeg.initValidate();
             curSeg.initDataGrid();
             // curSeg.onQuery();
+        },
+        //多个name属性校验
+        initValidate:function () {
+            if ($.validator) {
+                $.validator.prototype.elements = function () {
+                    var validator = this,
+                        rulesCache = {};
+                    // select all valid inputs inside the form (no submit or reset buttons)
+                    return $([]).add($(this.currentForm)
+                        .find("input, select, textarea")
+                        .not(":submit, :reset, :image, [disabled]")
+                        .not(this.settings.ignore)
+                        .filter(function () {
+                            if (!this.name && validator.settings.debug && window.console) {
+                                console.error("%o has no name assigned", this);
+                            }
+                            //注释这行代码
+                            // select only the first element for each name, and only those with rules specified
+                            //if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+                            //    return false;
+                            //}
+                            rulesCache[this.name] = true;
+                            return true;
+                        }));
+                }
+            }
         },
         //初始化表格数据
         initDataGrid: function () {
@@ -96,6 +124,124 @@ var MtdIndex = (function () {
                         })
                     });
                  console.log(jsonData);
+                    //表单校验
+
+                    var rules = {
+                        honeypotIp:{
+                            required: true,
+                            validateIpAddress:true
+                        },
+                        isMtdMode:{
+                            required: true
+                        },
+                        sessionIdle:{
+                            required: true,
+                            digits:true
+                        },
+                        externalAddress:{
+                            required: true,
+                            validateIpAddress:true
+                        },
+                        dnsForwardAddress:{
+                            required: true,
+                            validateIpAddress:true
+                        },
+                        dnsAddress:{
+                            required: true,
+                            validateIpAddress:true
+                        },
+                        externalSwitchPort:{
+                            required: true
+                        },
+                        externalGateway:{
+                            required: true,
+                            validateIpAddress:true
+                        },
+                        useHoneypot:{
+                            required: true
+                        },
+                        honeypotPathIdle:{
+                            required: true,
+                            digits:true
+                        },
+                        honeypotMac:{
+                            required: true
+                        },
+                        // honeypotSwitchPort:{
+                        //     required: true
+                        // },
+                        isPathMutation:{
+                            required: true
+                        },
+                        pathTtl:{
+                            required: true,
+                            digits:true
+                        },
+                        kPath:{
+                            required: true,
+                            digits:true
+                        }
+                    };
+                    var messages = {
+
+                        honeypotIp:{
+                            required: "蜜罐ip不能为空"
+                        },
+                        isMtdMode:{
+                            required: "请选择mtd配置",
+                        },
+                        sessionIdle:{
+                            required: "不能为空",
+                            digits:"请输入整数"
+                        },
+                        externalAddress:{
+                            required: "访问外网地址不能为空"
+                        },
+                        dnsForwardAddress:{
+                            required: "dns服务器地址不能为空"
+                        },
+                        dnsAddress:{
+                            required: "内部dns服务器地址不能为空"
+                        },
+                        externalSwitchPort:{
+                            required: "出外网的端口不能为空"
+                        },
+                        externalGateway:{
+                            required: "出外网的网关不能为空"
+                        },
+                        useHoneypot:{
+                            required: "请选择蜜罐配置"
+                        },
+                        honeypotPathIdle:{
+                            required: "流表最大空闲时间不能为空",
+                            digits:"请输入整数"
+                        },
+                        honeypotMac:{
+                            required: "请输入蜜罐服务器mac地址"
+                        },
+                        // honeypotSwitchPort:{
+                        //     required: "请选择蜜罐交换机"
+                        // },
+                        isPathMutation:{
+                            required: "请选择路径跳变配置"
+                        },
+                        pathTtl:{
+                            required: "路径跳变周期不能为空",
+                            digits:"路径跳变周期必须为整数"
+                        },
+                        kPath:{
+                            required: "可跳变的最大路径数",
+                            digits:"可调变的最大路径数为整数"
+                        }
+
+                    };
+                    baseTools2.validateForm($(mtdForm), rules, messages);
+                    if (!$(mtdForm).valid()) {
+                        return;
+                    }
+
+
+
                     baseTools2.ajaxPost({
                         bShow:false,
                         url: "/functionView/mtd/mtdSave",

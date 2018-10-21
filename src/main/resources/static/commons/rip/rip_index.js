@@ -54,7 +54,7 @@ var RipIndex = (function () {
                 search : true,
                 searchOnEnterKey : true,
                 sortName : 'createTime',
-                sortOrder : 'asc',
+                sortOrder : 'desc',
                 pagination : true,
                 sidePagination : 'server',
                 pageSize: 20,
@@ -145,7 +145,7 @@ var RipIndex = (function () {
                         return;
                     }
                     console.log("校验通过");
-                    // baseTools2.ajaxSubmitForm($(ripForm), $(ripForm).attr('action'));
+                    baseTools2.ajaxSubmitForm($(ripForm), $(ripForm).attr('action'));
                 },
                 btn2: function () {
                     layer.closeAll();
