@@ -43,6 +43,7 @@ var baseTools2 = (function () {
                 onfocusin:false,
                 onfocusout:false,
                 rules: rules,
+                onkeyup:false,
                 messages: messages,
                 showErrors: function (errorMap, errorList) {
                     if (parseInt(errorList.length) > 0) {
@@ -50,6 +51,18 @@ var baseTools2 = (function () {
                         layer.msg(errorList[0].message, {icon: 2});
                     }
                 }
+                // showErrors: function (errorMap, errorList) {
+                //     var msg = "";
+                //     $.each(errorList, function (i, v) {
+                //         console.log("提示框的参数详解：：："+v.element);
+                //         layer.tips(v.message , v.element, {
+                //             tips: [1, '#3595CC'],
+                //             time: 2000
+                //         });
+                //         return false;
+                //     });
+                // }
+
             });
         },
         //查询数据

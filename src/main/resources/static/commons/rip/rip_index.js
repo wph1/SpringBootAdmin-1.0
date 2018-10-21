@@ -5,7 +5,7 @@ $(document).ready(function () {
 
 var RipIndex = (function () {
     //私有属性
-    var curSeg, formSearch, $table;
+    var curSeg, $table;
     var initLayout = function () {
         curSeg = RipIndex;
         $table = $("#networkGrid");
@@ -15,7 +15,6 @@ var RipIndex = (function () {
         onLoad: function () {
             initLayout();
             curSeg.initDataGrid();
-            // curSeg.onQuery();
         },
         //初始化表格数据
         initDataGrid: function () {
@@ -68,39 +67,85 @@ var RipIndex = (function () {
         add: function () {
             layer.open({
                 type: 2,
-//            title: '添加用户',
                 shadeClose: false,
                 shade: 0.8,
-                maxmin: true, //开启最大化最小化按钮
+                maxmin: true,
                 area: ['500px', '600px'],
                 content: '/functionView/rip/ripAdd',
-                btn: ['确定', '取消'] //只是为了演示
+                btn: ['确定', '取消']
                 , yes: function (index, layero) {//layero 是弹出来的窗口对象
                     var body = layer.getChildFrame('body', index);
-                    var btn = body.find("#ripForm");
+                    var ripForm = body.find("#ripForm");
                     var rules = {
                         net: {
-                            required: true
+                            required: true,
+                            validateNet: true
+
                         },
                         prefix: {
                             required: true
+                        },
+                        startIpString:{
+                            required: true,
+                            validateIpAddress:true
+                        },
+                        endIpString:{
+                            required: true,
+                            validateIpAddress:true
+                        },
+                        gateway:{
+                            required: true,
+                            validateIpAddress:true
+                        },
+                        period:{
+                            required: true,
+                            digits:true
+                        },
+                        virtualPeriod:{
+                            required: true,
+                            digits:true
+                        },
+                        domainPeriod:{
+                            required: true,
+                            digits:true
                         }
                     };
                     var messages = {
                         net: {
-                            required: "用户名不能为空"
+                            required: "名称不能为空",
+                            validatePrefix:true
                         },
                         prefix: {
-                            required: "没密码怎么登陆"
+                            required: "不能为空"
+                        },
+                        startIpString:{
+                            required: "开始ip不能为空"
+                        },
+                        endIpString:{
+                            required: "结束ip不能为空"
+                        },
+                        gateway:{
+                            required: "网关地址不能为空"
+                        },
+                        period:{
+                            required: "不能为空",
+                            digits:"请输入整数"
+                        },
+                        virtualPeriod:{
+                            required: "不能为空",
+                            digits:"请输入整数"
+                        },
+                        domainPeriod:{
+                            required: "不能为空",
+                            digits:"请输入整数"
                         }
                     };
-                    baseTools2.validateForm($(btn), rules, messages);
-                   // $(btn).click();
-                    if (!$(btn).valid()) {
+                    baseTools2.validateForm($(ripForm), rules, messages);
+                    if (!$(ripForm).valid()) {
                         return;
                     }
                     console.log("校验通过");
-                    baseTools2.ajaxSubmitForm($(btn), $(btn).attr('action'));
+                    // baseTools2.ajaxSubmitForm($(ripForm), $(ripForm).attr('action'));
                 },
                 btn2: function () {
                     layer.closeAll();
