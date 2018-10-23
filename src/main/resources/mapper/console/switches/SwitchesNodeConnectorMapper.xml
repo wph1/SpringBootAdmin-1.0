@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.switches.SwitchesNodeConnectorMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.switches.SwitchesNodeConnector" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="node_connector_id" property="nodeConnectorId" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="transmit_drops" property="transmitDrops" jdbcType="INTEGER" />
+    <result column="receive_frame_error" property="receiveFrameError" jdbcType="INTEGER" />
+    <result column="receive_drops" property="receiveDrops" jdbcType="INTEGER" />
+    <result column="receive_crc_error" property="receiveCrcError" jdbcType="INTEGER" />
+    <result column="bytes_transmitted" property="bytesTransmitted" jdbcType="INTEGER" />
+    <result column="bytes_received" property="bytesReceived" jdbcType="INTEGER" />
+    <result column="nanosecond" property="nanosecond" jdbcType="INTEGER" />
+    <result column="second" property="second" jdbcType="INTEGER" />
+    <result column="receive_errors" property="receiveErrors" jdbcType="INTEGER" />
+    <result column="transmit_errors" property="transmitErrors" jdbcType="INTEGER" />
+    <result column="receive_over_run_error" property="receiveOverRunError" jdbcType="INTEGER" />
+    <result column="collision_count" property="collisionCount" jdbcType="INTEGER" />
+    <result column="packets_transmitted" property="packetsTransmitted" jdbcType="INTEGER" />
+    <result column="packets_received" property="packetsReceived" jdbcType="INTEGER" />
+    <result column="link_down" property="linkDown" jdbcType="VARCHAR" />
+    <result column="live" property="live" jdbcType="VARCHAR" />
+    <result column="blocked" property="blocked" jdbcType="VARCHAR" />
+    <result column="flow_name" property="flowName" jdbcType="VARCHAR" />
+    <result column="flow_speed" property="flowSpeed" jdbcType="INTEGER" />
+    <result column="flow_configuration" property="flowConfiguration" jdbcType="VARCHAR" />
+    <result column="flow_supported" property="flowSupported" jdbcType="VARCHAR" />
+    <result column="flow_peer_features" property="flowPeerFeatures" jdbcType="VARCHAR" />
+    <result column="flow_port_number" property="flowPortNumber" jdbcType="INTEGER" />
+    <result column="flow_advertised_features" property="flowAdvertisedFeatures" jdbcType="VARCHAR" />
+    <result column="flow_current_feature" property="flowCurrentFeature" jdbcType="VARCHAR" />
+    <result column="flow_hardware_address" property="flowHardwareAddress" jdbcType="VARCHAR" />
+    <result column="flow_current_speed" property="flowCurrentSpeed" jdbcType="INTEGER" />
+    <result column="switches_id" property="switchesId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

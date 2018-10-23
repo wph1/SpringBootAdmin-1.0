@@ -32,6 +32,9 @@ var includeTools = {
             case  17://vip配置
                 path.push('<script src="/static/commons/vip/vip_index.js" type="text/javascript"></scr' + 'ipt>');
                 break;
+            case  18://switches交换机信息
+                path.push('<script src="/static/commons/switches/switches_index.js" type="text/javascript"></scr' + 'ipt>');
+                break;
             case  12://统计图标组件
                 path.push('<script src="/static/commons/chart/Chart.min.js" type="text/javascript"></scr' + 'ipt>');
 

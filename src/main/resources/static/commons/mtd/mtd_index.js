@@ -104,7 +104,7 @@ var MtdIndex = (function () {
                 shadeClose: false,
                 shade: 0.8,
                 maxmin: true, //开启最大化最小化按钮
-                area: ['850px', '800px'],
+                area: ['850px', '750px'],
                 content: '/functionView/mtd/mtdAdd',
                 btn: ['确定', '取消'] //只是为了演示
                 , yes: function (index, layero) {//layero 是弹出来的窗口对象

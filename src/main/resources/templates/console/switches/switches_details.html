@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="console/header">
+    <meta charset="UTF-8">
+    <title>交换机详情页</title>
+
+</head>
+<body>
+<div class="container">
+    <form role="form" class="form-inline">
+        <input type="hidden" id="flowTableId" name="flowTableId" th:value="${flowTablesId}">
+        <input type="hidden" id="switchesId" name="switchesId" th:value="${switchesId}">
+    </form>
+    <h1>交换机流表信息</h1>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-3">
+            <b> 流id:</b>
+            <span th:text="${flowTables.flowTableId}"></span>
+        </div>
+        <div class="col-xs-3">
+            <b>流总数:</b>
+            <span th:text="${flowTables.activeFlows}"></span>
+        </div>
+        <div class="col-xs-3">
+            <b>查看包数量:</b>
+            <span th:text="${flowTables.packetsLookedUp}"></span>
+        </div>
+        <div class="col-xs-3">
+            <b>匹配包数量:</b>
+            <span th:text="${flowTables.packetsMatched}"></span>
+        </div>
+    </div>
+    <div class="row">
+        <h3>流详情列表</h3>
+        <table id="flowDetailsGrid"></table>
+        <h3>交换机端口列表</h3>
+        <table id="switcheNodeGrid"></table>
+    </div>
+</div>
+<div th:include="console/footer"></div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        FlowSessionDetails.onLoad();
+    });
+
+
+    var FlowSessionDetails = (function () {
+        //私有属性
+        var curSeg, $table;
+        //私有方法
+        //初始化页面UI
+        var initLayout = function () {
+            curSeg = FlowSessionDetails;
+            $table = $("#flowDetailsGrid");
+            $table2 = $("#switcheNodeGrid");
+        };
+        //公有方法
+        return {
+            onLoad: function () {
+                initLayout();
+                curSeg.initDataGrid();
+                curSeg.initSwitchDataGrid();
+                // curSeg.onQuery();
+            },
+            //初始化表格数据
+            initDataGrid: function () {
+                $table.bootstrapTable({
+//                    height: tableModel.getHeight(),
+                    idField: "pathId",
+                    columns: [[
+                        // {
+                        //     field: 'checked',
+                        //     checkbox: true
+                        // },
+                        {title: "流规则id", field: "id"},
+                        {title: "该流规则转发的比特数", field: "byteCount"},
+                        {title: "该流规则转发的包数量", field: "packetCount"},
+                        {title: "创建时间", field: "createTime", sortable: true},
+                    ]],
+                    url: '/functionView/switches/flowDetailsList',
+                    queryParams: function (params) {
+                        params.flowTableId = $("#flowTableId").val();
+                        return params;
+                    },
+                    responseHandler: function (res) {
+                        return {
+                            rows: res.result.pageInfo.list,
+                            total: res.result.pageInfo.total
+                        }
+                    },
+                    search: false,
+                    searchOnEnterKey: false,
+                    sortName: 'createTime',
+                    sortOrder: 'asc',
+                    pagination: true,
+                    sidePagination: 'server',
+                    pageSize: 5,
+                    pageList: [20, 40, 50, 100],
+                    toolbar: "#toolbar",
+                    showRefresh: false,
+                    showToggle: false,
+                    checkbox: true
+                });
+            },
+            //初始化交换机表格数据
+            initSwitchDataGrid: function () {
+                $table2.bootstrapTable({
+//                    height: tableModel.getHeight(),
+                    idField: "pathId",
+                    columns: [[
+                        // {
+                        //     field: 'checked',
+                        //     checkbox: true
+                        // },
+                        {title: "端口编号", field: "id"},
+                        {title: "转发的比特数", field: "bytesTransmitted"},
+                        {title: "接收的比特数", field: "bytesReceived"},
+                        {title: "转发的包数", field: "packetsTransmitted"},
+                        {title: "接收的包数", field: "packetsReceived"},
+                        {title: "创建时间", field: "createTime", sortable: true},
+                    ]],
+                    url: '/functionView/switches/switchNodeList',
+                    queryParams: function (params) {
+                        params.switchesId = $("#switchesId").val();
+                        return params;
+                    },
+                    responseHandler: function (res) {
+                        return {
+                            rows: res.result.pageInfo.list,
+                            total: res.result.pageInfo.total
+                        }
+                    },
+                    search: false,
+                    searchOnEnterKey: false,
+                    sortName: 'createTime',
+                    sortOrder: 'asc',
+                    pagination: true,
+                    sidePagination: 'server',
+                    pageSize: 5,
+                    pageList: [20, 40, 50, 100],
+                    toolbar: "#toolbar",
+                    showRefresh: false,
+                    showToggle: false,
+                    checkbox: true
+                });
+            },
+            //自定义点击id弹窗
+            setId: function (value, row, index) {
+                return "<a href=\"javascript:void(0);\" onclick=\"FlowSessionDetails.toPathInfos('" + value + "')\">" + value + "</a>";
+            },
+            //会话信息某个路径的节点详细信息
+            toPathInfos: function (pathId) {
+                layer.open({
+                    type: 2,
+//            title: '添加用户',
+                    shadeClose: false,
+                    shade: 0.8,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['500px', '400px'],
+                    content: '/nework/flowsession/toPathInfos?pathId=' + pathId
+
+                });
+            }
+        };
+    })();
+</script>
+</html>
+<style type="text/css">
+    div .row {
+        margin-top: 20px;
+    }
+
+    h3 {
+        margin-bottom: 0px;
+    }
+    h1 {
+        margin-bottom: 0px;
+    }
+    b{
+        font-size: 16px;
+    }
+</style>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.switches.FlowInstructionMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.switches.FlowInstruction" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="flow_instruction_id" property="flowInstructionId" jdbcType="VARCHAR" />
+    <result column="order" property="order" jdbcType="INTEGER" />
+    <result column="ethernet_source_address" property="ethernetSourceAddress" jdbcType="VARCHAR" />
+    <result column="ipv4_source" property="ipv4Source" jdbcType="VARCHAR" />
+    <result column="ethernet_destination_address" property="ethernetDestinationAddress" jdbcType="VARCHAR" />
+    <result column="ipv4_destination" property="ipv4Destination" jdbcType="VARCHAR" />
+    <result column="output_node_connector" property="outputNodeConnector" jdbcType="VARCHAR" />
+    <result column="max_length" property="maxLength" jdbcType="INTEGER" />
+    <result column="flow_table_details_id" property="flowTableDetailsId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

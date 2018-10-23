@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.switches.FlowTableMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.switches.FlowTable" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="flow_table_id" property="flowTableId" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="active_flows" property="activeFlows" jdbcType="INTEGER" />
+    <result column="packets_looked_up" property="packetsLookedUp" jdbcType="INTEGER" />
+    <result column="packets_matched" property="packetsMatched" jdbcType="INTEGER" />
+    <result column="switches_id" property="switchesId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

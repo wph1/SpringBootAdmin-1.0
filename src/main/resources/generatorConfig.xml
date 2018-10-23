@@ -26,18 +26,24 @@
 
         <javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}" type="XMLMAPPER" />
 
-       <!-- <table tableName="user_test"  domainObjectName="UserTest">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        <!--<table tableName="switches_new"  domainObjectName="SwitchesNew">
+            <generatedKey column="switches_id" sqlStatement="Mysql" identity="true"/>
         </table>-->
 
-       <!-- <table tableName="fixed_port"  domainObjectName="FixedPort">
-            <generatedKey column="fixed_port_id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="honeypot_config"  domainObjectName="HoneypotConfig">
-            <generatedKey column="honeypot_config_id" sqlStatement="Mysql" identity="true"/>
+       <!-- <table tableName="switches_node_connector"  domainObjectName="SwitchesNodeConnector">
+            <generatedKey column="node_connector_id" sqlStatement="Mysql" identity="true"/>
         </table>-->
-        <table tableName="virtual_ip_conf"  domainObjectName="VirtualIpConf">
-            <generatedKey column="virtual_ip_conf_id" sqlStatement="Mysql" identity="true"/>
-        </table>
+      <!--  <table tableName="switches_dip_data"  domainObjectName="SwitchesDipData">
+            <generatedKey column="dip_data_id" sqlStatement="Mysql" identity="true"/>
+        </table>-->
+       <!-- <table tableName="flow_table"  domainObjectName="FlowTable">
+            <generatedKey column="flow_table_id" sqlStatement="Mysql" identity="true"/>
+        </table>-->
+        <!--<table tableName="flow_table_details"  domainObjectName="FlowTableDetails">
+            <generatedKey column="flow_table_details_id" sqlStatement="Mysql" identity="true"/>
+        </table>-->
+      <!--  <table tableName="flow_instruction"  domainObjectName="FlowInstruction">
+            <generatedKey column="flow_instruction_id" sqlStatement="Mysql" identity="true"/>
+        </table>-->
     </context>
 </generatorConfiguration>

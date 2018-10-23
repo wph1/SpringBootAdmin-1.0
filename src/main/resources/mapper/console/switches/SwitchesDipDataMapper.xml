@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.switches.SwitchesDipDataMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.switches.SwitchesDipData" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="dip_data_id" property="dipDataId" jdbcType="VARCHAR" />
+    <result column="mac" property="mac" jdbcType="VARCHAR" />
+    <result column="vdomain" property="vdomain" jdbcType="VARCHAR" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="rip" property="rip" jdbcType="VARCHAR" />
+    <result column="vip" property="vip" jdbcType="VARCHAR" />
+    <result column="vip_last_mutation" property="vipLastMutation" jdbcType="INTEGER" />
+    <result column="vdomain_last_mutation" property="vdomainLastMutation" jdbcType="INTEGER" />
+    <result column="vmac" property="vmac" jdbcType="VARCHAR" />
+    <result column="node_connector_id" property="nodeConnectorId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

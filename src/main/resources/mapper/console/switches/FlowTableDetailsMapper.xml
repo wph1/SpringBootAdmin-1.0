@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.switches.FlowTableDetailsMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.switches.FlowTableDetails" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="flow_table_details_id" property="flowTableDetailsId" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="idle_timeout" property="idleTimeout" jdbcType="INTEGER" />
+    <result column="cookie" property="cookie" jdbcType="INTEGER" />
+    <result column="flags" property="flags" jdbcType="VARCHAR" />
+    <result column="hard_timeout" property="hardTimeout" jdbcType="INTEGER" />
+    <result column="cookie_mask" property="cookieMask" jdbcType="INTEGER" />
+    <result column="duration_nanosecond" property="durationNanosecond" jdbcType="INTEGER" />
+    <result column="second" property="second" jdbcType="INTEGER" />
+    <result column="byte_count" property="byteCount" jdbcType="INTEGER" />
+    <result column="packet_count" property="packetCount" jdbcType="INTEGER" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="table_id" property="tableId" jdbcType="INTEGER" />
+    <result column="match_tcp_destination_port" property="matchTcpDestinationPort" jdbcType="INTEGER" />
+    <result column="match_tcp_source_port" property="matchTcpSourcePort" jdbcType="INTEGER" />
+    <result column="match_ip_protocol" property="matchIpProtocol" jdbcType="INTEGER" />
+    <result column="match_ipv4_source" property="matchIpv4Source" jdbcType="VARCHAR" />
+    <result column="match_ipv4_destination" property="matchIpv4Destination" jdbcType="VARCHAR" />
+    <result column="match_ethernet_type" property="matchEthernetType" jdbcType="INTEGER" />
+    <result column="flow_table_id" property="flowTableId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>
