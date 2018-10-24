@@ -42,7 +42,7 @@ public class TestUserTest extends TestCase {
 //        String dateString = sdf.format(new Date());
 //        test.setCreateDate();
 //
-//        userTestService.insert();
+        userTestService.insert(test);
 
 
     }

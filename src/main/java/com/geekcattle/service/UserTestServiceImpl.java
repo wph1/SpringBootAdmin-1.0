@@ -1,11 +1,14 @@
 package com.geekcattle.service;
 
 import com.geekcattle.mapper.UserTestMapper;
+import com.geekcattle.mapper.virtualipconf.VirtualIpConfMapper;
 import com.geekcattle.model.UserTest;
+import com.geekcattle.model.virtualipconf.VirtualIpConf;
 import com.geekcattle.util.CamelCaseUtil;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -17,6 +20,8 @@ import java.util.List;
 public class UserTestServiceImpl implements UserTestService {
     @Autowired
     private UserTestMapper userTestMapper;
+    @Autowired
+    private VirtualIpConfMapper virtualIpConfMapper;
 
     /**
      * 分页查询，排序功能
@@ -78,8 +83,17 @@ public class UserTestServiceImpl implements UserTestService {
      * @param userTest
      */
     @Override
+    @Transactional
     public void insert(UserTest userTest) {
-        userTestMapper.insert(userTest);
+        for(int i=0;i<10;i++){
+            userTestMapper.insert(userTest);
+        }
+        VirtualIpConf virtualIpConf = new VirtualIpConf();
+//        virtualIpConf.setVirtualIpConfId();
+        virtualIpConf.setStartIp("wph");
+        virtualIpConf.setEndIp("wph");
+        virtualIpConfMapper.insert(virtualIpConf);
+        int i=2/0;
     }
 
     /**
