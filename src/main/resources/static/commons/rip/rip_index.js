@@ -168,7 +168,9 @@ var RipIndex = (function () {
         },
         delRow : function (rowid,url,field) {
             layer.confirm('确定删除吗?', function(){
+                var   index = layer.load(0, {shade: 0.2});
                 $.getJSON(url, {ids:rowid}, function(ret){
+                    layer.close(index);
                     if (ret.status){
                         layer.msg(ret.msg, {icon: 1});
                         $table.bootstrapTable('refresh',  {url: '/admin/function/ripList'});

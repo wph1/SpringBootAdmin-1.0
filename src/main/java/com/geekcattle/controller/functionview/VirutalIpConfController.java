@@ -35,8 +35,6 @@ import java.util.Map;
 @RequestMapping("/functionView/vip")
 public class VirutalIpConfController {
 
-    @Autowired
-    private RipsService ripsService;
 
     @Autowired
     private MtdConfigService mtdConfigService;

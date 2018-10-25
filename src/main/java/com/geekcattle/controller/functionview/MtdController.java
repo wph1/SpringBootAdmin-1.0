@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.geekcattle.model.mtd.HoneypotConfig;
 import com.geekcattle.model.mtd.MtdConfig2;
 import com.geekcattle.service.console.RipsService;
+import com.geekcattle.service.console.RipsServiceInterface;
 import com.geekcattle.service.mtd.FixedPortService;
 import com.geekcattle.service.mtd.HoneypotConfigService;
 import com.geekcattle.service.mtd.MtdConfigService;
@@ -34,7 +35,7 @@ import java.util.Map;
 public class MtdController {
 
     @Autowired
-    private RipsService ripsService;
+    private RipsServiceInterface ripsService;
 
     @Autowired
     private MtdConfigService mtdConfigService;

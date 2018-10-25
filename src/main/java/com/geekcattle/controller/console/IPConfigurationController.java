@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import com.geekcattle.service.console.RipsServiceInterface;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -52,7 +53,7 @@ public class IPConfigurationController {
     @Autowired
     private BindingService bindService;
     @Autowired
-    private RipsService ripsService;
+    private RipsServiceInterface ripsService;
     @Autowired
     private RipsMapper ripsMapper;
     @Autowired

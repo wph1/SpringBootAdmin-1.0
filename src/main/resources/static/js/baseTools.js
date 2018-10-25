@@ -87,7 +87,7 @@ var baseTools2 = (function () {
                 url: url,
                 dataType: 'json',
                 beforeSubmit: function (arr, $form, options) {
-                    index = layer.load(0, {shade: false});
+                    index = layer.load(0, {shade: 0.2});
                     // alert("提交之前");
                     // $btn.data("loading",true);
                     // var text = $btn.text();

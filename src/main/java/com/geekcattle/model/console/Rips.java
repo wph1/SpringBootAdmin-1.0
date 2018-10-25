@@ -45,10 +45,12 @@ public class Rips extends BaseEntity  implements Serializable {
     
     @Column(name = "create_time")
     private String createTime;
-    
+
+    @Transient
     @NotEmpty(message="网络起始地址不能为空")
     private String startIpString;
-    
+
+    @Transient
     @NotEmpty(message="网络结束地址不能为空")
     private String endIpString;
     

@@ -3,12 +3,18 @@ package com.geekcattle.controller.functionview;
 
 import com.geekcattle.model.console.Rips;
 import com.geekcattle.service.console.RipsService;
+import com.geekcattle.service.console.RipsServiceInterface;
 import com.geekcattle.util.DateUtil;
+import com.geekcattle.util.RestTemplateUtils;
 import com.geekcattle.util.ReturnUtil;
 import com.geekcattle.util.UuidUtil;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -19,9 +25,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 真实子网功能controller
@@ -29,9 +39,15 @@ import java.util.List;
 @Controller
 @RequestMapping("/functionView/rip")
 public class RipController {
-
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    private RipsService ripsService;
+    private RipsServiceInterface ripsService;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Value("${ripSubnetUrl}")
+    private String ripSubnetUrl;
+    @Value("${odlIpAndPort}")
+    private String odlIpAndPort;
     /**
      * 真实子网列表页跳转
      * @return
@@ -75,7 +91,6 @@ public class RipController {
      * @param result
      * @return
      */
-    @Transactional
     @RequestMapping(value = "/ripSave", method = {RequestMethod.POST})
     @ResponseBody
     public ModelMap RipsSave(@Valid Rips rips, BindingResult result) {
@@ -104,10 +119,11 @@ public class RipController {
             rips.IPV42Integer_endIp(rips_end_str);
             rips.setCreateTime(DateUtil.getCurrentTime());
             System.out.println("test="+rips.getVirtualPeriod());
-
-            ripsService.insert(rips);
+//            ripsService.insert(rips);
+            ripsService.insertAndSendOdl(rips);
             return ReturnUtil.Success("操作成功", null, "/functionView/rip/index");
         }catch (Exception e) {
+            logger.info("====>保存rips命令出现异常，"+e.getMessage());
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ReturnUtil.Error("操作失败", null, null);
@@ -125,14 +141,13 @@ public class RipController {
         try {
             if (StringUtils.isNotEmpty(ids)) {
                String[] idList =  ids.split(",");
-                    for (String id : idList) {
-                        ripsService.deleteById(id);
-                }
+                ripsService.deleteByIdAndOdl(idList);
                 return ReturnUtil.Success("删除成功", null, null);
             } else {
                 return ReturnUtil.Error("删除失败", null, null);
             }
         } catch (Exception e) {
+            logger.info("====>向odl发送删除rips命令失败，"+e.getMessage());
             e.printStackTrace();
             return ReturnUtil.Error("删除失败", null, null);
         }
