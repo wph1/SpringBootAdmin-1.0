@@ -37,4 +37,8 @@
     <result column="switches_id" property="switchesId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <delete id="deleteAll" parameterType="String">
+    delete  from switches_node_connector
+  </delete>
 </mapper>

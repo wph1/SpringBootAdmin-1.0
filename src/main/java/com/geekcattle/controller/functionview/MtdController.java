@@ -15,6 +15,8 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +35,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/functionView/mtd")
 public class MtdController {
-
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private RipsServiceInterface ripsService;
 
@@ -82,37 +84,35 @@ public class MtdController {
      * @param
      * @return
      */
-    @Transactional
+//    @Transactional
     @RequestMapping(value = "/mtdSave", method = {RequestMethod.POST})
     @ResponseBody
     public ModelMap RipsSave(@RequestParam("STR_JSON")String strJson) {
         Map<String,Object> map = JsonUtil.getMapByJson(strJson);
         try {
-            //mtd配置
-            MtdConfig2   mtdConfig2 = JSON.parseObject(JSON.toJSONString(map), MtdConfig2.class);
-            mtdConfig2.setCreateAt(new Date());
-            mtdConfigService.insert(mtdConfig2);
-            //蜜罐配置
-            List<Map> mapList = (List)MapUtils.getObject(map,"mgList",new ArrayList<>());
-            for(Map m:mapList){
-                HoneypotConfig honeypotConfig=new HoneypotConfig();
-                BeanUtils.populate(honeypotConfig,m);
-                honeypotConfig.setCreateAt(new Date());
-                honeypotConfigService.insert(honeypotConfig);
-            }
-            //静态ip配置
-//            List<Map> mapList = (List)MapUtils.getObject(map,"mpList",new ArrayList<>());
+//            //mtd配置
+//            MtdConfig2   mtdConfig2 = JSON.parseObject(JSON.toJSONString(map), MtdConfig2.class);
+//            mtdConfig2.setCreateAt(new Date());
+//            mtdConfigService.insert(mtdConfig2);
+//            //蜜罐配置
+//            List<Map> mapList = (List)MapUtils.getObject(map,"mgList",new ArrayList<>());
 //            for(Map m:mapList){
-//                HoneypotConfig honeypotConfig = new HoneypotConfig();
+//                HoneypotConfig honeypotConfig=new HoneypotConfig();
 //                BeanUtils.populate(honeypotConfig,m);
+//                honeypotConfig.setCreateAt(new Date());
 //                honeypotConfigService.insert(honeypotConfig);
 //            }
-
-
-
-
+//            //静态ip配置
+////            List<Map> mapList = (List)MapUtils.getObject(map,"mpList",new ArrayList<>());
+////            for(Map m:mapList){
+////                HoneypotConfig honeypotConfig = new HoneypotConfig();
+////                BeanUtils.populate(honeypotConfig,m);
+////                honeypotConfigService.insert(honeypotConfig);
+////            }
+            mtdConfigService.insertMtdConfigAndOdl(map);
             return ReturnUtil.Success("操作成功", null, "/functionView/mtd/mtdIndex");
         }catch (Exception e) {
+            logger.info("====>插入mtdconfig失败，"+e.getMessage());
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ReturnUtil.Error("操作失败", null, null);
@@ -126,18 +126,17 @@ public class MtdController {
      */
     @RequestMapping(value = "/mtdDelete", method = {RequestMethod.GET})
     @ResponseBody
-    public ModelMap ripDelete(String ids) {  //真实网络删除函数
+    public ModelMap mtdDelete(String ids) {  //真实网络删除函数
         try {
             if (StringUtils.isNotEmpty(ids)) {
                String[] idList =  ids.split(",");
-                    for (String id : idList) {
-                        mtdConfigService.deleteByPrimaryKey(id);
-                }
+                    mtdConfigService.deleteMtdConfigAndOdl(idList);
                 return ReturnUtil.Success("删除成功", null, null);
             } else {
                 return ReturnUtil.Error("删除失败", null, null);
             }
         } catch (Exception e) {
+            logger.info("====>向odl发送删除mtd命令失败，"+e.getMessage());
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ReturnUtil.Error("删除失败", null, null);

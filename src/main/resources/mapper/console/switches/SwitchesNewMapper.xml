@@ -9,4 +9,9 @@
     <result column="switches_name" property="switchesName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
+
+  <delete id="deleteAll">
+    delete  from switches_new
+  </delete>
 </mapper>

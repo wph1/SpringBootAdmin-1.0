@@ -4,19 +4,34 @@ import com.geekcattle.mapper.virtualipconf.VirtualIpConfMapper;
 import com.geekcattle.model.virtualipconf.VirtualIpConf;
 import com.geekcattle.service.virtualipconf.VirtualIpConfServcie;
 import com.geekcattle.util.CamelCaseUtil;
+import com.geekcattle.util.RestTemplateUtils;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * 虚拟ip池service接口
  */
 @Service
 public class VirtualIpConfServcieImpl  implements VirtualIpConfServcie {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private VirtualIpConfMapper virtualIpConfMapper;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Value("${virtualIpConfigUrl}")
+    private String virtualIpConfigUrl;
+    @Value("${odlIpAndPort}")
+    private String odlIpAndPort;
     /**
      * 列表分页查询
      * @param virtualIpConf
@@ -43,4 +58,38 @@ public class VirtualIpConfServcieImpl  implements VirtualIpConfServcie {
         virtualIpConfMapper.deleteByPrimaryKey(id);
     }
 
+    /**
+     * 添加真实子网，并配置odl
+     * @param mapList
+     */
+    @Override
+    @Transactional
+    public void saveOdl(List<Map> mapList) throws Exception{
+        for(Map m:mapList){
+            VirtualIpConf virtualIpConf=new VirtualIpConf();
+            BeanUtils.populate(virtualIpConf,m);
+            virtualIpConf.setCreateAt(new Date());
+            virtualIpConfMapper.insert(virtualIpConf);
+        }
+        Map<String,Object>binding_json = new HashMap<String,Object>();
+        Map<String,Object>bindingConf = new HashMap<String,Object>();
+        bindingConf.put("virtual-ip-conf", mapList);
+        bindingConf.put("use-own-address", true);
+        binding_json.put("virtual-config", bindingConf);
+        String responseStr = (String)  RestTemplateUtils.sendUrl(restTemplate,odlIpAndPort+virtualIpConfigUrl, HttpMethod.PUT,binding_json);
+        logger.info("====>向odl发送保存配置虚拟ip命令完成");
+    }
+    /**
+     * 删除odl虚拟池配置
+     * @param idList
+     */
+    @Override
+    @Transactional
+    public void deleteVirtualConfigAndOdl(String[] idList) {
+        for (String id : idList) {
+            virtualIpConfMapper.deleteByPrimaryKey(id);
+        }
+        String responseStr = (String)  RestTemplateUtils.sendUrl(restTemplate,odlIpAndPort+virtualIpConfMapper, HttpMethod.DELETE,null);
+        logger.info("====>向odl发送删除虚拟ip池命令完成");
+    }
 }

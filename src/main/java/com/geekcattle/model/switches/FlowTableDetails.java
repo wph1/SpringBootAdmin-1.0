@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.geekcattle.model.BaseEntity;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -51,7 +52,7 @@ public class FlowTableDetails extends BaseEntity implements Serializable {
      * 该流规则转发的包数量
      */
     @Column(name = "packet_count")
-    private Integer packetCount;
+    private BigInteger packetCount;
 
     private Integer priority;
 
@@ -243,7 +244,7 @@ public class FlowTableDetails extends BaseEntity implements Serializable {
      *
      * @return packet_count - 该流规则转发的包数量
      */
-    public Integer getPacketCount() {
+    public BigInteger getPacketCount() {
         return packetCount;
     }
 
@@ -252,7 +253,7 @@ public class FlowTableDetails extends BaseEntity implements Serializable {
      *
      * @param packetCount 该流规则转发的包数量
      */
-    public void setPacketCount(Integer packetCount) {
+    public void setPacketCount(BigInteger packetCount) {
         this.packetCount = packetCount;
     }
 

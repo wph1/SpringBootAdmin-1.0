@@ -91,12 +91,7 @@ public class VirutalIpConfController {
         Map<String,Object> map = JsonUtil.getMapByJson(strJson);
         try {
             List<Map> mapList = (List)MapUtils.getObject(map,"mgList",new ArrayList<>());
-            for(Map m:mapList){
-                VirtualIpConf virtualIpConf=new VirtualIpConf();
-                BeanUtils.populate(virtualIpConf,m);
-                virtualIpConf.setCreateAt(new Date());
-                virtualIpConfServcie.insert(virtualIpConf);
-            }
+           virtualIpConfServcie.saveOdl(mapList);
             return ReturnUtil.Success("操作成功", null, null);
         }catch (Exception e) {
             e.printStackTrace();
@@ -116,9 +111,7 @@ public class VirutalIpConfController {
         try {
             if (StringUtils.isNotEmpty(ids)) {
                String[] idList =  ids.split(",");
-                    for (String id : idList) {
-                        virtualIpConfServcie.deleteByPrimaryKey(id);
-                }
+                virtualIpConfServcie.deleteVirtualConfigAndOdl(idList);
                 return ReturnUtil.Success("删除成功", null, null);
             } else {
                 return ReturnUtil.Error("删除失败", null, null);

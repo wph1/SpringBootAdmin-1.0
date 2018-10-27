@@ -1,5 +1,6 @@
 package com.geekcattle.service.switches;
 
+import com.geekcattle.model.console.Switches;
 import com.geekcattle.model.switches.FlowTable;
 import tk.mybatis.mapper.entity.Example;
 
@@ -16,4 +17,10 @@ public interface FlowTableService {
      * @return
      */
      List<FlowTable> getByExample(Example example);
+
+    /**
+     * 获取交换机流表信息
+     */
+    void getSwitchFlow();
+
 }

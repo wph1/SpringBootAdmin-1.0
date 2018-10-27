@@ -6,4 +6,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface SwitchesNodeConnectorMapper extends CustomerMapper<SwitchesNodeConnector> {
+    void deleteAll();
 }

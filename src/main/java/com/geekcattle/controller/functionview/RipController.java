@@ -4,10 +4,7 @@ package com.geekcattle.controller.functionview;
 import com.geekcattle.model.console.Rips;
 import com.geekcattle.service.console.RipsService;
 import com.geekcattle.service.console.RipsServiceInterface;
-import com.geekcattle.util.DateUtil;
-import com.geekcattle.util.RestTemplateUtils;
-import com.geekcattle.util.ReturnUtil;
-import com.geekcattle.util.UuidUtil;
+import com.geekcattle.util.*;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -18,13 +15,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
@@ -83,6 +78,16 @@ public class RipController {
     @GetMapping(value = "/ripAdd")
     public String ripAdd() {
         return "/console/rip/rip_add";
+    }
+
+    /**
+     * 真实子网绑定交换机
+     * @return
+     */
+    @GetMapping(value = "/ripAddSwitches")
+    public String ripAddSwitches(String id,Model model) {
+        model.addAttribute("id",id);
+        return "/console/rip/ripAddSwitches";
     }
 
     /**
@@ -150,6 +155,21 @@ public class RipController {
             logger.info("====>向odl发送删除rips命令失败，"+e.getMessage());
             e.printStackTrace();
             return ReturnUtil.Error("删除失败", null, null);
+        }
+    }
+
+
+    @RequestMapping(value = "/bindSwitchesSave", method = {RequestMethod.POST})
+    @ResponseBody
+    public ModelMap bindSwitchesSave(@RequestParam("BIND_JSON")String strJson) {
+        Map<String,Object> map = JsonUtil.getMapByJson(strJson);
+        try {
+            ripsService.bingSwitches(map);
+            return ReturnUtil.Success("操作成功", null, null);
+        }catch (Exception e) {
+            logger.info("====> 绑定交换机失败，"+e.getMessage());
+            e.printStackTrace();
+            return ReturnUtil.Error("操作失败", null, null);
         }
     }
 

@@ -22,4 +22,9 @@ public interface FlowSessionServcie {
      */
      FlowSession getByPrimaryKey(String id);
 
+    /**
+     * 获取回话信息
+     */
+    void getFlowsessionInfoByOdl();
+
 }

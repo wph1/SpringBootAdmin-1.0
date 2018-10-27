@@ -1,4 +1,7 @@
 import com.geekcattle.Application;
+import com.geekcattle.mapper.console.SwitchMapper;
+import com.geekcattle.mapper.switches.SwitchesNewMapper;
+import com.geekcattle.service.console.SwitchService;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +24,12 @@ public class TestApp extends TestCase {
 
     @Autowired
     JedisPool jedisPool;
-
+    @Autowired
+    private SwitchesNewMapper switchesNewMapper;
+    @Autowired
+    private SwitchService switchService;
+    @Autowired
+    private SwitchMapper sMapper;
     @Autowired
     RedisTemplate<String, String> redisTemplate;
 
@@ -39,11 +47,10 @@ public class TestApp extends TestCase {
     }
     //测试添加
     @Test
-    public static void testSelect() {
-        logger.debug("debug");
-        logger.info("info");
-        logger.warn("warn");
-        logger.error("error");
+    public  void testSelect() {
+
+//        sMapper.deleteAll();
+        switchesNewMapper.deleteAll();
 
 
 

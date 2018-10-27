@@ -4,6 +4,7 @@ import com.geekcattle.model.console.Rips;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RipsServiceInterface {
 
@@ -34,6 +35,12 @@ public interface RipsServiceInterface {
     void save(Rips net);
 
     void updateExample(Rips network, Example example);
+
+    /**
+     * 真实子网绑定交换机
+     * @param map
+     */
+    void bingSwitches(Map map);
 
 
 }

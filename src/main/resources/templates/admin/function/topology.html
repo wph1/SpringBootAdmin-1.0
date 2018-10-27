@@ -44,151 +44,151 @@
     <script src="/static/js/d3.v3.min.js"></script>
     <script src="/static/js/topology.js"></script>
        <script type="text/javascript">
-//        $().ready(initTopology);
-//    	var tag = window.sessionStorage.getItem("tag");
-//    	if (tag==1)
-//        	setInterval('initTopology()',5000); //每10秒刷新一次页面下边显示的数据
-//        function initTopology(){
-//        	$.ajax({
-//        		type:"get",
-//        		url:"/admin/function/topologyData",
-//        		dataType:'json',
-//        		async:false,
-//        		success:function(data){
-//        			var topology=new Topology('topology_svg');
-//        			var nodeInfo = d3.select("#nodeInfo");
-//        			var linkInfo = d3.select("#linkInfo");
-//        			topology.mouseoverLinkHandler = function(d) {
-//        			  linkInfo
-//        			  .style("display", "block")
-//        			  .style("width","300px")
-//       			      .style("left", function(){
-//        					var position_source = window.sessionStorage.getItem(d.source.id);
-//        					var position_target = window.sessionStorage.getItem(d.target.id);
-//      						/*<![CDATA[*/   //这句话不是注释，作用是thymeleaf不能解析&&,因此需要加上这句话
-//          					if(position_source != null && position_target != null)
-//          					{
-//          						var dot_source = position_source.indexOf(",");
-//          						var dot_target = position_target.indexOf(",");
-//
-//          						if(dot_source>0  && dot_target>0)
-//          						{
-//          							var x_source= position_source.slice(0,dot_source);
-//          							var xFloat_source = parseFloat(x_source);
-//          							var x_target= position_target.slice(0,dot_target);
-//          							var xFloat_target = parseFloat(x_target);
-//          							return ((xFloat_source + xFloat_target)/2 + "px");
-//          						}
-//          					}/*]]>*/
-//          			    	return ((d.source.x + d.target.x)/2 + 40 + "px");
-//       			      })
-//       			      .style("top", function(){
-//      					var position_source = window.sessionStorage.getItem(d.source.id);
-//      					var position_target = window.sessionStorage.getItem(d.target.id);
-//						/*<![CDATA[*/   //这句话不是注释，作用是thymeleaf不能解析&&,因此需要加上这句话
-//        					if(position_source != null && position_target != null)
-//        					{
-//        						var dot_source = position_source.indexOf(",");
-//        						var dot_target = position_target.indexOf(",");
-//
-//        						if(dot_source>0 && dot_target>0)
-//        						{
-//        							var y_source= position_source.slice(dot_source+1);
-//        							var yFloat_source = parseFloat(y_source);
-//        							var y_target= position_target.slice(dot_target+1);
-//        							var yFloat_target = parseFloat(y_target);
-//        							return ((yFloat_source + yFloat_target)/2 + "px");
-//        						}/*]]>*/
-//        					}
-//        			    	return ((d.source.y + d.target.y)/2 + "px");
-//     			      })
-//        			  .transition()
-//        			  .duration(500)
-//        			  .style("opacity", .9);
-//
-//        			  linkInfo.select(".head").text(d.source.id + "(" + d.src_port + ")" + "  ---->  " + d.target.id + "(" + d.dst_port + ")");
-//        			};
-//        			topology.mouseoutLinkHandler = function(d) {
-//        			  linkInfo
-//        			  .style("opacity", 0)
-//        			  .style("display", "none");
-//        			};
-//
-//        			topology.dblclickNodeHandler = function(d) {
-//        			  d.fixed = (!d.fixed);
-//        			  nodeInfo.classed("locked", d.fixed);
-//        			  d3.select(this).classed("fixed", d.fixed);
-//        			  // topology.force.stop();
-//        			};
-//
-//        			topology.mouseoverNodeHandler = function(d) {
-//        			  if (nodeInfo.classed("locked")) return;
-//        			  if (d.type_output == "host"){   //只有主机才显示信息
-//            			nodeInfo
-//          			    .style("display", "block")
-//          			    .style("left", function(){
-//          					var position = window.sessionStorage.getItem(d.id);
-//          					if(position != null)
-//          					{
-//          						var dot = position.indexOf(",");
-//          						/*<![CDATA[*/   //这句话不是注释，作用是thymeleaf不能解析&&,因此需要加上这句话
-//          						if(dot>0 && dot<position.length)
-//          						{
-//          							var x= position.slice(0,dot);
-//          							var xFloat = parseFloat(x);
-//          							return ((xFloat + 60) + "px");
-//          						}/*]]>*/
-//          					}
-//          			    	return ((d.x + 60) + "px");
-//          			    })
-//          			    .style("top", function(){
-//          					var position = window.sessionStorage.getItem(d.id);
-//          					if(position != null)
-//          					{
-//          						var dot = position.indexOf(",");
-//          						/*<![CDATA[*/   //这句话不是注释，作用是thymeleaf不能解析&&,因此需要加上这句话
-//          						if(dot>0 && dot<position.length)
-//          						{
-//          							var y= position.slice(dot+1);
-//          							var yFloat = parseFloat(y);
-//          							return ((yFloat - 10) + "px");
-//          						}/*]]>*/
-//          					}
-//          			    	return ((d.y - 10) + "px");
-//          			    })
-//          			    .transition()
-//          			    .duration(500)
-//          			    .style("opacity", .9);
-//
-//        				nodeInfo.select(".head").text(d.id);
-//	        			nodeInfo.select(".rip").text(d.rip);
-//	        			nodeInfo.select(".port").text(d.port);
-//	        			nodeInfo.select(".rmac").text(d.rmac);
-//	        			nodeInfo.select(".vip").text(d.vip);
-//	        			nodeInfo.select(".vip_time").text(d.vip_time);
-//	        			nodeInfo.select(".vdomain").text(d.vdomain);
-//	        			nodeInfo.select(".vdomain_time").text(d.vdomain_time);
-//	        			nodeInfo.select(".type_output").text(d.type_output);
-//	        			nodeInfo.select(".create_time").text(d.create_time);
-//        			  }
-//        			};
-//
-//        			topology.mouseoutNodeHandler = function(d) {
-//        			  if (nodeInfo.classed("locked")) return;
-//        			  nodeInfo
-//        			    .style("opacity", 0)
-//        			    .style("display", "none");
-//        			};
-//
-//        			topology.init(data);
-//        		},
-//        		error:function(){
-//        			alert("error!");
-//        		}
-//        	})
-//        };
-//
-layer.alert("请求超时！")
+        $().ready(initTopology);
+    	var tag = window.sessionStorage.getItem("tag");
+    	if (tag==1)
+        	setInterval('initTopology()',5000); //每10秒刷新一次页面下边显示的数据
+        function initTopology(){
+        	$.ajax({
+        		type:"get",
+        		url:"/admin/function/topologyData",
+        		dataType:'json',
+        		async:false,
+        		success:function(data){
+        			var topology=new Topology('topology_svg');
+        			var nodeInfo = d3.select("#nodeInfo");
+        			var linkInfo = d3.select("#linkInfo");
+        			topology.mouseoverLinkHandler = function(d) {
+        			  linkInfo
+        			  .style("display", "block")
+        			  .style("width","300px")
+       			      .style("left", function(){
+        					var position_source = window.sessionStorage.getItem(d.source.id);
+        					var position_target = window.sessionStorage.getItem(d.target.id);
+      						/*<![CDATA[*/   //这句话不是注释，作用是thymeleaf不能解析&&,因此需要加上这句话
+          					if(position_source != null && position_target != null)
+          					{
+          						var dot_source = position_source.indexOf(",");
+          						var dot_target = position_target.indexOf(",");
+
+          						if(dot_source>0  && dot_target>0)
+          						{
+          							var x_source= position_source.slice(0,dot_source);
+          							var xFloat_source = parseFloat(x_source);
+          							var x_target= position_target.slice(0,dot_target);
+          							var xFloat_target = parseFloat(x_target);
+          							return ((xFloat_source + xFloat_target)/2 + "px");
+          						}
+          					}/*]]>*/
+          			    	return ((d.source.x + d.target.x)/2 + 40 + "px");
+       			      })
+       			      .style("top", function(){
+      					var position_source = window.sessionStorage.getItem(d.source.id);
+      					var position_target = window.sessionStorage.getItem(d.target.id);
+						/*<![CDATA[*/   //这句话不是注释，作用是thymeleaf不能解析&&,因此需要加上这句话
+        					if(position_source != null && position_target != null)
+        					{
+        						var dot_source = position_source.indexOf(",");
+        						var dot_target = position_target.indexOf(",");
+
+        						if(dot_source>0 && dot_target>0)
+        						{
+        							var y_source= position_source.slice(dot_source+1);
+        							var yFloat_source = parseFloat(y_source);
+        							var y_target= position_target.slice(dot_target+1);
+        							var yFloat_target = parseFloat(y_target);
+        							return ((yFloat_source + yFloat_target)/2 + "px");
+        						}/*]]>*/
+        					}
+        			    	return ((d.source.y + d.target.y)/2 + "px");
+     			      })
+        			  .transition()
+        			  .duration(500)
+        			  .style("opacity", .9);
+
+        			  linkInfo.select(".head").text(d.source.id + "(" + d.src_port + ")" + "  ---->  " + d.target.id + "(" + d.dst_port + ")");
+        			};
+        			topology.mouseoutLinkHandler = function(d) {
+        			  linkInfo
+        			  .style("opacity", 0)
+        			  .style("display", "none");
+        			};
+
+        			topology.dblclickNodeHandler = function(d) {
+        			  d.fixed = (!d.fixed);
+        			  nodeInfo.classed("locked", d.fixed);
+        			  d3.select(this).classed("fixed", d.fixed);
+        			  // topology.force.stop();
+        			};
+
+        			topology.mouseoverNodeHandler = function(d) {
+        			  if (nodeInfo.classed("locked")) return;
+        			  if (d.type_output == "host"){   //只有主机才显示信息
+            			nodeInfo
+          			    .style("display", "block")
+          			    .style("left", function(){
+          					var position = window.sessionStorage.getItem(d.id);
+          					if(position != null)
+          					{
+          						var dot = position.indexOf(",");
+          						/*<![CDATA[*/   //这句话不是注释，作用是thymeleaf不能解析&&,因此需要加上这句话
+          						if(dot>0 && dot<position.length)
+          						{
+          							var x= position.slice(0,dot);
+          							var xFloat = parseFloat(x);
+          							return ((xFloat + 60) + "px");
+          						}/*]]>*/
+          					}
+          			    	return ((d.x + 60) + "px");
+          			    })
+          			    .style("top", function(){
+          					var position = window.sessionStorage.getItem(d.id);
+          					if(position != null)
+          					{
+          						var dot = position.indexOf(",");
+          						/*<![CDATA[*/   //这句话不是注释，作用是thymeleaf不能解析&&,因此需要加上这句话
+          						if(dot>0 && dot<position.length)
+          						{
+          							var y= position.slice(dot+1);
+          							var yFloat = parseFloat(y);
+          							return ((yFloat - 10) + "px");
+          						}/*]]>*/
+          					}
+          			    	return ((d.y - 10) + "px");
+          			    })
+          			    .transition()
+          			    .duration(500)
+          			    .style("opacity", .9);
+
+        				nodeInfo.select(".head").text(d.id);
+	        			nodeInfo.select(".rip").text(d.rip);
+	        			nodeInfo.select(".port").text(d.port);
+	        			nodeInfo.select(".rmac").text(d.rmac);
+	        			nodeInfo.select(".vip").text(d.vip);
+	        			nodeInfo.select(".vip_time").text(d.vip_time);
+	        			nodeInfo.select(".vdomain").text(d.vdomain);
+	        			nodeInfo.select(".vdomain_time").text(d.vdomain_time);
+	        			nodeInfo.select(".type_output").text(d.type_output);
+	        			nodeInfo.select(".create_time").text(d.create_time);
+        			  }
+        			};
+
+        			topology.mouseoutNodeHandler = function(d) {
+        			  if (nodeInfo.classed("locked")) return;
+        			  nodeInfo
+        			    .style("opacity", 0)
+        			    .style("display", "none");
+        			};
+
+        			topology.init(data);
+        		},
+        		error:function(){
+        			alert("error!");
+        		}
+        	})
+        };
+
+//layer.alert("请求超时！")
     
     </script>
 </head>

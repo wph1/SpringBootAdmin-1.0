@@ -1,12 +1,32 @@
 package com.geekcattle.service.switches.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
+import com.geekcattle.mapper.switches.FlowInstructionMapper;
+import com.geekcattle.mapper.switches.FlowTableDetailsMapper;
 import com.geekcattle.mapper.switches.FlowTableMapper;
+import com.geekcattle.mapper.switches.SwitchesNewMapper;
+import com.geekcattle.model.console.HttpRequest;
+import com.geekcattle.model.console.Switches;
+import com.geekcattle.model.switches.FlowInstruction;
 import com.geekcattle.model.switches.FlowTable;
+import com.geekcattle.model.switches.FlowTableDetails;
+import com.geekcattle.model.switches.SwitchesNew;
 import com.geekcattle.service.switches.FlowTableService;
+import com.geekcattle.service.switches.SwitchesNewService;
+import com.geekcattle.util.PasswordUtil;
+import com.geekcattle.util.UuidUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,8 +34,15 @@ import java.util.List;
  */
 @Service
 public class FlowTableServiceImpl implements FlowTableService {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private FlowTableMapper flowTableMapper;
+    @Autowired
+    private SwitchesNewMapper switchesNewMapper;
+    @Autowired
+    private FlowTableDetailsMapper flowTableDetailsMapper;
+    @Autowired
+    private FlowInstructionMapper flowInstructionMapper;
 
     /**
      * 根据条件查询流表数据
@@ -25,5 +52,146 @@ public class FlowTableServiceImpl implements FlowTableService {
     @Override
     public List<FlowTable> getByExample(Example example) {
         return flowTableMapper.selectByExample(example);
+    }
+
+    /**
+     * 获取交换机流表信息
+     */
+    @Override
+    @Transactional
+    public void getSwitchFlow() {
+        List<SwitchesNew> switchesNews = switchesNewMapper.selectAll();
+        for(SwitchesNew s:switchesNews){
+            //交换机名称
+            String switchesName = s.getSwitchesName();
+            logger.info("====> 交换机名称："+switchesName);
+            String url_switch = "http://10.10.216.116:8181/restconf/operational/opendaylight-inventory:nodes/node/"+switchesName+"/flow-node-inventory:table/0";
+            String username = "admin";
+            String password = "admin";
+            HttpRequest.setBasicAuth(PasswordUtil.getBasicAuthStr(username,password));
+            String str_switchData = HttpRequest.sendGet(url_switch,"");
+            System.err.println(str_switchData);
+            JSONObject jsonObject = JSON.parseObject(str_switchData);
+            //交换机的流表
+            JSONArray flowTable =   jsonObject.getJSONArray("flow-node-inventory:table");
+            System.err.println("flowTable:::"+flowTable);
+            for(int i=0;i<flowTable.size();i++){
+                //单个流表对象
+                JSONObject flow =flowTable.getJSONObject(i);
+                //流表
+                System.err.println("流表:"+flow);
+                JSONObject flow_Table = flow.getJSONObject("opendaylight-flow-table-statistics:flow-table-statistics");
+
+                System.err.println("flow_Table数据:"+flow_Table);
+                Integer id = flow.getInteger("id");
+                BigInteger packets_matched = flow_Table.getBigInteger("packets-matched");
+                BigInteger packets_looked_up = flow_Table.getBigInteger("packets-looked-up");
+                String active_flows = flow_Table.getString("active-flows");
+                //插入流表主表数据===========
+                FlowTable flowTable1 = new FlowTable();
+                flowTable1.setActiveFlows(active_flows==null?0:Integer.parseInt(active_flows));
+                flowTable1.setCreateTime(new Date());
+                flowTable1.setId(id);
+                String fowTableId = UuidUtil.getUUID();
+                flowTable1.setFlowTableId(fowTableId);
+                flowTable1.setPacketsLookedUp(packets_looked_up==null?new BigInteger("0"):packets_matched);
+                flowTable1.setPacketsMatched(packets_matched==null?new BigInteger("0"):packets_matched);
+//            flowTable1.setSwitchesId();//交换机name
+                logger.info("====> 开始插入流表成功");
+                flowTableMapper.insert(flowTable1);
+                logger.info("====> 插入流表成功");
+
+                System.err.println("流表id:"+id+",流表匹配报数量："+packets_matched+"流表查看报数量:"+packets_looked_up+"活跃流："+active_flows);
+
+                //流表详细信息
+                JSONArray flowDetail = flow.getJSONArray("flow");
+                for(int j=0;j<flowDetail.size();j++){
+                    //单个流详情对象
+                    JSONObject detail =flowDetail.getJSONObject(j);
+                    String detailId = detail.getString("id");
+
+                    //字节和包数量
+                    JSONObject byteAndPacket =detail.getJSONObject("opendaylight-flow-statistics:flow-statistics");
+                    // 该流规则转发的比特数
+                    String byte_count = byteAndPacket.getString("byte-count");
+                    // 该流规则转发的包数量
+                    BigInteger packet_count = byteAndPacket.getBigInteger("packet-count");
+                    System.err.println("流详情id:"+detailId+",转发比特数："+byte_count+"转发包数量:"+packet_count);
+
+
+                    //匹配规则
+                    JSONObject match =detail.getJSONObject("match");
+                    List<Integer> typeList = (List<Integer>) JSONPath.eval(match,"$..type");
+                    Integer count=0;
+                    if(typeList !=null && typeList.size()>0){
+                        System.err.println("匹配type:"+typeList.get(0));
+                        System.err.println("匹配type:"+typeList.get(0));
+                        count = typeList.get(0);
+                    }
+                    //流表详情
+                    FlowTableDetails flowTableDetails = new FlowTableDetails();
+                    flowTableDetails.setCreateTime(new Date());
+                    flowTableDetails.setId(detailId);
+                    flowTableDetails.setByteCount(byte_count==null?0:Integer.parseInt(byte_count));
+                    flowTableDetails.setPacketCount(packet_count==null?new BigInteger("0"):packet_count);
+                    flowTableDetails.setMatchEthernetType(count);
+                    flowTableDetails.setFlowTableId(fowTableId);
+                    //详情id
+                    String flowTableDetailsId = UuidUtil.getUUID();
+                    flowTableDetails.setFlowTableDetailsId(flowTableDetailsId);
+                    logger.info("====> 开始插入流表详情");
+                    flowTableDetailsMapper.insert(flowTableDetails);
+                    logger.info("====> 插入流表详情成功");
+                    //动作列表对象
+                    JSONObject instructions =detail.getJSONObject("instructions");
+                    System.err.println("aaaaa:"+instructions);
+                    if(instructions==null)
+                        continue;
+                    JSONArray instructionList =instructions.getJSONArray("instruction");
+
+                    System.err.println("bbbb:"+instructionList);
+                    for(int a=0;a<instructionList.size();a++){
+                        JSONObject instruction =instructionList.getJSONObject(a);
+                        System.err.println("cccc:"+instruction);
+                        if(instruction==null)
+                            continue;
+                        JSONObject applyActions =instruction.getJSONObject("apply-actions");
+                        JSONArray actionList =applyActions.getJSONArray("action");
+                        for(int b=0;b<actionList.size();b++){//动作action
+                            JSONObject action =actionList.getJSONObject(b);
+                            JSONObject outputAction =action.getJSONObject("output-action");
+                            String outputNodeConnector = outputAction.getString("output-node-connector");
+                            String maxLength = outputAction.getString("max-length");
+                            String order = outputAction.getString("order");
+                            System.err.println("order:"+order+"action1:"+outputNodeConnector+",action2:"+maxLength);
+                            //插入指令
+                            FlowInstruction flowInstruction = new FlowInstruction();
+                            flowInstruction.setCreateTime(new Date());
+                            flowInstruction.setMaxLength(maxLength==null?0:Integer.parseInt(maxLength));
+                            flowInstruction.setOrder(order);
+                            flowInstruction.setOutputNodeConnector(outputNodeConnector);
+                            flowInstruction.setFlowTableDetailsId(flowTableDetailsId);
+                            logger.info("====> 开始插入流表指令");
+                            flowInstructionMapper.insert(flowInstruction);
+                            logger.info("====> 插入流表指令成功");
+
+                        }
+                    }
+
+                }
+
+            }
+
+
+
+
+
+
+
+
+
+
+        }
+
     }
 }

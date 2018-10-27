@@ -1,11 +1,12 @@
 package com.geekcattle.service.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import com.geekcattle.mapper.console.BindingMapper;
+import com.geekcattle.model.console.Binding;
 import com.geekcattle.util.RestTemplateUtils;
+import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,12 @@ public class RipsService implements RipsServiceInterface{
     private String ripSubnetUrl;
     @Value("${odlIpAndPort}")
     private String odlIpAndPort;
+
+    @Value("${bindSwitchUrl}")
+    private String bindSwitchUrl;
+
+    @Autowired
+    private BindingMapper bindingMapper;
 
     public List<Rips> getPageList(Rips network) {
         PageHelper.offsetPage(network.getOffset(), network.getLimit(), CamelCaseUtil.toUnderlineName(network.getSort())+" "+network.getOrder());
@@ -144,6 +151,37 @@ public class RipsService implements RipsServiceInterface{
     	networkMapper.updateByExampleSelective(network, example);
     }
 
+    /**
+     * 真实子网绑定交换机
+     * @param map
+     */
 
-
+    @Override
+    @Transactional
+    public void bingSwitches(Map map) {
+        Binding binding = new Binding();
+        SimpleDateFormat dateformat1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date=dateformat1.format(new Date());
+        binding.setCreateTime(date);
+        binding.setNode( MapUtils.getString(map,"node"));
+        binding.setSubnet(MapUtils.getString(map,"id"));
+        bindingMapper.insert(binding);
+        logger.info("====> 插入绑定数据成功");
+        Map<String,Object>binding_json = new HashMap<String,Object>();
+        Map<String,Object>bindingConf = new HashMap<String,Object>();
+        //绑定列表
+        List<Map> bindingConfList = new ArrayList<>();
+//        List<Binding> bindList = bindMapper.selectAllBindings();
+//        for (Binding list_bind : bindList) {
+        Map<String,Object>bindConfData = new HashMap<String,Object>();
+        bindConfData.put("node", MapUtils.getString(map,"node"));
+//            String subnetId = ripsMapper.selectByname(list_bind.getSubnet()).getId();
+        bindConfData.put("subnet", MapUtils.getString(map,"id"));
+        bindingConfList.add(bindConfData);
+//        }
+        bindingConf.put("address-binding", bindingConfList);
+        binding_json.put("binding", bindingConf);
+        String responseStr = (String)  RestTemplateUtils.sendUrl(restTemplate,odlIpAndPort+bindSwitchUrl, HttpMethod.PUT,binding_json);
+        logger.info("====>向odl发送保存绑定命令完成");
+    }
 }

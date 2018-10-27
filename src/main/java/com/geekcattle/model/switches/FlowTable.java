@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.geekcattle.model.BaseEntity;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -27,13 +28,13 @@ public class FlowTable extends BaseEntity implements Serializable {
      * 该流表查看的包数量
      */
     @Column(name = "packets_looked_up")
-    private Integer packetsLookedUp;
+    private BigInteger packetsLookedUp;
 
     /**
      * 匹配的包数量
      */
     @Column(name = "packets_matched")
-    private Integer packetsMatched;
+    private BigInteger packetsMatched;
 
     /**
      * 交换机id
@@ -99,7 +100,7 @@ public class FlowTable extends BaseEntity implements Serializable {
      *
      * @return packets_looked_up - 该流表查看的包数量
      */
-    public Integer getPacketsLookedUp() {
+    public BigInteger getPacketsLookedUp() {
         return packetsLookedUp;
     }
 
@@ -108,7 +109,7 @@ public class FlowTable extends BaseEntity implements Serializable {
      *
      * @param packetsLookedUp 该流表查看的包数量
      */
-    public void setPacketsLookedUp(Integer packetsLookedUp) {
+    public void setPacketsLookedUp(BigInteger packetsLookedUp) {
         this.packetsLookedUp = packetsLookedUp;
     }
 
@@ -117,7 +118,7 @@ public class FlowTable extends BaseEntity implements Serializable {
      *
      * @return packets_matched - 匹配的包数量
      */
-    public Integer getPacketsMatched() {
+    public BigInteger getPacketsMatched() {
         return packetsMatched;
     }
 
@@ -126,7 +127,7 @@ public class FlowTable extends BaseEntity implements Serializable {
      *
      * @param packetsMatched 匹配的包数量
      */
-    public void setPacketsMatched(Integer packetsMatched) {
+    public void setPacketsMatched(BigInteger packetsMatched) {
         this.packetsMatched = packetsMatched;
     }
 

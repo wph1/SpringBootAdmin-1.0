@@ -166,6 +166,80 @@ var RipIndex = (function () {
             ids = ids.substring(0, ids.length - 1);
             curSeg.delRow(ids, '/functionView/rip/ripDelete', 'uid');
         },
+        //绑定交换机
+        bindSwitches: function () {
+            var ids = "";//得到用户选择的数据的ID
+            var rows = $table.bootstrapTable('getSelections');
+            if (rows.length != 1) {
+                layer.alert("请选择一行！");
+                return;
+            }
+            layer.open({
+                type: 2,
+                shadeClose: false,
+                shade: 0.8,
+                maxmin: true,
+                area: ['500px', '300px'],
+                content: '/functionView/rip/ripAddSwitches?id='+rows[0].id,
+                btn: ['确定', '取消']
+                , yes: function (index, layero) {//layero 是弹出来的窗口对象
+                    var body = layer.getChildFrame('body', index);
+                    var bindForm = body.find("#bindForm");
+                    var jsonData =    bindForm.serializeJson();
+                    var rules = {
+                        node: {
+                            required: true
+                        }
+                    };
+                    var messages = {
+                        node: {
+                            required: "请选择"
+                        }
+                    };
+                    baseTools2.validateForm($(bindForm), rules, messages);
+                    if (!$(bindForm).valid()) {
+                        return;
+                    }
+                    console.log("校验通过");
+                    // baseTools2.ajaxSubmitForm($(ripForm), $(ripForm).attr('action'));
+
+                    baseTools2.ajaxPost({
+                        // bShow:false,
+                        url: "/functionView/rip/bindSwitchesSave",
+                        params: {  'BIND_JSON': JSON.stringify(jsonData) },
+                        callback: [curSeg.pageFlowControl]
+                    });
+
+                },
+                btn2: function () {
+                    layer.closeAll();
+                }
+            })
+            ;
+
+        },
+        /**
+         * 需要的时候可以覆盖该方法
+         * 在ajax调用中，在得到数据时调用该方法
+         */
+        pageFlowControl: function (jsonObj, xhrArgs) {
+            switch (parseInt(jsonObj.status)) {
+                //失败
+                case 0:
+                    layer.alert(jsonObj.msg, {icon: 1},function () {
+                        layer.closeAll();
+                    });
+                    break;
+                //成功
+                case 1:
+                    layer.alert(jsonObj.msg, {icon: 1},function () {
+                        layer.closeAll();
+                        $table.bootstrapTable('refresh',  {url: '/functionView/rip/ripList'});
+                    });
+                    break;
+                default:
+            }
+        },
         delRow : function (rowid,url,field) {
             layer.confirm('确定删除吗?', function(){
                 var   index = layer.load(0, {shade: 0.2});

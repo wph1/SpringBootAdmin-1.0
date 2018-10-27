@@ -14,4 +14,14 @@ public interface SwitchesNewService {
      * @return
      */
     List<SwitchesNew> getPageList(SwitchesNew switchesNew);
+
+    /**
+     * 从odl服务器获取交换机信息和端口信息
+     */
+   void  getSwitchesAndPortInfoByOdl();
+
+    /**
+     * 获取所有交换机信息
+     */
+    List<SwitchesNew> getAll();
 }

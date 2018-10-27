@@ -143,7 +143,7 @@ public class SwitchesController {
     }
 
     /**
-     * 获取某个交换机下的端口列表
+     * 获取某个交换机下的端口列表(分页)
      * @param switchesNodeConnector
      * @return
      */
@@ -156,6 +156,37 @@ public class SwitchesController {
         List<SwitchesNodeConnector> Lists = switchesNodeConnectorService.getPageList(switchesNodeConnector,example);
         map.put("pageInfo", new PageInfo<SwitchesNodeConnector>(Lists));
         map.put("queryParam", switchesNodeConnector);
+        return ReturnUtil.Success("加载成功", map, null);
+    }
+
+    /**
+     * 获取交换机下拉框（不分页）
+     * @param
+     * @return
+     */
+    @GetMapping(value = "/getSwitchs")
+    @ResponseBody
+    public ModelMap getSwitchs() {
+        ModelMap map = new ModelMap();
+        map.put("switches",switchesNewService.getAll());
+        return ReturnUtil.Success("加载成功", map, null);
+    }
+
+    /**
+     * 获取某个交换机下的端口列表（不分页）
+     * @param switchesNodeConnector
+     * @return
+     */
+    @GetMapping(value = "/switchPortBySwitchId")
+    @ResponseBody
+    public ModelMap switchPortBySwitchId(SwitchesNodeConnector switchesNodeConnector) {
+        ModelMap map = new ModelMap();
+        Example example = new Example(SwitchesNodeConnector.class);
+        example.createCriteria().andCondition("switches_id = ", switchesNodeConnector.getSwitchesId());
+//        List<SwitchesNodeConnector> Lists = switchesNodeConnectorService.getPageList(switchesNodeConnector,example);
+//        map.put("pageInfo", new PageInfo<SwitchesNodeConnector>(Lists));
+        List<SwitchesNodeConnector> switchPortList = switchesNodeConnectorService.getByExample(example);
+        map.put("switchPortList", switchPortList);
         return ReturnUtil.Success("加载成功", map, null);
     }
 
