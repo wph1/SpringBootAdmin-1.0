@@ -1,0 +1,64 @@
+.ztree *{
+    font-family: "微软雅黑","宋体",Arial, "Times New Roman", Times, serif;
+}
+.ztree {
+    padding: 0;
+    border-left: 1px solid #E3E3E3;
+    border-right: 1px solid #E3E3E3;
+    border-bottom: 1px solid #E3E3E3;
+}
+.ztree li a {
+    vertical-align: middle;
+    height: 32px;
+    padding: 0px;
+}
+.ztree li > a {
+    width: 100%;
+}
+.ztree li a.curSelectedNode {
+    padding-top: 0px;
+    background-color: #FFE6B0;
+    border: 1px #FFB951 solid;
+    opacity: 1;
+    height: 32px;
+}
+.ztree li ul {
+    padding-left: 0px
+}
+.ztree div.divTd span {
+    line-height: 30px;
+    vertical-align: middle;
+}
+.ztree div.divTd {
+    height: 100%;
+    line-height: 30px;
+    border-top: 1px solid #E3E3E3;
+    border-left: 1px solid #E3E3E3;
+    text-align: center;
+    display: inline-block;
+    color: #6c6c6c;
+    overflow: hidden;
+}
+.ztree div.divTd:first-child {
+    text-align: left;
+    text-indent: 10px;
+    border-left: none;
+}
+.ztree .head {
+    background: #E8EFF5;
+}
+.ztree .head div.divTd {
+    color: #393939;
+    font-weight: bold;
+}
+.ztree .ck{
+    padding: 0 5px;
+    margin: 2px 3px 7px 3px;
+}
+
+/*li:nth-child(odd){*/
+    /*background-color:#F5FAFA;*/
+/*}*/
+/*li:nth-child(even){*/
+    /*background-color:#FFFFFF;*/
+/*}*/

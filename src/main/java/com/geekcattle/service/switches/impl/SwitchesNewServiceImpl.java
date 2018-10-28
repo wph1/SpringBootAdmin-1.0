@@ -19,8 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by 王鹏豪 on 2018/10/23.
@@ -32,14 +31,16 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
     private SwitchesNewMapper switchesNewMapper;
     @Autowired
     private SwitchesNodeConnectorMapper switchesNodeConnectorMapper;
+
     /**
      * 交换机列表查询
+     *
      * @param switchesNew
      * @return
      */
     @Override
     public List<SwitchesNew> getPageList(SwitchesNew switchesNew) {
-        PageHelper.offsetPage(switchesNew.getOffset(), switchesNew.getLimit(), CamelCaseUtil.toUnderlineName(switchesNew.getSort())+" "+switchesNew.getOrder());
+        PageHelper.offsetPage(switchesNew.getOffset(), switchesNew.getLimit(), CamelCaseUtil.toUnderlineName(switchesNew.getSort()) + " " + switchesNew.getOrder());
         return switchesNewMapper.selectAll();
     }
 
@@ -59,7 +60,7 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
         String password = "admin";
         HttpRequest.setBasicAuth(PasswordUtil.getBasicAuthStr(username, password));
         String str_switchData = HttpRequest.sendGet(url_switch, "");
-        logger.info("====> 向odl服务器发送请求结束，获取到数据："+str_switchData);
+        logger.info("====> 向odl服务器发送请求结束，获取到数据：" + str_switchData);
         System.err.println(str_switchData);
         JSONObject jsonObject = JSON.parseObject(str_switchData);
         //JSONObject jsonObject1 = JSONObject.parseObject(COMPLEX_JSON_STR);//因为JSONObject继承了JSON，所以这样也是可以的
@@ -94,15 +95,15 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
                 String switchPortId = switchNodeConnector.getString("id");
                 System.err.println("交换机端口id:" + switchPortId);
                 //端口字节数量
-                JSONObject bytes=  switchNodeConnector.getJSONObject("opendaylight-port-statistics:flow-capable-node-connector-statistics");
-                JSONObject byteObject= bytes.getJSONObject("bytes");
+                JSONObject bytes = switchNodeConnector.getJSONObject("opendaylight-port-statistics:flow-capable-node-connector-statistics");
+                JSONObject byteObject = bytes.getJSONObject("bytes");
                 Integer transmitted = byteObject.getInteger("transmitted");
                 Integer received = byteObject.getInteger("received");
-                System.err.println("字节数：转发："+transmitted+"----接收："+received);
-                JSONObject packetsObject= bytes.getJSONObject("packets");
-                Integer transmittedp =packetsObject.getInteger("transmitted");
-                Integer receivedp =packetsObject.getInteger("received");
-                System.err.println("包数：转发："+transmittedp+"----接收："+receivedp);
+                System.err.println("字节数：转发：" + transmitted + "----接收：" + received);
+                JSONObject packetsObject = bytes.getJSONObject("packets");
+                Integer transmittedp = packetsObject.getInteger("transmitted");
+                Integer receivedp = packetsObject.getInteger("received");
+                System.err.println("包数：转发：" + transmittedp + "----接收：" + receivedp);
 
                 SwitchesNodeConnector switchesNodeConnector = new SwitchesNodeConnector();
                 switchesNodeConnector.setCreateTime(new Date());
@@ -125,6 +126,39 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
 
     @Override
     public List<SwitchesNew> getAll() {
-       return switchesNewMapper.selectAll();
+        return switchesNewMapper.selectAll();
+    }
+
+    /**
+     * 封装交换机ztree的数据进行展示
+     *
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getAllForZtree() {
+        //获取所有交换机
+        List<SwitchesNew> switchesNews = switchesNewMapper.selectAll();
+        //把别人选择过的去掉
+
+        //包装zTree
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = null;
+        for (int i = 0; i < switchesNews.size(); i++) {
+            map = new HashMap<>();
+            //Role role=functions.get(i);
+            SwitchesNew fun = switchesNews.get(i);
+            map.put("id", fun.getSwitchesId());
+            map.put("pId",0);
+            map.put("name", fun.getSwitchesName());
+//            map.put("isParent", fun.getIsParent());
+            //判断指定用户的角色是否在所有角色中包含，有则设置checked=true.
+//            if (functionsByRoleId != null && functionsByRoleId.size() > 0 && ListIsContainsObj(functionsByRoleId, fun)) {
+//                map.put("checked", true);
+//            } else {
+//                map.put("checked", false);
+//            }
+            list.add(map);
+        }
+        return list;
     }
 }

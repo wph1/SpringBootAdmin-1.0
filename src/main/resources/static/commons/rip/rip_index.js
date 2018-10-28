@@ -185,7 +185,16 @@ var RipIndex = (function () {
                 , yes: function (index, layero) {//layero 是弹出来的窗口对象
                     var body = layer.getChildFrame('body', index);
                     var bindForm = body.find("#bindForm");
+                    var treeMultiple = body.find("#treeMultiple")
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    // 调用子页面方法
+                  var chkNode = iframeWin.onCheckNode();
+                    if(chkNode.length==0){
+                        layer.alert("请选择交换机");
+                        return
+                    }
                     var jsonData =    bindForm.serializeJson();
+                    jsonData.node=chkNode;
                     var rules = {
                         node: {
                             required: true
@@ -201,7 +210,6 @@ var RipIndex = (function () {
                         return;
                     }
                     console.log("校验通过");
-                    // baseTools2.ajaxSubmitForm($(ripForm), $(ripForm).attr('action'));
 
                     baseTools2.ajaxPost({
                         // bShow:false,

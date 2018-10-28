@@ -160,24 +160,43 @@ public class RipsService implements RipsServiceInterface{
     @Transactional
     public void bingSwitches(Map map) {
         Binding binding = new Binding();
-        SimpleDateFormat dateformat1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date=dateformat1.format(new Date());
-        binding.setCreateTime(date);
-        binding.setNode( MapUtils.getString(map,"node"));
-        binding.setSubnet(MapUtils.getString(map,"id"));
-        bindingMapper.insert(binding);
-        logger.info("====> 插入绑定数据成功");
+        //绑定列表
+        List<Map> bindingConfList = new ArrayList<>();
+        List<Map> nodeList = (List<Map>)MapUtils.getObject(map,"node");
+        Example example = new Example(Binding.class);
+        example.createCriteria().andCondition("subnet = ", MapUtils.getString(map,"id"));
+        bindingMapper.deleteByExample(example);
+        logger.info("====> 删除原有子网和交换机绑定");
+        if(nodeList!=null&&nodeList.size()>0){
+
+            for(Map m:nodeList){
+                SimpleDateFormat dateformat1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String date=dateformat1.format(new Date());
+                binding.setCreateTime(date);
+                binding.setNode( MapUtils.getString(m,"name"));
+                binding.setSubnet(MapUtils.getString(map,"id"));
+                bindingMapper.insert(binding);
+                logger.info("====> 插入绑定数据成功");
+                Map<String,Object>bindConfData = new HashMap<String,Object>();
+                bindConfData.put("node", MapUtils.getString(m,"name"));
+//            String subnetId = ripsMapper.selectByname(list_bind.getSubnet()).getId();
+                bindConfData.put("subnet", MapUtils.getString(map,"id"));
+                bindingConfList.add(bindConfData);
+            }
+
+        }
+
         Map<String,Object>binding_json = new HashMap<String,Object>();
         Map<String,Object>bindingConf = new HashMap<String,Object>();
         //绑定列表
-        List<Map> bindingConfList = new ArrayList<>();
+//        List<Map> bindingConfList = new ArrayList<>();
 //        List<Binding> bindList = bindMapper.selectAllBindings();
 //        for (Binding list_bind : bindList) {
-        Map<String,Object>bindConfData = new HashMap<String,Object>();
-        bindConfData.put("node", MapUtils.getString(map,"node"));
-//            String subnetId = ripsMapper.selectByname(list_bind.getSubnet()).getId();
-        bindConfData.put("subnet", MapUtils.getString(map,"id"));
-        bindingConfList.add(bindConfData);
+//        Map<String,Object>bindConfData = new HashMap<String,Object>();
+//        bindConfData.put("node", MapUtils.getString(map,"node"));
+////            String subnetId = ripsMapper.selectByname(list_bind.getSubnet()).getId();
+//        bindConfData.put("subnet", MapUtils.getString(map,"id"));
+//        bindingConfList.add(bindConfData);
 //        }
         bindingConf.put("address-binding", bindingConfList);
         binding_json.put("binding", bindingConf);

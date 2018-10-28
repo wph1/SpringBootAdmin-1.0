@@ -35,6 +35,10 @@ var includeTools = {
             case  18://switches交换机信息
                 path.push('<script src="/static/commons/switches/switches_index.js" type="text/javascript"></scr' + 'ipt>');
                 break;
+            case  19://ztree树形
+                path.push('<link href="/static/commons/js/ztree3.5/css/zTreeStyle/zTreeStyle.css"  rel="stylesheet" type="text/css">');
+                path.push('<script src="/static/commons/js/ztree3.5/js/jquery.ztree.all-3.5.min.js" type="text/javascript"></scr' + 'ipt>');
+                break;
             case  12://统计图标组件
                 path.push('<script src="/static/commons/chart/Chart.min.js" type="text/javascript"></scr' + 'ipt>');
 

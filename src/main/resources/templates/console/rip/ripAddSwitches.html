@@ -10,16 +10,20 @@
             <div class="box box-primary">
                 <div class="box-body">
                     <form class="form-horizontal" name="bindForm" id="bindForm" role="form">
-                        <input id="id" name="id" th:value="${id}"/>
+                        <input id="id" name="id" type="hidden" th:value="${id}"/>
                         <div class="box-header with-border">
-                            <h3 class="box-title" ><strong>>交换机信息</strong></h3>
+                            <h3 class="box-title"><strong>>交换机信息</strong></h3>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <select  id="switch" name="node" class="col-sm-6" >
-                                   <!-- <option value=''>请选择交换机</option>-->
-                                </select>
+                              <!--  <select id="switch" name="node" class="col-sm-6">
+                                    &lt;!&ndash; <option value=''>请选择交换机</option>&ndash;&gt;
+                                </select>-->
 
+                            </div>
+                            <div class="zTreeDemoBackground left" class="col-sm-12">
+                                <ul id="treeMultiple" class="ztree"
+                                    style=" overflow-y: auto"></ul>
                             </div>
                         </div>
                     </form>
@@ -29,11 +33,72 @@
     </div>
 </section>
 <div th:include="console/footer"></div>
-<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=10"></script>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=1019"></script>
 <script type="text/javascript">
+    var setting = {
+        check: {
+            enable: true,
+            chkStyle: "checkbox",
+            chkboxType: {"Y": "s", "N": "ps"}
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            onCheck: onCheckNode    //回调函数,获取选节点
+        }
+    };
+
+    var zNodes = [
+        {id: 1, pId: 0, name: "湖北省", open: true},
+        {id: 11, pId: 1, name: "武汉市", open: true},
+        {id: 111, pId: 11, name: "汉口"},
+        {id: 112, pId: 11, name: "武昌"},
+        {id: 12, pId: 1, name: "黄石市", open: true},
+        {id: 121, pId: 12, name: "黄石港区"},
+        {id: 122, pId: 12, name: "西塞山区"},
+        {id: 2, pId: 0, name: "湖南省", open: true},
+        {id: 21, pId: 2, name: "长沙市"},
+        {id: 22, pId: 2, name: "株洲市", open: true},
+        {id: 221, pId: 22, name: "天元区"},
+        {id: 222, pId: 22, name: "荷塘区"},
+        {id: 23, pId: 2, name: "湘潭市"}
+    ];
+
+
+    function onCheckNode() {
+        var chkNodeArr;
+        var nodeJson = [];
+        console.log("触发点击事件");
+        chkNodeArr = zTreeObj.getCheckedNodes();    //true获取选中节点,false未选中节点,默认为true
+        for (var i = 0; i < chkNodeArr.length; i++) {
+            nodeJson[i] = {"name": chkNodeArr[i].name, "id": chkNodeArr[i].id};
+        }
+        //console.log(chkNodeArr);
+        var  chkNodeStr = JSON.stringify(nodeJson);
+        return nodeJson;
+    }
+    var  zTreeObj;
     $(document).ready(function () {
-        loadBarand();
+//        loadBarand();
+//        zTreeObj=   $.fn.zTree.init($("#treeMultiple"), setting, zNodes);
+        loadZtree();
     });
+
+    function loadZtree(){
+        baseTools2.ajaxGet({
+            url: "/functionView/switches/getSwitchsForZtree",
+            callback: [function (jsonObj) {
+                if (jsonObj.status === 1) {
+                    var zNodes = jsonObj.result.switches;
+                    zTreeObj=   $.fn.zTree.init($("#treeMultiple"), setting, zNodes);
+                }
+            }]
+        });
+    }
+
     function loadBarand() {
         // var jqBd = formObj.find("#BARAND_ID");
         var jqBd = $("#switch");
@@ -41,7 +106,7 @@
             return false;
         }
         baseTools2.ajaxGet({
-            bShow:false,
+            bShow: false,
             url: "/functionView/switches/getSwitchs",
             callback: [function (jsonObj) {
                 if (jsonObj.status === 1) {
@@ -55,8 +120,8 @@
 //                            content.push("<option selected='selected' value='" + data[i].switchesId + "'>" +
 //                                    data[i].switchesName + "</option>");
 //                        } else {
-                            content.push("<option  value='" + data[i].switchesName + "'>" +
-                                    data[i].switchesName + "</option>");
+                        content.push("<option  value='" + data[i].switchesName + "'>" +
+                                data[i].switchesName + "</option>");
 //                        }
                     }
 //                        content.push("</optgroup>");
@@ -73,66 +138,61 @@
         });
     }
 
-//    function loadSwitchPort(obj) {
-//        var $switchPort = $("#switchPort");
-////        if(index==1){//数据回显
-////            brandId=obj;
-////        }else if(index==2){//自己选择
-//       var switchesId = obj.value;
-////        }
-//        baseTools2.ajaxGet({
-//            url:"/functionView/switches/switchPortBySwitchId",
-//            bShow: false,
-//            params: {switchesId:switchesId},
-//            callback: [function (jsonObj) {
-//                if (jsonObj.status === 1) {
-//                    $switchPort.html("");
-//                    var data = jsonObj.result.switchPortList;
-//                    var content = ["<option value=''>请选择端口</option>"];
-////                    for (var og in data) {
-////                        content.push("<optgroup label='" + og + "'>");
-//                        for (var i = 0; i < data.length; i++) {
-////                            if(data[i].ID==seriseID){
-////                                content.push("<option selected='selected' value='" + data[i].ID +
-////                                        "' status='" + data[i].STATUS +
-////                                        "' pinyin='" + data[i].PINYIN + "' levelid='" +
-////                                        data[i].LEVELID + "' levelname='" +
-////                                        data[i].LEVELNAME + "'>" +
-////                                        data[i].NAME + "</option>");
-////                            }else{
-////                                content.push("<option value='" + data[i].id +
-////                                        "' status='" + data[i].STATUS +
-////                                        "' pinyin='" + data[i].PINYIN + "' levelid='" +
-////                                        data[i].LEVELID + "' levelname='" +
-////                                        data[i].LEVELNAME + "'>" +
-////                                        data[i].NAME + "</option>");
-//
-//                            content.push("<option  value='" + data[i].id + "'>" +
-//                                    data[i].id + "</option>");
-////                            }
-//                        }
-////                        content.push("</optgroup>");
-//                        $switchPort.append(content.join(""));
-////                        if(index==1){//先判断是数据回显还是，自己选择的
-////                            loadModel(seriseID,'1');
-////                        }
-////                    }
-//                }
-//            }]
-//        });
-//    }
-//
-//
-//
+    //    function loadSwitchPort(obj) {
+    //        var $switchPort = $("#switchPort");
+    ////        if(index==1){//数据回显
+    ////            brandId=obj;
+    ////        }else if(index==2){//自己选择
+    //       var switchesId = obj.value;
+    ////        }
+    //        baseTools2.ajaxGet({
+    //            url:"/functionView/switches/switchPortBySwitchId",
+    //            bShow: false,
+    //            params: {switchesId:switchesId},
+    //            callback: [function (jsonObj) {
+    //                if (jsonObj.status === 1) {
+    //                    $switchPort.html("");
+    //                    var data = jsonObj.result.switchPortList;
+    //                    var content = ["<option value=''>请选择端口</option>"];
+    ////                    for (var og in data) {
+    ////                        content.push("<optgroup label='" + og + "'>");
+    //                        for (var i = 0; i < data.length; i++) {
+    ////                            if(data[i].ID==seriseID){
+    ////                                content.push("<option selected='selected' value='" + data[i].ID +
+    ////                                        "' status='" + data[i].STATUS +
+    ////                                        "' pinyin='" + data[i].PINYIN + "' levelid='" +
+    ////                                        data[i].LEVELID + "' levelname='" +
+    ////                                        data[i].LEVELNAME + "'>" +
+    ////                                        data[i].NAME + "</option>");
+    ////                            }else{
+    ////                                content.push("<option value='" + data[i].id +
+    ////                                        "' status='" + data[i].STATUS +
+    ////                                        "' pinyin='" + data[i].PINYIN + "' levelid='" +
+    ////                                        data[i].LEVELID + "' levelname='" +
+    ////                                        data[i].LEVELNAME + "'>" +
+    ////                                        data[i].NAME + "</option>");
+    //
+    //                            content.push("<option  value='" + data[i].id + "'>" +
+    //                                    data[i].id + "</option>");
+    ////                            }
+    //                        }
+    ////                        content.push("</optgroup>");
+    //                        $switchPort.append(content.join(""));
+    ////                        if(index==1){//先判断是数据回显还是，自己选择的
+    ////                            loadModel(seriseID,'1');
+    ////                        }
+    ////                    }
+    //                }
+    //            }]
+    //        });
+    //    }
+    //
+    //
+    //
 
 
-
-
-
-
-
-    function btn(){
-        var d=  $("#ripForm");
+    function btn() {
+        var d = $("#ripForm");
         if (!$(d).valid()) {
             return;
         }
@@ -141,59 +201,59 @@
     }
     function onAddRow(obj) {
         var trObj = obj.parentNode.parentNode,
-            tbody = trObj.parentNode,
-            tabObj = tbody.parentNode;
+                tbody = trObj.parentNode,
+                tabObj = tbody.parentNode;
         tbody.insertRow(trObj.rowIndex).innerHTML = tbody.rows[0].innerHTML
-            .replace("baseValid-error", "");
+                .replace("baseValid-error", "");
     }
 
     function onDelRow(obj) {
         var tr = obj.parentNode.parentNode,
-            tbody = tr.parentNode;
+                tbody = tr.parentNode;
         if (tr.rowIndex === 1) {
             layer.alert('不允许删除!', {icon: 6});
             return;
         }
-        layer.confirm('确定删除吗?', function(){
+        layer.confirm('确定删除吗?', function () {
             tbody.removeChild(tr);
             layer.closeAll();
         });
     }
     //是否开启mtd配置按钮
     $("input[name='isMtdMode']").change(
-        function() {
-            var id = $("input[name='isMtdMode']:checked").val();
-            if (id == 1) {
-                $("#mtdDiv").show();
-            }else if (id == 0){
-                $("#mtdDiv").hide();
-            }
-        });
+            function () {
+                var id = $("input[name='isMtdMode']:checked").val();
+                if (id == 1) {
+                    $("#mtdDiv").show();
+                } else if (id == 0) {
+                    $("#mtdDiv").hide();
+                }
+            });
     $("input[name='useHoneypot']").change(
-        function() {
-            var id = $("input[name='useHoneypot']:checked").val();
-            if (id == 1) {
-                $("#miGuanDiv").show();
-            }else if (id == 0){
-                $("#miGuanDiv").hide();
-            }
-        });
+            function () {
+                var id = $("input[name='useHoneypot']:checked").val();
+                if (id == 1) {
+                    $("#miGuanDiv").show();
+                } else if (id == 0) {
+                    $("#miGuanDiv").hide();
+                }
+            });
     //是否开启路径跳变
     $("input[name='isPathMutation']").change(
-    function() {
-        var id = $("input[name='isPathMutation']:checked").val();
-        if (id == 1) {
-            $("#luJingTiaoBianDiv").show();
-        }else if (id == 0){
-            $("#luJingTiaoBianDiv").hide();
-        }
-    });
+            function () {
+                var id = $("input[name='isPathMutation']:checked").val();
+                if (id == 1) {
+                    $("#luJingTiaoBianDiv").show();
+                } else if (id == 0) {
+                    $("#luJingTiaoBianDiv").hide();
+                }
+            });
 </script>
 </body>
 
 </html>
 <style type="text/css">
-    .form-horizontal .control-label{
-        text-align:left;
+    .form-horizontal .control-label {
+        text-align: left;
     }
 </style>

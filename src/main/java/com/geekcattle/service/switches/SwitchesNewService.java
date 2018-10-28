@@ -3,6 +3,7 @@ package com.geekcattle.service.switches;
 import com.geekcattle.model.switches.SwitchesNew;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 王鹏豪 on 2018/10/23.
@@ -24,4 +25,10 @@ public interface SwitchesNewService {
      * 获取所有交换机信息
      */
     List<SwitchesNew> getAll();
+
+    /**
+     * 封装用于展示的ztree数据
+     * @return
+     */
+    List<Map<String, Object>> getAllForZtree();
 }
