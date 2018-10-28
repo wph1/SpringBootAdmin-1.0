@@ -124,6 +124,15 @@ var MtdIndex = (function () {
                         })
                     });
                  console.log(jsonData);
+                    //树形菜单数据，子页面对象iframeWin
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    // 调用子页面方法
+                    var chkNode = iframeWin.onCheckNode();
+                    if(chkNode.length==0){
+                        layer.alert("请选择静态配置端口");
+                        return;
+                    }
+                    jsonData.switchPort=chkNode;
                     //表单校验
 
                     var rules = {

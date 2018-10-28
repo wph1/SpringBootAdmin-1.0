@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
 
@@ -148,8 +149,55 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
             //Role role=functions.get(i);
             SwitchesNew fun = switchesNews.get(i);
             map.put("id", fun.getSwitchesId());
-            map.put("pId",0);
+            map.put("pId", 0);
             map.put("name", fun.getSwitchesName());
+//            map.put("isParent", fun.getIsParent());
+            //判断指定用户的角色是否在所有角色中包含，有则设置checked=true.
+//            if (functionsByRoleId != null && functionsByRoleId.size() > 0 && ListIsContainsObj(functionsByRoleId, fun)) {
+//                map.put("checked", true);
+//            } else {
+//                map.put("checked", false);
+//            }
+            list.add(map);
+        }
+        return list;
+    }
+
+    /**
+     * 获得交换机和端口ztree树
+     *
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getSwitchsAndPortForZtree() {
+        //获取所有交换机
+        List<SwitchesNew> switchesNews = switchesNewMapper.selectAll();
+        //包装zTree
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = null;
+        Map<String, Object> portMap = null;
+        for (int i = 0; i < switchesNews.size(); i++) {
+            map = new HashMap<>();
+            //Role role=functions.get(i);
+            SwitchesNew switches = switchesNews.get(i);
+            map.put("id", switches.getSwitchesId());
+            map.put("pId", 0);
+            map.put("name", switches.getSwitchesName());
+            map.put("nocheck", true);//父节点不被选中
+            //获取某个交换机的所有端口
+            Example example = new Example(SwitchesNodeConnector.class);
+            example.createCriteria().andCondition("switches_id = ", switches.getSwitchesId());
+            List<SwitchesNodeConnector> switchesNodeConnectors = switchesNodeConnectorMapper.selectByExample(example);
+            for (int j = 0; j < switchesNodeConnectors.size(); j++) {
+                portMap = new HashMap<>();
+                SwitchesNodeConnector switchesNodeConnector = switchesNodeConnectors.get(j);
+                portMap.put("id", switchesNodeConnector.getId());
+                portMap.put("pId", switchesNodeConnector.getSwitchesId());
+                portMap.put("name", switchesNodeConnector.getId());
+                list.add(portMap);
+            }
+
+
 //            map.put("isParent", fun.getIsParent());
             //判断指定用户的角色是否在所有角色中包含，有则设置checked=true.
 //            if (functionsByRoleId != null && functionsByRoleId.size() > 0 && ListIsContainsObj(functionsByRoleId, fun)) {

@@ -172,7 +172,7 @@ public class SwitchesController {
         return ReturnUtil.Success("加载成功", map, null);
     }
     /**
-     * 获取交换机下拉框（不分页）
+     * 获取交换机ztree结构，（不分页，不包含端口）
      * @param
      * @return
      */
@@ -181,6 +181,19 @@ public class SwitchesController {
     public ModelMap getSwitchsForZtree() {
         ModelMap map = new ModelMap();
         map.put("switches",switchesNewService.getAllForZtree());
+        return ReturnUtil.Success("加载成功", map, null);
+    }
+
+    /**
+     * 获取交换机ztree结构，（不分页，包含端口）
+     * @param
+     * @return
+     */
+    @GetMapping(value = "/getSwitchsAndPortForZtree")
+    @ResponseBody
+    public ModelMap getSwitchsAndPortForZtree() {
+        ModelMap map = new ModelMap();
+        map.put("switches",switchesNewService.getSwitchsAndPortForZtree());
         return ReturnUtil.Success("加载成功", map, null);
     }
 

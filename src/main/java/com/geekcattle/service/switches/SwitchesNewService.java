@@ -27,8 +27,14 @@ public interface SwitchesNewService {
     List<SwitchesNew> getAll();
 
     /**
-     * 封装用于展示的ztree数据
+     * 封装交换机数据用于展示的ztree数据
      * @return
      */
     List<Map<String, Object>> getAllForZtree();
+
+    /**
+     * 获得交换机和端口ztree数据
+     * @return
+     */
+    List<Map<String, Object>> getSwitchsAndPortForZtree();
 }

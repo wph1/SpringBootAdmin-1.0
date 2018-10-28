@@ -170,12 +170,13 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <select onchange="loadSwitchPort(this);" id="switch" name="switch" class="col-sm-6" >
-                                   <!-- <option value=''>请选择交换机</option>-->
-                                </select>
-                                <select id="switchPort" name="switchPort" class="col-sm-6" >
-                                   <!-- <option value=''>请选择交换机端口</option>-->
-                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="zTreeDemoBackground left" class="col-sm-12">
+                                <ul id="treeMultiple" class="ztree"
+                                    style=" overflow-y: auto"></ul>
                             </div>
                         </div>
                     </form>
@@ -185,10 +186,52 @@
     </div>
 </section>
 <div th:include="console/footer"></div>
-<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=10"></script>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=1019"></script>
 <script type="text/javascript">
+    var setting = {
+        check: {
+            enable: true,
+            chkStyle: "checkbox",
+            chkboxType: {"Y": "s", "N": "ps"}
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            onCheck: onCheckNode    //回调函数,获取选节点
+        }
+    };
+
+    function onCheckNode() {
+        var chkNodeArr;
+        var nodeJson = [];
+        console.log("触发点击事件");
+        chkNodeArr = zTreeObj.getCheckedNodes();    //true获取选中节点,false未选中节点,默认为true
+        for (var i = 0; i < chkNodeArr.length; i++) {
+            nodeJson[i] = {"name": chkNodeArr[i].name, "id": chkNodeArr[i].id};
+        }
+        //console.log(chkNodeArr);
+        var  chkNodeStr = JSON.stringify(nodeJson);
+        return nodeJson;
+    }
+    var  zTreeObj;
+    function loadZtree(){
+        baseTools2.ajaxGet({
+            url: "/functionView/switches/getSwitchsAndPortForZtree",
+            callback: [function (jsonObj) {
+                if (jsonObj.status === 1) {
+                    var zNodes = jsonObj.result.switches;
+                    zTreeObj=   $.fn.zTree.init($("#treeMultiple"), setting, zNodes);
+                }
+            }]
+        });
+    }
     $(document).ready(function () {
         loadBarand();
+        //加载ztree树
+        loadZtree();
     });
     function loadBarand() {
         // var jqBd = formObj.find("#BARAND_ID");
