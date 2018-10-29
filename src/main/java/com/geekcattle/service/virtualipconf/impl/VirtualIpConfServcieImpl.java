@@ -7,6 +7,7 @@ import com.geekcattle.util.CamelCaseUtil;
 import com.geekcattle.util.RestTemplateUtils;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,15 +66,20 @@ public class VirtualIpConfServcieImpl  implements VirtualIpConfServcie {
     @Override
     @Transactional
     public void saveOdl(List<Map> mapList) throws Exception{
+        List<Map>  mList = new ArrayList<>();
         for(Map m:mapList){
+            Map map = new HashMap();
             VirtualIpConf virtualIpConf=new VirtualIpConf();
             BeanUtils.populate(virtualIpConf,m);
             virtualIpConf.setCreateAt(new Date());
             virtualIpConfMapper.insert(virtualIpConf);
+            map.put("start-ip", virtualIpConf.getStartIp());
+            map.put("end-ip",virtualIpConf.getEndIp());
+            mList.add(map);
         }
         Map<String,Object>binding_json = new HashMap<String,Object>();
         Map<String,Object>bindingConf = new HashMap<String,Object>();
-        bindingConf.put("virtual-ip-conf", mapList);
+        bindingConf.put("virtual-ip-conf", mList);
         bindingConf.put("use-own-address", true);
         binding_json.put("virtual-config", bindingConf);
         String responseStr = (String)  RestTemplateUtils.sendUrl(restTemplate,odlIpAndPort+virtualIpConfigUrl, HttpMethod.PUT,binding_json);
@@ -89,7 +95,7 @@ public class VirtualIpConfServcieImpl  implements VirtualIpConfServcie {
         for (String id : idList) {
             virtualIpConfMapper.deleteByPrimaryKey(id);
         }
-        String responseStr = (String)  RestTemplateUtils.sendUrl(restTemplate,odlIpAndPort+virtualIpConfMapper, HttpMethod.DELETE,null);
+        String responseStr = (String)  RestTemplateUtils.sendUrl(restTemplate,odlIpAndPort+virtualIpConfigUrl, HttpMethod.DELETE,null);
         logger.info("====>向odl发送删除虚拟ip池命令完成");
     }
 }

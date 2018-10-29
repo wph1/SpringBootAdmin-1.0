@@ -107,7 +107,7 @@
                                 <tr>
                                     <th>蜜罐ip</th>
                                     <th>蜜罐服务器mac地址</th>
-                                    <th>蜜罐所接交换机及端口</th>
+                                    <th>蜜罐所接交换机</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -116,9 +116,12 @@
                                     <td><input type="text" class="form-control" name="honeypotIp"  placeholder="ip地址，如192.168.1.1"></td>
                                     <td><input type="text" class="form-control" name="honeypotMac"  placeholder="mac地址"></td>
                                     <td>
-                                        <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
+                                       <!-- <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
                                         <option value=''>请选择交换机</option>
-                                        </select>
+                                        </select>-->
+                                          <select id="switch" name="honeypotSwitchPort" class="col-sm-12">
+                                               <!-- <option value=''>请选择交换机</option>-->
+                                           </select>
                                     </td>
                                     <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
                                                            onclick="onAddRow(this);"></i>&nbsp;&nbsp;

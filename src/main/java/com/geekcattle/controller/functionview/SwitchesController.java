@@ -102,7 +102,7 @@ public class SwitchesController {
     public String toDetails(SwitchesNew switchesNew, Model model) {
         if (!StringUtils.isEmpty(switchesNew.getSwitchesId())) {
             Example flowTableExample = new Example(FlowSession.class);
-            flowTableExample.createCriteria().andCondition("switches_id = ", switchesNew.getSwitchesId());
+            flowTableExample.createCriteria().andCondition("switches_id = ", switchesNew.getSwitchesName());
             //流表数据
             List<FlowTable> flowTables = flowTableService.getByExample(flowTableExample);
 //            //流表对应的流详细信息列表
@@ -113,10 +113,16 @@ public class SwitchesController {
 //            Example switchesNodeConnectorExample = new Example(FlowSession.class);
 //            switchesNodeConnectorExample.createCriteria().andCondition("switches_id = ",switchesNew.getSwitchesId());
 //            List<SwitchesNodeConnector> switchesNodeConnectors = switchesNodeConnectorService.getByExample(switchesNodeConnectorExample);
+            if(flowTables!=null&&flowTables.size()>0){
+                model.addAttribute("flowTables", flowTables.get(0));
+                model.addAttribute("flowTablesId", flowTables.get(0).getFlowTableId());
+                model.addAttribute("switchesId", switchesNew.getSwitchesId());
+            }else{
+                model.addAttribute("flowTables", new FlowTable());
+                model.addAttribute("flowTablesId", "-1");
+                model.addAttribute("switchesId", switchesNew.getSwitchesId());
+            }
 
-            model.addAttribute("flowTables", flowTables.get(0));
-            model.addAttribute("flowTablesId", flowTables.get(0).getFlowTableId());
-            model.addAttribute("switchesId", switchesNew.getSwitchesId());
         }else{
             model.addAttribute("flowTables", new ArrayList<FlowTable>());
             model.addAttribute("flowTablesId", "-1");

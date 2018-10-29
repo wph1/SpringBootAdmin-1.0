@@ -97,14 +97,21 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
                 System.err.println("交换机端口id:" + switchPortId);
                 //端口字节数量
                 JSONObject bytes = switchNodeConnector.getJSONObject("opendaylight-port-statistics:flow-capable-node-connector-statistics");
-                JSONObject byteObject = bytes.getJSONObject("bytes");
-                Integer transmitted = byteObject.getInteger("transmitted");
-                Integer received = byteObject.getInteger("received");
-                System.err.println("字节数：转发：" + transmitted + "----接收：" + received);
-                JSONObject packetsObject = bytes.getJSONObject("packets");
-                Integer transmittedp = packetsObject.getInteger("transmitted");
-                Integer receivedp = packetsObject.getInteger("received");
-                System.err.println("包数：转发：" + transmittedp + "----接收：" + receivedp);
+                Integer transmitted =0;
+                Integer received =0;
+                Integer transmittedp = 0;
+                Integer receivedp = 0;
+                if(bytes!=null){
+                    JSONObject byteObject = bytes.getJSONObject("bytes");
+                     transmitted = byteObject.getInteger("transmitted");
+                     received = byteObject.getInteger("received");
+                    System.err.println("字节数：转发：" + transmitted + "----接收：" + received);
+                    JSONObject packetsObject = bytes.getJSONObject("packets");
+                     transmittedp = packetsObject.getInteger("transmitted");
+                     receivedp = packetsObject.getInteger("received");
+                    System.err.println("包数：转发：" + transmittedp + "----接收：" + receivedp);
+                }
+
 
                 SwitchesNodeConnector switchesNodeConnector = new SwitchesNodeConnector();
                 switchesNodeConnector.setCreateTime(new Date());

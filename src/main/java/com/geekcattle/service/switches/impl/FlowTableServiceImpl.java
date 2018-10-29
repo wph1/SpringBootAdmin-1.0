@@ -16,6 +16,7 @@ import com.geekcattle.model.switches.FlowTableDetails;
 import com.geekcattle.model.switches.SwitchesNew;
 import com.geekcattle.service.switches.FlowTableService;
 import com.geekcattle.service.switches.SwitchesNewService;
+import com.geekcattle.util.JsonUtil;
 import com.geekcattle.util.PasswordUtil;
 import com.geekcattle.util.UuidUtil;
 import org.slf4j.Logger;
@@ -69,11 +70,28 @@ public class FlowTableServiceImpl implements FlowTableService {
             String username = "admin";
             String password = "admin";
             HttpRequest.setBasicAuth(PasswordUtil.getBasicAuthStr(username,password));
-            String str_switchData = HttpRequest.sendGet(url_switch,"");
-            System.err.println(str_switchData);
+            String str_switchData = "";
+            try {
+                str_switchData =    HttpRequest.sendGet(url_switch,"");
+                System.err.println(str_switchData);
+            }catch (Exception e){
+                logger.error("====> 交换机："+switchesName+","+e.getMessage());
+                continue;
+            }
+
+            //判断一个字符串是否是一个合法的json对象
+            if(!JsonUtil.isJSONValid(str_switchData)){
+                logger.info("====> 交换机："+switchesName+",获取到的流表数据有问题");
+                //不是合法的字符串数据，证明请求有问题
+                continue;
+            }
             JSONObject jsonObject = JSON.parseObject(str_switchData);
             //交换机的流表
             JSONArray flowTable =   jsonObject.getJSONArray("flow-node-inventory:table");
+            if(flowTable==null){
+                logger.info("====> 交换机："+switchesName+",没有流表信息");
+                continue;
+            }
             System.err.println("flowTable:::"+flowTable);
             for(int i=0;i<flowTable.size();i++){
                 //单个流表对象
@@ -96,7 +114,7 @@ public class FlowTableServiceImpl implements FlowTableService {
                 flowTable1.setFlowTableId(fowTableId);
                 flowTable1.setPacketsLookedUp(packets_looked_up==null?new BigInteger("0"):packets_matched);
                 flowTable1.setPacketsMatched(packets_matched==null?new BigInteger("0"):packets_matched);
-//            flowTable1.setSwitchesId();//交换机name
+            flowTable1.setSwitchesId(s.getSwitchesName());//交换机name
                 logger.info("====> 开始插入流表成功");
                 flowTableMapper.insert(flowTable1);
                 logger.info("====> 插入流表成功");
