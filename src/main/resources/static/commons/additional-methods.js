@@ -44,3 +44,18 @@ $.validator.addMethod("validateIpAddress", function(value, element) {
     }
 
 }, "IP地址不合法");
+
+//校验mac地址是否合法
+$.validator.addMethod("validateMacAddress", function(value, element) {
+    var regEx = /^[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}:[A-F\d]{2}$/;
+    if (value) {
+        if (!regEx.test(value)) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return null;
+    }
+
+}, "mac地址不合法");

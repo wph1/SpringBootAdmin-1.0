@@ -92,7 +92,7 @@ var BalckListIndex = (function () {
                 shadeClose: false,
                 shade: 0.8,
                 maxmin: true, //开启最大化最小化按钮
-                area: ['850px', '550px'],
+                area: ['950px', '550px'],
                 content: '/functionView/blackList/blackAdd',
                 btn: ['确定', '取消'] //只是为了演示
                 , yes: function (index, layero) {//layero 是弹出来的窗口对象
@@ -100,6 +100,10 @@ var BalckListIndex = (function () {
                     var balckForm = body.find("#balckForm");
                     //表单校验
                     var rules = {
+                        blackListIp:{
+                            required: true,
+                            validateIpAddress:true
+                        },
                         honeypotIp:{
                             required: true,
                             validateIpAddress:true
@@ -112,14 +116,17 @@ var BalckListIndex = (function () {
                             validateIpAddress:true
                         },
                         honeypotMac:{
-                            required: true
+                            required: true,
+                            validateMacAddress:true
                         },
                         honeypotSwitchPort:{
                             required: true
                         }
                     };
                     var messages = {
-
+                        blackListIp:{
+                            required: "黑名单ip不能为空"
+                        },
                         honeypotIp:{
                             required: "蜜罐ip不能为空"
                         },
