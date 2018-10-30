@@ -29,6 +29,19 @@ public class HoneypotConfig extends BaseEntity implements Serializable {
      */
     @Column(name = "honeypot_mac")
     private String honeypotMac;
+    /**
+     * 蜜罐网关
+     */
+    @Column(name = "honeypot_gateway")
+    private String honeypotGateway;
+
+    public String getHoneypotGateway() {
+        return honeypotGateway;
+    }
+
+    public void setHoneypotGateway(String honeypotGateway) {
+        this.honeypotGateway = honeypotGateway;
+    }
 
     /**
      * 蜜罐所接交换机及端口

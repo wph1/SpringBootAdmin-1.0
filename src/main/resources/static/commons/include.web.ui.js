@@ -39,6 +39,9 @@ var includeTools = {
                 path.push('<link href="/static/commons/js/ztree3.5/css/zTreeStyle/zTreeStyle.css"  rel="stylesheet" type="text/css">');
                 path.push('<script src="/static/commons/js/ztree3.5/js/jquery.ztree.all-3.5.min.js" type="text/javascript"></scr' + 'ipt>');
                 break;
+            case  20://黑名单列表信息
+                path.push('<script src="/static/commons/blacklist/balcklist_index.js" type="text/javascript"></scr' + 'ipt>');
+                break;
             case  12://统计图标组件
                 path.push('<script src="/static/commons/chart/Chart.min.js" type="text/javascript"></scr' + 'ipt>');
 

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>黑名单配置</h1>
+</section>
+<section class="content table-content">
+    <div id="toolbar">
+        <button  type="button" class="btn  btn-primary" onclick="BalckListIndex.add()">
+            添加
+        </button>
+        <button  type="button" class="btn btn-danger" onclick="BalckListIndex.del()">删除</button>
+        <!--<a href="/console/admin/from" class="btn btn-primary">添加用户</a>-->
+    </div>
+    <table id="blackListGrid"></table>
+</section>
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=1020"></script>
+</body>
+</html>

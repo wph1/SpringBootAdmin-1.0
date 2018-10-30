@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.blacklist.BlackListMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.blacklist.BlackList" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="black_list_id" property="blackListId" jdbcType="VARCHAR" />
+    <result column="is_use_black_list" property="isUseBlackList" jdbcType="INTEGER" />
+    <result column="black_list_ip" property="blackListIp" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+
+</mapper>

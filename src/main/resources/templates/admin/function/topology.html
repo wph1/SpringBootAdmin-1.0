@@ -54,10 +54,10 @@
         		type:"get",
         		url:"/admin/function/topologyData",
         		dataType:'json',
-                beforeSubmit: function (arr, $form, options) {
-        		    console.log("数据：："+tag);
-        		    if(1!=tag)
-                   maskObj = layer.load(0, {shade: 0.1});
+                beforeSend: function (arr, $form, options) {
+//        		    console.log("数据：："+tag);
+//        		    if(1!=tag)
+//                   maskObj = layer.load(0, {shade: 0.1});
                 },
         		async:true,//异步请求
         		success:function(data){
@@ -192,9 +192,9 @@
         			layer.alert("请求超时!");
         		},
                 complete: function(){
-                    console.log("数据222：："+tag);
-                    if(1!=tag)
-                    layer.close(maskObj);
+//                    console.log("数据222：："+tag);
+//                    if(1!=tag)
+//                    layer.close(maskObj);
                     // $btn.data("loading",false);
                 }
         	})

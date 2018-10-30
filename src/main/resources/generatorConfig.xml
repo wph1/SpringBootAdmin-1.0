@@ -45,5 +45,8 @@
       <!--  <table tableName="flow_instruction"  domainObjectName="FlowInstruction">
             <generatedKey column="flow_instruction_id" sqlStatement="Mysql" identity="true"/>
         </table>-->
+       <!-- <table tableName="black_list"  domainObjectName="BlackList">
+            <generatedKey column="black_list_id" sqlStatement="Mysql" identity="true"/>
+        </table>-->
     </context>
 </generatorConfiguration>

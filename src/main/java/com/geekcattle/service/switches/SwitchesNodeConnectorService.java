@@ -23,4 +23,8 @@ public interface SwitchesNodeConnectorService {
      * @return
      */
     List<SwitchesNodeConnector> getPageList(SwitchesNodeConnector switchesNodeConnector, Example example );
+    /**
+     * 获取所有交换机端口信息
+     */
+    List<SwitchesNodeConnector> getAll();
 }

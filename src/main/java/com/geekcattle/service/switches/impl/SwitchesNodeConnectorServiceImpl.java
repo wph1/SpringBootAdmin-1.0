@@ -40,4 +40,9 @@ public class SwitchesNodeConnectorServiceImpl implements SwitchesNodeConnectorSe
         PageHelper.offsetPage(switchesNodeConnector.getOffset(), switchesNodeConnector.getLimit(), CamelCaseUtil.toUnderlineName(switchesNodeConnector.getSort())+" "+switchesNodeConnector.getOrder());
         return switchesNodeConnectorMapper.selectByExample(example);
     }
+
+    @Override
+    public List<SwitchesNodeConnector> getAll() {
+        return switchesNodeConnectorMapper.selectAll();
+    }
 }

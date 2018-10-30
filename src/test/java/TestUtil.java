@@ -9,6 +9,7 @@ import com.geekcattle.model.switches.FlowTableDetails;
 import com.geekcattle.util.CamelCaseUtil;
 import com.geekcattle.util.DateUtil;
 import com.geekcattle.util.UuidUtil;
+import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -283,6 +284,51 @@ public class TestUtil{
 
 
     }
+
+
+    /**
+     * 黑名单
+     */
+    @Test
+    public void testBlackListConfig() {
+        RestTemplate rest = new RestTemplate();
+        String url_binding = "http://10.10.216.116:8181/restconf/config/dip-config:ip-blacklist";
+        String username = "admin";
+        String password = "admin";
+        String auth = getBasicAuthStr(username, password);
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+        headers.add("Accept", "application/json");
+        headers.add("Authorization", auth);
+
+        //蜜罐
+        List<Map> honeyListToOdl = new ArrayList<>();
+        //黑名单
+        List<Map> blackListToOdl = new ArrayList<>();
+        Map toOdl1 = new HashMap();
+        toOdl1.put("ip", "192.168.8.8");
+        blackListToOdl.add(toOdl1);
+
+        Map toOdl = new HashMap();
+        toOdl.put("honeypot-ip","192.168.8.8");
+        toOdl.put("honeypot-gateway","192.168.8.8");
+        toOdl.put("honeypot-mac","5a:be:a0:dc:6a:e6");
+        toOdl.put("honeypot-switch-port","openflow:2:2");
+        honeyListToOdl.add(toOdl);
+
+        Map<String,Object>blackJson = new HashMap<String,Object>();
+        Map<String,Object>bindingConf = new HashMap<String,Object>();
+
+        bindingConf.put("use-blacklist", true);
+        bindingConf.put("dst-list",blackListToOdl );
+        bindingConf.put("honeypot-config", honeyListToOdl);
+        blackJson.put("ip-blacklist", bindingConf);
+        HttpEntity<Object> requestEntity_binding = new HttpEntity<Object>(blackJson,headers);
+        rest.exchange(url_binding,HttpMethod.PUT,requestEntity_binding,String.class);
+
+
+    }
+
+
 
 
     /**

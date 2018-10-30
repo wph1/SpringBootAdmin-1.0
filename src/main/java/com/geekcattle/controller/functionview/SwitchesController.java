@@ -212,12 +212,18 @@ public class SwitchesController {
     @GetMapping(value = "/switchPortBySwitchId")
     @ResponseBody
     public ModelMap switchPortBySwitchId(SwitchesNodeConnector switchesNodeConnector) {
-        ModelMap map = new ModelMap();
-        Example example = new Example(SwitchesNodeConnector.class);
-        example.createCriteria().andCondition("switches_id = ", switchesNodeConnector.getSwitchesId());
+        List<SwitchesNodeConnector> switchPortList =null;
+                ModelMap map = new ModelMap();
+        if(StringUtils.isNotEmpty(switchesNodeConnector.getSwitchesId())){
+            Example example = new Example(SwitchesNodeConnector.class);
+            example.createCriteria().andCondition("switches_id = ", switchesNodeConnector.getSwitchesId());
 //        List<SwitchesNodeConnector> Lists = switchesNodeConnectorService.getPageList(switchesNodeConnector,example);
 //        map.put("pageInfo", new PageInfo<SwitchesNodeConnector>(Lists));
-        List<SwitchesNodeConnector> switchPortList = switchesNodeConnectorService.getByExample(example);
+            switchPortList = switchesNodeConnectorService.getByExample(example);
+        }else{//没有交换机id就是获取所有交换机端口
+            switchPortList =  switchesNodeConnectorService.getAll();
+        }
+
         map.put("switchPortList", switchPortList);
         return ReturnUtil.Success("加载成功", map, null);
     }
