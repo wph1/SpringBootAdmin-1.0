@@ -44,6 +44,7 @@
     <script src="/static/js/d3.v3.min.js"></script>
     <script src="/static/js/topology.js"></script>
        <script type="text/javascript">
+           var maskObj;
         $().ready(initTopology);
     	var tag = window.sessionStorage.getItem("tag");
     	if (tag==1)
@@ -53,6 +54,10 @@
         		type:"get",
         		url:"/admin/function/topologyData",
         		dataType:'json',
+                beforeSubmit: function (arr, $form, options) {
+        		    if(1!=tag)
+                   maskObj = layer.load(0, {shade: 0.1});
+                },
         		async:true,//异步请求
         		success:function(data){
         			var topology=new Topology('topology_svg');
@@ -183,8 +188,13 @@
         			topology.init(data);
         		},
         		error:function(){
-        			alert("error!");
-        		}
+        			layer.alert("请不要频繁点击!");
+        		},
+                complete: function(){
+                    if(1!=tag)
+                    layer.close(maskObj);
+                    // $btn.data("loading",false);
+                }
         	})
         };
 
