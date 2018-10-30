@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 
 @Controller
 public class TopologyController {
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	private List<OldPacket> oldPacketList = new ArrayList<>();
 	public class OldPacket {	//记录刷新前的历史包数据，用以和当前时刻进行比较，从而推断出流量变化情况
 		private String connector;	
@@ -70,11 +73,14 @@ public class TopologyController {
         String password = "admin";
     	HttpRequest.setBasicAuth(getBasicAuthStr(username,password));
         String str_switchData = HttpRequest.sendGet(url_switchData,"");
-        String str_hostData = HttpRequest.sendGet(url_hostData,"");        
+		System.err.println("str_switchData::"+str_switchData);
+        String str_hostData = HttpRequest.sendGet(url_hostData,"");
+		System.err.println("str_hostData::"+str_hostData);
     	Map<String,Object>data = new HashMap<String,Object>();
         Gson gson = new Gson();	
         java.lang.reflect.Type type = new TypeToken<TopologySwitchData>() {}.getType();
-        TopologySwitchData hostdata = gson.fromJson(str_hostData, type);     
+        TopologySwitchData hostdata = gson.fromJson(str_hostData, type);
+
 		List<Map> nodeList = new ArrayList<>();
 		List<Map> linkList = new ArrayList<>();
 		List<String> dynamicList = new ArrayList<>();//记录哪些端口有流量     
@@ -106,8 +112,14 @@ public class TopologyController {
             	if(oldPacketList == null) {   //如果还未建立历史端口数据列表，则把当前端口的id以及收到的数据包数量，发送的数据包数量存入列表中
             		OldPacket packetAdd = new OldPacket();
             		packetAdd.setConnector(nodeConnector.getId());
-            		packetAdd.setOldPacketReceived(nodeConnector.getPortStatistics().getPackets().getReceived());
-            		packetAdd.setOldPacketTransmitted(nodeConnector.getPortStatistics().getPackets().getTransmitted());
+					if(nodeConnector.getPortStatistics()!=null){
+						packetAdd.setOldPacketReceived(nodeConnector.getPortStatistics().getPackets().getReceived());
+						packetAdd.setOldPacketTransmitted(nodeConnector.getPortStatistics().getPackets().getTransmitted());
+					}else{
+						packetAdd.setOldPacketReceived(0);
+						packetAdd.setOldPacketTransmitted(0);
+					}
+
             		oldPacketList.add(packetAdd);
             	}else { //如果历史数据端口列表中有数据，则判断列表中是否有和当前遍历的端口id一致的端口信息，有的话，提取历史数据进行比对，没有的话建立新的
             		tag = 0;  //用于判断oldPacketList中是否存在有和当前connector一样的ID
@@ -115,8 +127,14 @@ public class TopologyController {
             			if(packetAdd.getConnector().equals(nodeConnector.getId())) {
             				old_packet_received = packetAdd.getOldPacketReceived();
             				old_packet_transmitted = packetAdd.getOldPackettransmitted();
-            				packetAdd.setOldPacketReceived(nodeConnector.getPortStatistics().getPackets().getReceived());
-            				packetAdd.setOldPacketTransmitted(nodeConnector.getPortStatistics().getPackets().getTransmitted());
+							if(nodeConnector.getPortStatistics()!=null){
+								packetAdd.setOldPacketReceived(nodeConnector.getPortStatistics().getPackets().getReceived());
+								packetAdd.setOldPacketTransmitted(nodeConnector.getPortStatistics().getPackets().getTransmitted());
+							}else {
+								packetAdd.setOldPacketReceived(0);
+								packetAdd.setOldPacketTransmitted(0);
+							}
+
             				tag = 1;
             				break;
             			}	
@@ -128,13 +146,24 @@ public class TopologyController {
             	if(tag == 0) {
             		OldPacket packetAdd = new OldPacket();
             		packetAdd.setConnector(nodeConnector.getId());
-            		packetAdd.setOldPacketReceived(nodeConnector.getPortStatistics().getPackets().getReceived());
-            		packetAdd.setOldPacketTransmitted(nodeConnector.getPortStatistics().getPackets().getTransmitted());
+					if(nodeConnector.getPortStatistics()!=null){
+						packetAdd.setOldPacketReceived(nodeConnector.getPortStatistics().getPackets().getReceived());
+						packetAdd.setOldPacketTransmitted(nodeConnector.getPortStatistics().getPackets().getTransmitted());
+					}else{
+						packetAdd.setOldPacketReceived(0);
+						packetAdd.setOldPacketTransmitted(0);
+					}
+
             		oldPacketList.add(packetAdd);
             	}
             	//当前最新的端口流量
-            	long current_packet_received = nodeConnector.getPortStatistics().getPackets().getReceived();
-                long current_packet_transmitted = nodeConnector.getPortStatistics().getPackets().getTransmitted();                         
+				long current_packet_received = 0;
+				long current_packet_transmitted =0;
+				if(nodeConnector.getPortStatistics()!=null){
+					 current_packet_received = nodeConnector.getPortStatistics().getPackets().getReceived();
+					 current_packet_transmitted = nodeConnector.getPortStatistics().getPackets().getTransmitted();
+				}
+
             	if ((current_packet_received - old_packet_received > 5) || (current_packet_transmitted - old_packet_transmitted > 5)) {//端口有流量
         			nodeConnector.setTag(1);
         			//该端口有数据流量包，并且添加到list中

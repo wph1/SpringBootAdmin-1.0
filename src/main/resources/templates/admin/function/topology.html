@@ -47,13 +47,13 @@
         $().ready(initTopology);
     	var tag = window.sessionStorage.getItem("tag");
     	if (tag==1)
-        	setInterval('initTopology()',5000); //每10秒刷新一次页面下边显示的数据
+        	setInterval('initTopology()',10000); //每10秒刷新一次页面下边显示的数据
         function initTopology(){
         	$.ajax({
         		type:"get",
         		url:"/admin/function/topologyData",
         		dataType:'json',
-        		async:false,
+        		async:true,//异步请求
         		success:function(data){
         			var topology=new Topology('topology_svg');
         			var nodeInfo = d3.select("#nodeInfo");

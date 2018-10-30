@@ -34,44 +34,44 @@ public class Timer {
     @Autowired
     private FlowTableService flowTableService;
 
-    @Scheduled(cron = "0 0/5 * * * *")//300秒执行一次（5分钟）
-    public void sessionTimer() {//会话定时器
-        //获取当前时间
-        LocalDateTime localDateTime = LocalDateTime.now();
-        System.out.println("会话当前时间为:" + localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        try {
-            flowSessionServcie.getFlowsessionInfoByOdl();
-        }catch (Exception e){
-            logger.error("获取回话信息出现异常，"+e.getMessage());
-        }
-
-    }
-
-    @Scheduled(cron = "0 0/10 * * * *")//10分钟
-    public void swticherAndPortTimer() {//获取交换机id和端口id
-        //获取当前时间
-        LocalDateTime localDateTime = LocalDateTime.now();
-        System.out.println("交换机当前时间为:" + localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        try {
-            switchesNewService.getSwitchesAndPortInfoByOdl();
-        }catch (Exception e){
-            logger.error("获取交换机信息,"+e.getMessage());
-            e.printStackTrace();
-        }
-
-    }
-
-    @Scheduled(cron = "0 0/3 * * * *")//3分钟
-    public void swticherFlowTableTimer() {//交换机流表
-        //获取当前时间
-        LocalDateTime localDateTime = LocalDateTime.now();
-        System.out.println("交换机当前时间为:" + localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        try {
-            flowTableService.getSwitchFlow();
-        }catch (Exception e){
-            logger.error("====> 获取交换机流表信息失败,"+e.getMessage());
-            e.printStackTrace();
-        }
-
-    }
+//    @Scheduled(cron = "0 0/5 * * * *")//300秒执行一次（5分钟）
+//    public void sessionTimer() {//会话定时器
+//        //获取当前时间
+//        LocalDateTime localDateTime = LocalDateTime.now();
+//        System.out.println("会话当前时间为:" + localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//        try {
+//            flowSessionServcie.getFlowsessionInfoByOdl();
+//        }catch (Exception e){
+//            logger.error("获取回话信息出现异常，"+e.getMessage());
+//        }
+//
+//    }
+//
+//    @Scheduled(cron = "0 0/10 * * * *")//10分钟
+//    public void swticherAndPortTimer() {//获取交换机id和端口id
+//        //获取当前时间
+//        LocalDateTime localDateTime = LocalDateTime.now();
+//        System.out.println("交换机当前时间为:" + localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//        try {
+//            switchesNewService.getSwitchesAndPortInfoByOdl();
+//        }catch (Exception e){
+//            logger.error("获取交换机信息,"+e.getMessage());
+//            e.printStackTrace();
+//        }
+//
+//    }
+//
+//    @Scheduled(cron = "0 0/3 * * * *")//3分钟
+//    public void swticherFlowTableTimer() {//交换机流表
+//        //获取当前时间
+//        LocalDateTime localDateTime = LocalDateTime.now();
+//        System.out.println("交换机当前时间为:" + localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//        try {
+//            flowTableService.getSwitchFlow();
+//        }catch (Exception e){
+//            logger.error("====> 获取交换机流表信息失败,"+e.getMessage());
+//            e.printStackTrace();
+//        }
+//
+//    }
 }

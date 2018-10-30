@@ -61,7 +61,7 @@ function Topology(svg) {
             		if(i == nodeNumber.length-1)
             		{
             			var tag = window.sessionStorage.setItem("tag",1);
-                    	setInterval('initTopology()',5000); //每10秒刷新一次页面下边显示的数据
+                    	setInterval('initTopology()',10000); //每10秒刷新一次页面下边显示的数据
             		}
 
             	}
