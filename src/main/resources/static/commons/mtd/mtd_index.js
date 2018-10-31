@@ -111,18 +111,18 @@ var MtdIndex = (function () {
                     var body = layer.getChildFrame('body', index);
                     var mtdForm = body.find("#mtdForm");
                  var jsonData =    mtdForm.serializeJson();
-                    //组装分期数据结构
-                    jsonData.mgList = [];
-                    var mgTr = mtdForm.find("#mGTable").find("tbody > tr"),
-                        mg;
-                    mgTr.each(function () {
-                        mg = $(this);
-                        jsonData.mgList.push({
-                            honeypotIp: mg.find(":input[name='honeypotIp']")[0].value,
-                            honeypotMac: mg.find(":input[name='honeypotMac']")[0].value,
-                            honeypotSwitchPort: mg.find(":input[name='honeypotSwitchPort']")[0].value
-                        })
-                    });
+                    // //组装蜜罐数据结构
+                    // jsonData.mgList = [];
+                    // var mgTr = mtdForm.find("#mGTable").find("tbody > tr"),
+                    //     mg;
+                    // mgTr.each(function () {
+                    //     mg = $(this);
+                    //     jsonData.mgList.push({
+                    //         honeypotIp: mg.find(":input[name='honeypotIp']")[0].value,
+                    //         honeypotMac: mg.find(":input[name='honeypotMac']")[0].value,
+                    //         honeypotSwitchPort: mg.find(":input[name='honeypotSwitchPort']")[0].value
+                    //     })
+                    // });
                  console.log(jsonData);
                     //树形菜单数据，子页面对象iframeWin
                     var iframeWin = window[layero.find('iframe')[0]['name']];

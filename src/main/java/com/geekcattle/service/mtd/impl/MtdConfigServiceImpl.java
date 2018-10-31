@@ -73,15 +73,15 @@ public class MtdConfigServiceImpl implements MtdConfigService {
         mtdConfigMapper.insert(mtdConfig2);
         logger.info("====>插入mtdconfig成功");
         //蜜罐配置
-        List<Map> mapList = (List) MapUtils.getObject(map, "mgList", new ArrayList<>());
-        for (Map m : mapList) {
-            HoneypotConfig honeypotConfig = new HoneypotConfig();
-            BeanUtils.populate(honeypotConfig, m);
-            honeypotConfig.setCreateAt(new Date());
-            logger.info("====>插入honeypotConfig开始");
-            honeypotConfigMapper.insert(honeypotConfig);
-            logger.info("====>插入honeypotConfig成功");
-        }
+//        List<Map> mapList = (List) MapUtils.getObject(map, "mgList", new ArrayList<>());
+//        for (Map m : mapList) {
+//            HoneypotConfig honeypotConfig = new HoneypotConfig();
+//            BeanUtils.populate(honeypotConfig, m);
+//            honeypotConfig.setCreateAt(new Date());
+//            logger.info("====>插入honeypotConfig开始");
+//            honeypotConfigMapper.insert(honeypotConfig);
+//            logger.info("====>插入honeypotConfig成功");
+//        }
         //静态ip配置
 //            List<Map> mapList = (List)MapUtils.getObject(map,"mpList",new ArrayList<>());
 //            for(Map m:mapList){
@@ -115,7 +115,8 @@ public class MtdConfigServiceImpl implements MtdConfigService {
             }
         }
         mtd_config.put("fixed-port", fixPortList);
-        mtd_config.put("honeypot-path-idle", MapUtils.getString(map, "honeypotPathIdle"));
+//        mtd_config.put("honeypot-path-idle", MapUtils.getString(map, "honeypotPathIdle"));
+        mtd_config.put("honeypot-path-idle", "0");
         mtd_config.put("k-path", MapUtils.getString(map, "kPath"));
         mtd_config.put("path-ttl", MapUtils.getString(map, "pathTtl"));
         String isMtdMode = MapUtils.getString(map, MapUtils.getString(map, "isMtdMode"));

@@ -114,7 +114,7 @@ public class MtdController {
         }catch (Exception e) {
             logger.info("====>插入mtdconfig失败，"+e.getMessage());
             e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ReturnUtil.Error("操作失败", null, null);
         }
     }
@@ -138,7 +138,7 @@ public class MtdController {
         } catch (Exception e) {
             logger.info("====>向odl发送删除mtd命令失败，"+e.getMessage());
             e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ReturnUtil.Error("删除失败", null, null);
         }
     }

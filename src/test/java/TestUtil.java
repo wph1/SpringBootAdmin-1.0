@@ -174,10 +174,10 @@ public class TestUtil{
         mtd_config.put("external-gateway", "192.168.125.254");
         mtd_json.put("mtd-config", mtd_config);
 
-        HttpEntity<Object> requestEntity = new HttpEntity<Object>(headers);
+        HttpEntity<Object> requestEntity = new HttpEntity<Object>(mtd_json,headers);
         System.out.println(mtd_json);
         //restTemplate.put(url_mtd, requestEntity, String.class);
-        rest.exchange(url_mtd,HttpMethod.DELETE,requestEntity,String.class);
+        rest.exchange(url_mtd,HttpMethod.PUT,requestEntity,String.class);
     }
 
 
@@ -287,7 +287,7 @@ public class TestUtil{
 
 
     /**
-     * 黑名单
+     * 黑名单  对接过
      */
     @Test
     public void testBlackListConfig() {
