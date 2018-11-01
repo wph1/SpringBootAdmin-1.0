@@ -19,6 +19,8 @@ import com.geekcattle.service.switches.SwitchesNewService;
 import com.geekcattle.util.JsonUtil;
 import com.geekcattle.util.PasswordUtil;
 import com.geekcattle.util.UuidUtil;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigInteger;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by 王鹏豪 on 2018/10/23.
@@ -211,5 +212,63 @@ public class FlowTableServiceImpl implements FlowTableService {
 
         }
 
+    }
+
+    /**
+     * 通过交换机id查询流表项的id
+     * @param switchesId
+     * @return
+     */
+    @Override
+    public List<Object> getSwitchesFlowDetailsBySwitchesId(String switchesId) {
+        List dataList = new ArrayList();
+        List<Map<String, Object>> flowDetailLists = flowTableMapper.selectFlowBySwitchesId(switchesId);
+        if(flowDetailLists!=null&&flowDetailLists.size()>0){
+            for(Map<String, Object> map:flowDetailLists){
+                //流表项id
+                String flowDetailId = MapUtils.getString(map, "id");
+                    List<Map<String, Object>> flowDetailDataList = flowTableMapper.selectFlowDetailDataById(ArrayUtils.toMap(new String[][]{
+                        {"switchesId", switchesId},
+                        {"flowDetailId", flowDetailId},
+                }));
+                if(flowDetailDataList!=null&&flowDetailDataList.size()>0){
+                    for(Map<String, Object> m:flowDetailDataList){
+                            List data = new ArrayList();
+                        data.add(MapUtils.getString(m,"byte_count"));
+                        data.add(MapUtils.getString(m,"packet_count"));
+                        dataList.add(data);
+                    }
+
+                }
+
+            }
+
+
+        }
+
+        return dataList;
+    }
+
+    /**
+     * 交换机流表项个数
+     * @return
+     */
+    @Override
+    public Map<String, Object> getTotalFlowDetailBySwitchesId() {
+        Map flowTableData = new HashMap();
+        List switchList = new ArrayList();
+        List flowList = new ArrayList();
+
+        List<SwitchesNew> switchesList = switchesNewMapper.selectAll();
+        for(SwitchesNew switches:switchesList){
+            switchList.add(switches.getSwitchesName());
+            Map<String, Object> flowMap = flowTableMapper.getTotalFlowDetailBySwitchesId(switches.getSwitchesName());
+            String total = MapUtils.getString(flowMap, "total");
+            flowList.add(Integer.parseInt(total));
+        }
+        flowTableData.put("switchList",switchList);
+        flowTableData.put("flowList",flowList);
+
+        return flowTableData;
     }
 }

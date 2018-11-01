@@ -216,4 +216,28 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
         }
         return list;
     }
+
+    /**
+     * 获取所有交换机和端口
+     * @return
+     */
+    @Override
+    public Map<String, Object> getAllSwitchsAndPort() {
+        Map data = new HashMap();
+        List switchList = new ArrayList();
+        List portList = new ArrayList();
+
+        List<SwitchesNew> switchesNews = switchesNewMapper.selectAll();
+        for(SwitchesNew s:switchesNews){
+            String switchesId = s.getSwitchesId();
+            switchList.add(s.getSwitchesName());
+            Example example = new Example(SwitchesNodeConnector.class);
+            example.createCriteria().andCondition("switches_id = ", switchesId);
+            int sum = switchesNodeConnectorMapper.selectCountByExample(example);
+            portList.add(sum);
+        }
+        data.put("switchList",switchList);
+        data.put("portList",portList);
+        return data;
+    }
 }

@@ -13,4 +13,89 @@
     <result column="switches_id" property="switchesId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <!--查询某个交换机下面有多少条流表项   = #{id}  -->
+  <select id="selectFlowBySwitchesId"  parameterType="java.lang.String" resultType="java.util.HashMap">
+          SELECT
+          t2.id
+      FROM
+          flow_table_details t2,
+          (
+              SELECT
+                  t.flow_table_id,
+                  t.switches_id
+              FROM
+                  flow_table t
+              WHERE
+                  t.switches_id = 'openflow:2037944993637447489'
+          ) t3
+      WHERE
+          t2.flow_table_id = t3.flow_table_id
+      GROUP BY
+          t2.id
+  </select>
+
+  <!--获取某个流表项详细的接收的字节数和包数 最近10分钟
+   AND t4.create_time > DATE_ADD(NOW(), INTERVAL - 10 MINUTE)
+  -->
+  <select id="selectFlowDetailDataById"  parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   SELECT
+	*
+FROM
+	(
+		SELECT
+			t2.create_time,
+			t3.switches_id,
+			t2.id,
+			t2.flow_table_details_id,
+			t2.packet_count,
+			t2.byte_count
+		FROM
+			flow_table_details t2,
+			(
+				SELECT
+					t.flow_table_id,
+					t.switches_id
+				FROM
+					flow_table t
+				WHERE
+					t.switches_id = 'openflow:2037944993637447489'
+			) t3
+		WHERE
+			t2.flow_table_id = t3.flow_table_id
+	) t4
+    WHERE
+        t4.id = #{flowDetailId}
+
+    ORDER BY
+        t4.byte_count
+  </select>
+    <!--获取某个交换机的最后10分钟的所有流表项个数-->
+    <select id="getTotalFlowDetailBySwitchesId"  parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT
+	count(*) AS total
+  FROM
+	(
+		SELECT
+			t2.create_time,
+			t3.switches_id,
+			t2.id,
+			t2.flow_table_details_id,
+			t2.packet_count,
+			t2.byte_count
+		FROM
+			flow_table_details t2,
+			(
+				SELECT
+					t.flow_table_id,
+					t.switches_id
+				FROM
+					flow_table t
+				WHERE
+					t.switches_id = 'openflow:2037944993637447489'
+			) t3
+		WHERE
+			t2.flow_table_id = t3.flow_table_id
+	) t4
+    </select>
+
 </mapper>

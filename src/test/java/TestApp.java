@@ -1,5 +1,6 @@
 import com.geekcattle.Application;
 import com.geekcattle.mapper.console.SwitchMapper;
+import com.geekcattle.mapper.switches.FlowTableMapper;
 import com.geekcattle.mapper.switches.SwitchesNewMapper;
 import com.geekcattle.service.console.SwitchService;
 import junit.framework.TestCase;
@@ -13,6 +14,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import redis.clients.jedis.JedisPool;
+
+import java.util.List;
+import java.util.Map;
 
 
 @RunWith(SpringJUnit4ClassRunner.class) // SpringJUnit支持，由此引入Spring-Test框架支持！
@@ -33,6 +37,9 @@ public class TestApp extends TestCase {
     @Autowired
     RedisTemplate<String, String> redisTemplate;
 
+    @Autowired
+    private FlowTableMapper flowTableMapper;
+
     @Test
     public void testRedis(){
 //        redisTemplate.boundValueOps("geekcattle").set("df1111111111111");
@@ -50,7 +57,10 @@ public class TestApp extends TestCase {
     public  void testSelect() {
 
 //        sMapper.deleteAll();
-        switchesNewMapper.deleteAll();
+//        switchesNewMapper.deleteAll();
+
+        List<Map<String, Object>> maps = flowTableMapper.selectFlowBySwitchesId("1");
+        System.out.println(maps.get(0).get("id"));
 
 
 

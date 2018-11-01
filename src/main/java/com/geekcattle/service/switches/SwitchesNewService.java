@@ -37,4 +37,10 @@ public interface SwitchesNewService {
      * @return
      */
     List<Map<String, Object>> getSwitchsAndPortForZtree();
+
+    /**
+     * 获取所有交换机和端口
+     * @return
+     */
+    Map<String, Object> getAllSwitchsAndPort();
 }

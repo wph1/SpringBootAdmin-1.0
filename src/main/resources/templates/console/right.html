@@ -4,157 +4,369 @@
 <head th:include="console/header">
 </head>
 <body>
-    <section class="content-header">
-        <h1>后台总览</h1>
-    </section>
-    <section class="content">
-        <div class="row">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">用户总数</span>
+<section class="content-header">
+    <h1>后台总览</h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">用户总数</span>
                     <span class="info-box-number">
                         <span th:text="${admin}">0</span>
                         <small>个</small>
                     </span>
-                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">角色总数</span>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">角色总数</span>
                     <span class="info-box-number">
                         <span th:text="${role}">0</span>
                         <small>个</small>
                     </span>
-                    </div>
                 </div>
             </div>
+        </div>
 
 
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">资源总数</span>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">资源总数</span>
                     <span class="info-box-number">
                         <span th:text="${menu}">0</span>
                         <small>个</small>
                     </span>
-                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">资源总数</span>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">资源总数</span>
                     <span class="info-box-number">
                         <span th:text="${menu}">0</span>
                         <small>个</small>
                     </span>
-                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <!-- AREA CHART -->
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Area Chart</h3>
+    </div>
+    <!--流动图-->
+    <!--  <div class="row">
+          <div class="col-xs-12">
+              &lt;!&ndash; interactive chart &ndash;&gt;
+              <div class="box box-primary">
+                  <div class="box-header with-border">
+                      <i class="fa fa-bar-chart-o"></i>
 
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                        </div>
+                      <h3 class="box-title">Interactive Area Chart</h3>
+
+                      <div class="box-tools pull-right">
+                          Real time
+                          <div class="btn-group" id="realtime" data-toggle="btn-toggle">
+                              <button type="button" class="btn btn-default btn-xs active" data-toggle="on">On</button>
+                              <button type="button" class="btn btn-default btn-xs" data-toggle="off">Off</button>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="box-body">
+                      <div id="interactive" style="height: 300px;"></div>
+                  </div>
+                  &lt;!&ndash; /.box-body&ndash;&gt;
+              </div>
+              &lt;!&ndash; /.box &ndash;&gt;
+
+          </div>
+          &lt;!&ndash; /.col &ndash;&gt;
+      </div>-->
+    <div class="row">
+        <div class="col-md-6">
+            <!-- AREA CHART -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Area Chart</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
                     </div>
-                    <div class="box-body">
-                        <div class="chart">
-                            <canvas id="areaChart" style="height:250px"></canvas>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
                 </div>
-                <!-- /.box -->
-
-                <!-- DONUT CHART -->
-                <div class="box box-danger">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Donut Chart</h3>
-
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                        </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="areaChart" style="height:250px"></canvas>
                     </div>
-                    <div class="box-body">
-                        <canvas id="pieChart" style="height:250px"></canvas>
-                    </div>
-                    <!-- /.box-body -->
                 </div>
-                <!-- /.box -->
-
+                <!-- /.box-body -->
             </div>
-            <!-- /.col (LEFT) -->
-            <div class="col-md-6">
-                <!-- LINE CHART -->
-                <div class="box box-info">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Line Chart</h3>
+            <!-- /.box -->
 
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                        </div>
+            <!-- DONUT CHART -->
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title">登陆日志统计</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
                     </div>
-                    <div class="box-body">
-                        <div class="chart">
-                            <canvas id="lineChart" style="height:250px"></canvas>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
                 </div>
-                <!-- /.box -->
-
-                <!-- BAR CHART -->
-                <div class="box box-success">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Bar Chart</h3>
-
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                        </div>
-                    </div>
-                    <div class="box-body">
-                        <div class="chart">
-                            <canvas id="barChart" style="height:230px"></canvas>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
+                <div class="box-body">
+                    <div id="main" style="width: 600px;height:400px;"></div>
                 </div>
-                <!-- /.box -->
-
+                <!-- /.box-body -->
             </div>
-            <!-- /.col (RIGHT) -->
+            <!-- /.box -->
+
         </div>
-        <!-- /.row -->
-    </section>
-    <div th:replace="console/footer"></div>
-    <script type="text/javascript" src="/static/commons/include.web.ui.js?dm=1012"></script>
-    <script>
+        <!-- /.col (LEFT) -->
+        <div class="col-md-6">
+            <!-- LINE CHART -->
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">交换机流表项个数(最近10分钟)</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <div id="switchesFlowNum" style="height:250px"></div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+            <!-- BAR CHART -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">交换机的端口数量</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <div id="portNum" style="width: 600px;height:400px;"></div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+        </div>
+        <!-- /.col (RIGHT) -->
+    </div>
+    <!-- <div class="row">
+         <div class="col-md-6">
+             &lt;!&ndash; AREA CHART &ndash;&gt;
+             <div class="box box-primary">
+                 <div class="box-header with-border">
+                     <h3 class="box-title">Area Chart</h3>
+
+                     <div class="box-tools pull-right">
+                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                 class="fa fa-minus"></i>
+                         </button>
+                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                         </button>
+                     </div>
+                 </div>
+                 <div class="box-body">
+                     <div class="chart">
+                         &lt;!&ndash;<div id="main" style="width: 600px;height:400px;"></div>&ndash;&gt;
+                     </div>
+                 </div>
+                 &lt;!&ndash; /.box-body &ndash;&gt;
+             </div>
+             &lt;!&ndash; /.box &ndash;&gt;
+
+
+
+         </div>
+     </div>-->
+    <!-- /.row -->
+</section>
+<div th:replace="console/footer"></div>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=101221"></script>
+<script>
+
+    function switchesFlowNum() {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('switchesFlowNum'));
+
+        var option = {
+            color: ['#3398DB'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '直接访问',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: [10, 52, 200, 334, 390, 330, 220]
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    }
+    function getPortNum() {
+        $.ajax({
+            type: "get", async: true, //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/functionView/switches/getAllSwitchsAndPort",
+            data: {}, dataType: "json",
+            //返回数据形式为json
+            success: function (data) { //请求成功时执行该函数内容，result即为服务器返回的json对象
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('portNum'));
+                //data.result.switchsAndPort.switchList
+
+                var option = {
+                    color: ['#3398DB'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: data.result.switchsAndPort.switchList,
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '直接访问',
+                            type: 'bar',
+                            barWidth: '60%',
+                            data: data.result.switchsAndPort.portList
+                        }
+                    ]
+                };
+
+                myChart.setOption(option);
+            }
+        })
+
+    }
+
+        //百分比
+        function getSwitchesPort() {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+
+            var option = {
+                title: {
+                    text: '某站点用户访问来源',
+                    subtext: '纯属虚构',
+                    x: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                },
+                series: [
+                    {
+                        name: '访问来源',
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '60%'],
+                        data: [
+                            {value: 335, name: '直接访问'},
+                            {value: 310, name: '邮件营销'},
+                            {value: 234, name: '联盟广告'},
+                            {value: 135, name: '视频广告'},
+                            {value: 1548, name: '搜索引擎'}
+                        ],
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+
         $(function () {
+            switchesFlowNum();
+            getPortNum();
+            getSwitchesPort();
             /* ChartJS
              * -------
              * Here we will create a few charts using ChartJS
@@ -167,71 +379,71 @@
             // Get context with jQuery - using jQuery's .get() method.
             var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
             // This will get the first returned node in the jQuery collection.
-            var areaChart       = new Chart(areaChartCanvas)
+            var areaChart = new Chart(areaChartCanvas)
 
             var areaChartData = {
-                labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                 datasets: [
                     {
-                        label               : 'Electronics',
-                        fillColor           : 'rgba(210, 214, 222, 1)',
-                        strokeColor         : 'rgba(210, 214, 222, 1)',
-                        pointColor          : 'rgba(210, 214, 222, 1)',
-                        pointStrokeColor    : '#c1c7d1',
-                        pointHighlightFill  : '#fff',
+                        label: 'Electronics',
+                        fillColor: 'rgba(210, 214, 222, 1)',
+                        strokeColor: 'rgba(210, 214, 222, 1)',
+                        pointColor: 'rgba(210, 214, 222, 1)',
+                        pointStrokeColor: '#c1c7d1',
+                        pointHighlightFill: '#fff',
                         pointHighlightStroke: 'rgba(220,220,220,1)',
-                        data                : [65, 59, 80, 81, 56, 55, 40]
+                        data: [65, 59, 80, 81, 56, 55, 40]
                     },
                     {
-                        label               : 'Digital Goods',
-                        fillColor           : 'rgba(60,141,188,0.9)',
-                        strokeColor         : 'rgba(60,141,188,0.8)',
-                        pointColor          : '#3b8bba',
-                        pointStrokeColor    : 'rgba(60,141,188,1)',
-                        pointHighlightFill  : '#fff',
+                        label: 'Digital Goods',
+                        fillColor: 'rgba(60,141,188,0.9)',
+                        strokeColor: 'rgba(60,141,188,0.8)',
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(60,141,188,1)',
+                        pointHighlightFill: '#fff',
                         pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data                : [28, 48, 40, 19, 86, 27, 90]
+                        data: [28, 48, 40, 19, 86, 27, 90]
                     }
                 ]
             }
 
             var areaChartOptions = {
                 //Boolean - If we should show the scale at all
-                showScale               : true,
+                showScale: true,
                 //Boolean - Whether grid lines are shown across the chart
-                scaleShowGridLines      : false,
+                scaleShowGridLines: false,
                 //String - Colour of the grid lines
-                scaleGridLineColor      : 'rgba(0,0,0,.05)',
+                scaleGridLineColor: 'rgba(0,0,0,.05)',
                 //Number - Width of the grid lines
-                scaleGridLineWidth      : 1,
+                scaleGridLineWidth: 1,
                 //Boolean - Whether to show horizontal lines (except X axis)
                 scaleShowHorizontalLines: true,
                 //Boolean - Whether to show vertical lines (except Y axis)
-                scaleShowVerticalLines  : true,
+                scaleShowVerticalLines: true,
                 //Boolean - Whether the line is curved between points
-                bezierCurve             : true,
+                bezierCurve: true,
                 //Number - Tension of the bezier curve between points
-                bezierCurveTension      : 0.3,
+                bezierCurveTension: 0.3,
                 //Boolean - Whether to show a dot for each point
-                pointDot                : false,
+                pointDot: false,
                 //Number - Radius of each point dot in pixels
-                pointDotRadius          : 4,
+                pointDotRadius: 4,
                 //Number - Pixel width of point dot stroke
-                pointDotStrokeWidth     : 1,
+                pointDotStrokeWidth: 1,
                 //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                pointHitDetectionRadius : 20,
+                pointHitDetectionRadius: 20,
                 //Boolean - Whether to show a stroke for datasets
-                datasetStroke           : true,
+                datasetStroke: true,
                 //Number - Pixel width of dataset stroke
-                datasetStrokeWidth      : 2,
+                datasetStrokeWidth: 2,
                 //Boolean - Whether to fill the dataset with a color
-                datasetFill             : true,
+                datasetFill: true,
                 //String - A legend template
-                legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].lineColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+                legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].lineColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
                 //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                maintainAspectRatio     : true,
+                maintainAspectRatio: true,
                 //Boolean - whether to make the chart responsive to window resizing
-                responsive              : true
+                responsive: true
             }
 
             //Create the line chart
@@ -240,9 +452,9 @@
             //-------------
             //- LINE CHART -
             //--------------
-            var lineChartCanvas          = $('#lineChart').get(0).getContext('2d')
-            var lineChart                = new Chart(lineChartCanvas)
-            var lineChartOptions         = areaChartOptions
+            var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+            var lineChart = new Chart(lineChartCanvas)
+            var lineChartOptions = areaChartOptions
             lineChartOptions.datasetFill = false
             lineChart.Line(areaChartData, lineChartOptions)
 
@@ -251,68 +463,68 @@
             //-------------
             // Get context with jQuery - using jQuery's .get() method.
             var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-            var pieChart       = new Chart(pieChartCanvas)
-            var PieData        = [
+            var pieChart = new Chart(pieChartCanvas)
+            var PieData = [
                 {
-                    value    : 700,
-                    color    : '#f56954',
+                    value: 700,
+                    color: '#f56954',
                     highlight: '#f56954',
-                    label    : 'Chrome'
+                    label: 'Chrome'
                 },
                 {
-                    value    : 500,
-                    color    : '#00a65a',
+                    value: 500,
+                    color: '#00a65a',
                     highlight: '#00a65a',
-                    label    : 'IE'
+                    label: 'IE'
                 },
                 {
-                    value    : 400,
-                    color    : '#f39c12',
+                    value: 400,
+                    color: '#f39c12',
                     highlight: '#f39c12',
-                    label    : 'FireFox'
+                    label: 'FireFox'
                 },
                 {
-                    value    : 600,
-                    color    : '#00c0ef',
+                    value: 600,
+                    color: '#00c0ef',
                     highlight: '#00c0ef',
-                    label    : 'Safari'
+                    label: 'Safari'
                 },
                 {
-                    value    : 300,
-                    color    : '#3c8dbc',
+                    value: 300,
+                    color: '#3c8dbc',
                     highlight: '#3c8dbc',
-                    label    : 'Opera'
+                    label: 'Opera'
                 },
                 {
-                    value    : 100,
-                    color    : '#d2d6de',
+                    value: 100,
+                    color: '#d2d6de',
                     highlight: '#d2d6de',
-                    label    : 'Navigator'
+                    label: 'Navigator'
                 }
             ]
-            var pieOptions     = {
+            var pieOptions = {
                 //Boolean - Whether we should show a stroke on each segment
-                segmentShowStroke    : true,
+                segmentShowStroke: true,
                 //String - The colour of each segment stroke
-                segmentStrokeColor   : '#fff',
+                segmentStrokeColor: '#fff',
                 //Number - The width of each segment stroke
-                segmentStrokeWidth   : 2,
+                segmentStrokeWidth: 2,
                 //Number - The percentage of the chart that we cut out of the middle
                 percentageInnerCutout: 50, // This is 0 for Pie charts
                 //Number - Amount of animation steps
-                animationSteps       : 100,
+                animationSteps: 100,
                 //String - Animation easing effect
-                animationEasing      : 'easeOutBounce',
+                animationEasing: 'easeOutBounce',
                 //Boolean - Whether we animate the rotation of the Doughnut
-                animateRotate        : true,
+                animateRotate: true,
                 //Boolean - Whether we animate scaling the Doughnut from the centre
-                animateScale         : false,
+                animateScale: false,
                 //Boolean - whether to make the chart responsive to window resizing
-                responsive           : true,
+                responsive: true,
                 // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                maintainAspectRatio  : true,
+                maintainAspectRatio: true,
                 //String - A legend template
-                legendTemplate       : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+                legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
             }
             //Create pie or douhnut chart
             // You can switch between pie and douhnut using the method below.
@@ -321,43 +533,43 @@
             //-------------
             //- BAR CHART -
             //-------------
-            var barChartCanvas                   = $('#barChart').get(0).getContext('2d')
-            var barChart                         = new Chart(barChartCanvas)
-            var barChartData                     = areaChartData
-            barChartData.datasets[1].fillColor   = '#00a65a'
+            var barChartCanvas = $('#barChart').get(0).getContext('2d')
+            var barChart = new Chart(barChartCanvas)
+            var barChartData = areaChartData
+            barChartData.datasets[1].fillColor = '#00a65a'
             barChartData.datasets[1].strokeColor = '#00a65a'
-            barChartData.datasets[1].pointColor  = '#00a65a'
-            var barChartOptions                  = {
+            barChartData.datasets[1].pointColor = '#00a65a'
+            var barChartOptions = {
                 //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-                scaleBeginAtZero        : true,
+                scaleBeginAtZero: true,
                 //Boolean - Whether grid lines are shown across the chart
-                scaleShowGridLines      : true,
+                scaleShowGridLines: true,
                 //String - Colour of the grid lines
-                scaleGridLineColor      : 'rgba(0,0,0,.05)',
+                scaleGridLineColor: 'rgba(0,0,0,.05)',
                 //Number - Width of the grid lines
-                scaleGridLineWidth      : 1,
+                scaleGridLineWidth: 1,
                 //Boolean - Whether to show horizontal lines (except X axis)
                 scaleShowHorizontalLines: true,
                 //Boolean - Whether to show vertical lines (except Y axis)
-                scaleShowVerticalLines  : true,
+                scaleShowVerticalLines: true,
                 //Boolean - If there is a stroke on each bar
-                barShowStroke           : true,
+                barShowStroke: true,
                 //Number - Pixel width of the bar stroke
-                barStrokeWidth          : 2,
+                barStrokeWidth: 2,
                 //Number - Spacing between each of the X value sets
-                barValueSpacing         : 5,
+                barValueSpacing: 5,
                 //Number - Spacing between data sets within X values
-                barDatasetSpacing       : 1,
+                barDatasetSpacing: 1,
                 //String - A legend template
-                legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+                legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
                 //Boolean - whether to make the chart responsive
-                responsive              : true,
-                maintainAspectRatio     : true
+                responsive: true,
+                maintainAspectRatio: true
             }
 
             barChartOptions.datasetFill = false
             barChart.Bar(barChartData, barChartOptions)
         })
-    </script>
+</script>
 </body>
 </html>

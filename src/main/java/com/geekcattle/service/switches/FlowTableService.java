@@ -5,6 +5,7 @@ import com.geekcattle.model.switches.FlowTable;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 王鹏豪 on 2018/10/23.
@@ -22,5 +23,18 @@ public interface FlowTableService {
      * 获取交换机流表信息
      */
     void getSwitchFlow();
+
+    /**
+     * 通过交换机id查询下面的流表项id
+     * @param switchesId
+     * @return
+     */
+    List<Object> getSwitchesFlowDetailsBySwitchesId(String switchesId);
+
+    /**
+     * 交换机流表项个数
+     * @return
+     */
+   Map<String,Object>  getTotalFlowDetailBySwitchesId();
 
 }

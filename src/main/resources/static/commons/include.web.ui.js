@@ -42,8 +42,15 @@ var includeTools = {
             case  20://黑名单列表信息
                 path.push('<script src="/static/commons/blacklist/balcklist_index.js" type="text/javascript"></scr' + 'ipt>');
                 break;
+            case  21://flot图表
+                path.push('<script src="/static/commons/js/flot/jquery.flot.js" type="text/javascript"></scr' + 'ipt>');
+                path.push('<script src="/static/commons/js/flot/jquery.flot.resize.js" type="text/javascript"></scr' + 'ipt>');
+                path.push('<script src="/static/commons/js/flot/jquery.flot.pie.js" type="text/javascript"></scr' + 'ipt>');
+                path.push('<script src="/static/commons/js/flot/jquery.flot.categories.js" type="text/javascript"></scr' + 'ipt>');
+                break;
             case  12://统计图标组件
                 path.push('<script src="/static/commons/chart/Chart.min.js" type="text/javascript"></scr' + 'ipt>');
+                path.push('<script src="/static/commons/chart/echarts.common.min.js" type="text/javascript"></scr' + 'ipt>');
 
 //                 //path.push('<link href="' + basePath + '../themes/default/main.css"  rel="stylesheet" type="text/css">');
 //

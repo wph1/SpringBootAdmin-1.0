@@ -31,6 +31,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 交换机信息controller
@@ -226,6 +227,63 @@ public class SwitchesController {
 
         map.put("switchPortList", switchPortList);
         return ReturnUtil.Success("加载成功", map, null);
+    }
+
+    /**
+     * 获取流表信息数据
+     * @param switchesId
+     * @return
+     */
+    @GetMapping(value = "/getSwitchesFlowDetailsBySwitchesId")
+    @ResponseBody
+    public ModelMap getSwitchesFlowDetailsBySwitchesId(String switchesId){
+        try {
+            ModelMap map = new ModelMap();
+            List<Object> flowDataList = flowTableService.getSwitchesFlowDetailsBySwitchesId(switchesId);
+            map.put("flowDataList", flowDataList);
+           return ReturnUtil.Success("加载成功", map, null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return  ReturnUtil.Error("加载失败", null, null);
+        }
+    }
+
+    /**
+     * 获取某个交换机流表总数（当前10分钟）
+     * @param
+     * @return
+     */
+    @GetMapping(value = "/getFlowDetailCountBySwitchesId")
+    @ResponseBody
+    public ModelMap getFlowDetailCountBySwitchesId(){
+        try {
+            ModelMap map = new ModelMap();
+            Map<String, Object> totalFlowDetail = flowTableService.getTotalFlowDetailBySwitchesId();
+            map.put("totalFlowDetail", totalFlowDetail);
+            return ReturnUtil.Success("加载成功", map, null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return  ReturnUtil.Error("加载失败", null, null);
+        }
+    }
+
+    /**
+     * 获取交换机和端口，统计使用
+     * @param
+     * @return
+     */
+    @GetMapping(value = "/getAllSwitchsAndPort")
+    @ResponseBody
+    public ModelMap getAllSwitchsAndPort(){
+        try {
+            ModelMap map = new ModelMap();
+            Map<String, Object> switchsAndPort = switchesNewService.getAllSwitchsAndPort();
+            map.put("switchsAndPort", switchsAndPort);
+            return ReturnUtil.Success("加载成功", map, null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return  ReturnUtil.Error("加载失败", null, null);
+        }
     }
 
 }
