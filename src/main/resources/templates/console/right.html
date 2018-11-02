@@ -117,29 +117,6 @@
             <!-- DONUT CHART -->
             <div class="box box-danger">
                 <div class="box-header with-border">
-                    <h3 class="box-title">登陆日志统计</h3>
-
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <div id="main" style="width: 600px;height:400px;"></div>
-                </div>
-                <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
-
-        </div>
-        <!-- /.col (LEFT) -->
-        <div class="col-md-6">
-            <!-- LINE CHART -->
-            <div class="box box-info">
-                <div class="box-header with-border">
                     <h3 class="box-title">交换机流表项个数(最近10分钟)</h3>
 
                     <div class="box-tools pull-right">
@@ -151,8 +128,33 @@
                     </div>
                 </div>
                 <div class="box-body">
+                    <!--<div id="main" style="width: 600px;height:400px;"></div>-->
+                    <div id="switchesFlowNum"  style="width: 600px;height:400px;"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+        </div>
+        <!-- /.col (LEFT) -->
+        <div class="col-md-6">
+            <!-- LINE CHART -->
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">登陆日志统计</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
                     <div class="chart">
-                        <div id="switchesFlowNum" style="height:250px"></div>
+                        <div id="main" style="width: 600px;height:250px;"></div>
+                       <!-- <div id="switchesFlowNum"  style="width: 600px;height:400px;"></div>-->
                     </div>
                 </div>
                 <!-- /.box-body -->
@@ -219,48 +221,105 @@
 <script>
 
     function switchesFlowNum() {
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('switchesFlowNum'));
+        $.ajax({
+            type: "get", async: true, //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/functionView/switches/getFlowDetailCountBySwitchesId",
+            data: {}, dataType: "json",
+            //返回数据形式为json
+            success: function (data) { //请求成功时执行该函数内容，result即为服务器返回的json对象
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('switchesFlowNum'));
+                //data.result.switchsAndPort.switchList
 
-        var option = {
-            color: ['#3398DB'],
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    axisTick: {
-                        alignWithLabel: true
-                    }
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
-            series: [
-                {
-                    name: '直接访问',
-                    type: 'bar',
-                    barWidth: '60%',
-                    data: [10, 52, 200, 334, 390, 330, 220]
-                }
-            ]
-        };
+                var option = {
+                    color: ['#3398DB'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: data.result.totalFlowDetail.switchList,
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            axisLabel : {//x轴倾斜显示
+                                interval:0,
+                                rotate:"45"
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '流表项数量',
+                            type: 'bar',
+                            barWidth: '60%',
+                            data: data.result.totalFlowDetail.flowList
+                        }
+                    ]
+                };
 
-        myChart.setOption(option);
+                myChart.setOption(option);
+            }
+        })
+
+
+//        // 基于准备好的dom，初始化echarts实例
+//        var myChart = echarts.init(document.getElementById('switchesFlowNum'));
+//
+//        var option = {
+//            color: ['#3398DB'],
+//            tooltip: {
+//                trigger: 'axis',
+//                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+//                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+//                }
+//            },
+//            grid: {
+//                left: '3%',
+//                right: '4%',
+//                bottom: '3%',
+//                containLabel: true
+//            },
+//            xAxis: [
+//                {
+//                    type: 'category',
+//                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+//                    axisTick: {
+//                        alignWithLabel: true
+//                    }
+//                }
+//            ],
+//            yAxis: [
+//                {
+//                    type: 'value'
+//                }
+//            ],
+//            series: [
+//                {
+//                    name: '直接访问',
+//                    type: 'bar',
+//                    barWidth: '60%',
+//                    data: [10, 52, 200, 334, 390, 330, 220]
+//                }
+//            ]
+//        };
+//
+//        myChart.setOption(option);
     }
     function getPortNum() {
         $.ajax({
@@ -293,6 +352,10 @@
                             data: data.result.switchsAndPort.switchList,
                             axisTick: {
                                 alignWithLabel: true
+                            },
+                            axisLabel : {//x轴倾斜显示
+                                interval:0,
+                                rotate:"45"
                             }
                         }
                     ],
@@ -303,7 +366,7 @@
                     ],
                     series: [
                         {
-                            name: '直接访问',
+                            name: '端口数量',
                             type: 'bar',
                             barWidth: '60%',
                             data: data.result.switchsAndPort.portList
