@@ -8,6 +8,7 @@ import com.geekcattle.model.flowsession.FlowSession;
 import com.geekcattle.model.switches.FlowTable;
 import com.geekcattle.service.flowsession.FlowSessionPathServcie;
 import com.geekcattle.service.flowsession.FlowSessionServcie;
+import com.geekcattle.service.honeypotlog.HoneypotLogServcie;
 import com.geekcattle.service.switches.FlowTableService;
 import com.geekcattle.service.switches.SwitchesNewService;
 import org.slf4j.Logger;
@@ -33,6 +34,8 @@ public class Timer {
     private FlowSessionServcie flowSessionServcie;
     @Autowired
     private FlowTableService flowTableService;
+    @Autowired
+    private HoneypotLogServcie honeypotLogServcie;
 
 //    @Scheduled(cron = "0 0/5 * * * *")//300秒执行一次（5分钟）
 //    public void sessionTimer() {//会话定时器
@@ -70,6 +73,17 @@ public class Timer {
 //            flowTableService.getSwitchFlow();
 //        }catch (Exception e){
 //            logger.error("====> 获取交换机流表信息失败,"+e.getMessage());
+//            e.printStackTrace();
+//        }
+//
+//    }
+//    @Scheduled(cron = "0/30 * * * * *")//30秒
+//    public void honeyPotLogTimer() {//蜜罐日志
+//        //获取当前时间
+//        try {
+//            honeypotLogServcie.saveHoneypotLogDataByOdl();
+//        }catch (Exception e){
+//            logger.error("====> 获取蜜罐日志信息失败,"+e.getMessage());
 //            e.printStackTrace();
 //        }
 //

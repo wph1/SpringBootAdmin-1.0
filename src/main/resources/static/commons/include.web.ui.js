@@ -48,6 +48,9 @@ var includeTools = {
                 path.push('<script src="/static/commons/js/flot/jquery.flot.pie.js" type="text/javascript"></scr' + 'ipt>');
                 path.push('<script src="/static/commons/js/flot/jquery.flot.categories.js" type="text/javascript"></scr' + 'ipt>');
                 break;
+            case  22://蜜罐日志
+                path.push('<script src="/static/commons/honeypotlog/honeypotlog_index.js" type="text/javascript"></scr' + 'ipt>');
+                break;
             case  12://统计图标组件
                 path.push('<script src="/static/commons/chart/Chart.min.js" type="text/javascript"></scr' + 'ipt>');
                 path.push('<script src="/static/commons/chart/echarts.common.min.js" type="text/javascript"></scr' + 'ipt>');

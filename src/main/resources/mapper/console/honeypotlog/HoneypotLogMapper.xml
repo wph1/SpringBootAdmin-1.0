@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geekcattle.mapper.honeypotlog.HoneypotLogMapper" >
+  <resultMap id="BaseResultMap" type="com.geekcattle.model.honeypotlog.HoneypotLog" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="honeyptlog_id" property="honeyptlogId" jdbcType="VARCHAR" />
+    <result column="src_mac" property="srcMac" jdbcType="VARCHAR" />
+    <result column="dst_mac" property="dstMac" jdbcType="VARCHAR" />
+    <result column="src_ip" property="srcIp" jdbcType="VARCHAR" />
+    <result column="dst_ip" property="dstIp" jdbcType="VARCHAR" />
+    <result column="src_port" property="srcPort" jdbcType="VARCHAR" />
+    <result column="dst_port" property="dstPort" jdbcType="VARCHAR" />
+    <result column="proto" property="proto" jdbcType="VARCHAR" />
+    <result column="honeypt_ip" property="honeyptIp" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>
