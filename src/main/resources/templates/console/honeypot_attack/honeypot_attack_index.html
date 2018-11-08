@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>蜜罐攻击</h1>
+    <!--<small>列表管理</small>-->
+</section>
+<section class="content table-content">
+    <div id="toolbar">
+    </div>
+    <table id="dataGrid"></table>
+</section>
+
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=10"></script>
+<script type="text/javascript" src="/static/commons/honeypot_attack/honeypot_attack_index.js"></script>
+</body>
+<script type="text/javascript">
+
+</script>
+</html>
