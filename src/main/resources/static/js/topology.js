@@ -28,6 +28,7 @@ function Topology(svg) {
         .alpha(0.005)
         .size([w, h])
  		.on("start",function(){//当节点开始运动时
+ 			console.log("节点开始运动");
 			self.vis.selectAll(".node")
 			.attr("transform", function(d) {
 				var position = window.sessionStorage.getItem(d.id);//从sessionStorage里获取每个节点对应的位置，如果窗口关闭，则sessionStorage就清0了。
@@ -47,6 +48,7 @@ function Topology(svg) {
            	
 		})
 		.on("end",function(){//当节点运动停止时
+            console.log("当节点运动停止时");
 			self.vis.selectAll(".node")
 			.attr("transform", function(d,i) {
 				var nodeNumber = document.getElementsByClassName("node");
@@ -85,6 +87,7 @@ function Topology(svg) {
            });
 		})
         .on("tick", function(x) {
+            console.log("tick-----》");
             self.vis.selectAll(".node")
             	.attr("transform", function(d) {
 			 		var position = window.sessionStorage.getItem(d.id);
