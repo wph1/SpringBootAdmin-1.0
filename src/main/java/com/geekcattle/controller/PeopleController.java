@@ -2,10 +2,12 @@ package com.geekcattle.controller;
 
 import com.geekcattle.core.es.ElasticsearchRestClientUtils;
 import com.geekcattle.model.PeopleTest;
+import com.geekcattle.model.honeypotattack.HonepotAttack;
 import com.geekcattle.util.ReturnUtil;
 import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.commons.lang3.ArrayUtils;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -14,6 +16,8 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -128,6 +133,63 @@ public class PeopleController {
 
 
 
+    /**
+     * 通过分页查询es数据
+     */
+    @GetMapping("getHoneypotAttackDataByPage")
+    @ResponseBody
+    public  ModelMap getHoneypotAttackDataByPage(HonepotAttack honepotAttack){
+        ModelMap map = new ModelMap();
+        List list = new ArrayList();
+        int start=honepotAttack.getOffset();
+        int size=honepotAttack.getLimit();
+        SearchResponse response = ElasticsearchRestClientUtils.pageQueryRequest("", "", "", "", start, size, restHighLevelClient);
+        SearchHits hits= response.getHits();
+        long totalRecordNum= hits.getTotalHits();
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd")
+                .create();
+        for (SearchHit searchHit : hits) {
+            Map<String, Object> source = searchHit.getSourceAsMap();
+            HonepotAttack entity =gson.fromJson(gson.toJson(source), HonepotAttack.class);
+            System.out.println(entity);
+            list.add(entity);
+        }
+
+        map.put("queryParam", honepotAttack);
+        PageInfo pageInfo= new PageInfo<HonepotAttack>(list);
+        pageInfo.setTotal(totalRecordNum);
+        map.put("pageInfo",pageInfo);
+        return ReturnUtil.Success("加载成功", map, null);
+    }
+
+
+    /**
+     * 分组查询
+     */
+    @GetMapping("group")
+    @ResponseBody
+    public  ModelMap group(){
+
+        SearchResponse response = ElasticsearchRestClientUtils.getCountGroupByType(restHighLevelClient);
+        Map<String, Aggregation> aggMap = response.getAggregations().getAsMap();
+        ParsedStringTerms gradeTerms = (ParsedStringTerms) aggMap.get("estateIdAgg");
+        List list = gradeTerms.getBuckets();
+        Map dataMap=new HashMap();
+      List   xList = new ArrayList();
+      List   yList = new ArrayList();
+        for (Object object : list) {
+            ParsedStringTerms.ParsedBucket obj = (ParsedStringTerms.ParsedBucket) object;
+            String key = obj.getKeyAsString();
+            long count = obj.getDocCount();
+            xList.add(key);
+            yList.add(count);
+            System.out.println("key::"+key+" ,count::"+count);
+        }
+        dataMap.put("xData",xList);
+        dataMap.put("yData",yList);
+        return ReturnUtil.Success("加载成功", dataMap, null);
+    }
 
 
 }

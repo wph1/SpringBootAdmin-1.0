@@ -10,12 +10,19 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.BucketOrder;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -56,28 +63,28 @@ public class ElasticsearchRestClientUtils {
 //        boolBuilder.must(matchbuilder);
 //        boolBuilder.must(rangbuilder);
         // 排序
-        FieldSortBuilder fsb = SortBuilders.fieldSort("date");
-        fsb.order(SortOrder.DESC);
-        sourceBuilder.sort(fsb);
+//        FieldSortBuilder fsb = SortBuilders.fieldSort("date");
+//        fsb.order(SortOrder.DESC);
+//        sourceBuilder.sort(fsb);
 
         sourceBuilder.query(boolBuilder);
         //System.out.println(sourceBuilder);
-        SearchRequest searchRequest = new SearchRequest("people");
-        searchRequest.types("man");
+        SearchRequest searchRequest = new SearchRequest("honeypot");
+        searchRequest.types("doc");
         searchRequest.source(sourceBuilder);
         SearchResponse response = null;
         try {
             response = client.search(searchRequest);
             SearchHits hits= response.getHits();
             int totalRecordNum= (int) hits.getTotalHits();
-            Gson gson = new GsonBuilder()
-                    .setDateFormat("yyyy-MM-dd")
-                    .create();
-            for (SearchHit searchHit : hits) {
-                Map<String, Object> source = searchHit.getSourceAsMap();
-                Object entity =gson.fromJson(gson.toJson(source), PeopleTest.class);
-                System.out.println(entity);
-            }
+//            Gson gson = new GsonBuilder()
+//                    .setDateFormat("yyyy-MM-dd")
+//                    .create();
+//            for (SearchHit searchHit : hits) {
+//                Map<String, Object> source = searchHit.getSourceAsMap();
+//                Object entity =gson.fromJson(gson.toJson(source), PeopleTest.class);
+//                System.out.println(entity);
+//            }
 
 
 //            client.close();
@@ -89,4 +96,38 @@ public class ElasticsearchRestClientUtils {
         return response;
     }
 
+    /**
+     * 通过类型分组求和
+     * @param client
+     * @return
+     */
+    public  static SearchResponse getCountGroupByType(RestHighLevelClient client){
+
+
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.size(0);
+        // 查询的等待时间
+        sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+         TermsAggregationBuilder aggregationBuilder = AggregationBuilders.terms("estateIdAgg").field("type.keyword");
+//        aggregationBuilder.order(BucketOrder.count(false));
+//        aggregationBuilder.size(Integer.MAX_VALUE);//todo
+        sourceBuilder.aggregation(aggregationBuilder);
+        //System.out.println(sourceBuilder);
+        SearchRequest searchRequest = new SearchRequest("honeypot");
+        searchRequest.types("doc");
+        searchRequest.source(sourceBuilder);
+        SearchResponse response = null;
+        try {
+            response = client.search(searchRequest);
+            SearchHits hits= response.getHits();
+//            int totalRecordNum= (int) hits.getTotalHits();
+
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return response;
+    }
 }
