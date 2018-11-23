@@ -42,11 +42,11 @@
         <!--<table tableName="flow_table_details"  domainObjectName="FlowTableDetails">
             <generatedKey column="flow_table_details_id" sqlStatement="Mysql" identity="true"/>
         </table>-->
-      <!--  <table tableName="flow_instruction"  domainObjectName="FlowInstruction">
-            <generatedKey column="flow_instruction_id" sqlStatement="Mysql" identity="true"/>
+       <!-- <table tableName="mtd_dynamic_port"  domainObjectName="MtdDynamicPort">
+            <generatedKey column="dynamicport_id" sqlStatement="Mysql" identity="true"/>
         </table>-->
-       <!-- <table tableName="black_list"  domainObjectName="BlackList">
-            <generatedKey column="black_list_id" sqlStatement="Mysql" identity="true"/>
-        </table>-->
+        <table tableName="mtd_config"  domainObjectName="MtdConfig">
+            <generatedKey column="mtd_id" sqlStatement="Mysql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>

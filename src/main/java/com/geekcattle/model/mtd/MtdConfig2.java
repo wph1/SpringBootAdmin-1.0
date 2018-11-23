@@ -46,10 +46,22 @@ public class MtdConfig2 extends BaseEntity implements Serializable {
     private String sessionIdle;
 
     /**
-     * 访问外网的地址
+     * 内网提供的开放服务的地址
      */
-    @Column(name = "external_address")
-    private String externalAddress;
+    @Column(name = "external_address_for_d_port")
+    private String externalAddressForDPort;
+
+    /**
+     * dns转发的采用的外网地址
+     */
+    @Column(name = "external_address_for_dns")
+    private String externalAddressForDns;
+
+    /**
+     * 内网访问外网采用的IP地址
+     */
+    @Column(name = "external_address_for_s_nat")
+    private String externalAddressForSNat;
 
     /**
      * 路径跳变开启与否,1-开启，0-关闭
@@ -198,22 +210,28 @@ public class MtdConfig2 extends BaseEntity implements Serializable {
         this.sessionIdle = sessionIdle;
     }
 
-    /**
-     * 获取访问外网的地址
-     *
-     * @return external_address - 访问外网的地址
-     */
-    public String getExternalAddress() {
-        return externalAddress;
+    public String getExternalAddressForDPort() {
+        return externalAddressForDPort;
     }
 
-    /**
-     * 设置访问外网的地址
-     *
-     * @param externalAddress 访问外网的地址
-     */
-    public void setExternalAddress(String externalAddress) {
-        this.externalAddress = externalAddress;
+    public void setExternalAddressForDPort(String externalAddressForDPort) {
+        this.externalAddressForDPort = externalAddressForDPort;
+    }
+
+    public String getExternalAddressForDns() {
+        return externalAddressForDns;
+    }
+
+    public void setExternalAddressForDns(String externalAddressForDns) {
+        this.externalAddressForDns = externalAddressForDns;
+    }
+
+    public String getExternalAddressForSNat() {
+        return externalAddressForSNat;
+    }
+
+    public void setExternalAddressForSNat(String externalAddressForSNat) {
+        this.externalAddressForSNat = externalAddressForSNat;
     }
 
     /**

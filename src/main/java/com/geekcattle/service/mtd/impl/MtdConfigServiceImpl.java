@@ -1,13 +1,12 @@
 package com.geekcattle.service.mtd.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.geekcattle.mapper.mtd.HoneypotConfigMapper;
-import com.geekcattle.mapper.mtd.MtdConfigMapper;
-import com.geekcattle.model.mtd.HoneypotConfig;
-import com.geekcattle.model.mtd.MtdConfig2;
+import com.geekcattle.mapper.mtd.*;
+import com.geekcattle.model.mtd.*;
 import com.geekcattle.service.mtd.MtdConfigService;
 import com.geekcattle.util.CamelCaseUtil;
 import com.geekcattle.util.RestTemplateUtils;
+import com.geekcattle.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.MapUtils;
@@ -29,7 +28,12 @@ public class MtdConfigServiceImpl implements MtdConfigService {
     private MtdConfigMapper mtdConfigMapper;
     @Autowired
     private HoneypotConfigMapper honeypotConfigMapper;
-
+    @Autowired
+    private FixedPortMapper fixedPortMapper;
+    @Autowired
+    private MtdDynamicPortMapper mtdDynamicPortMapper;
+    @Autowired
+    private MtdMappingPortMapper mtdMappingPortMapper;
     @Autowired
     private RestTemplate restTemplate;
     @Value("${mtdConfigUrl}")
@@ -68,54 +72,73 @@ public class MtdConfigServiceImpl implements MtdConfigService {
     public void insertMtdConfigAndOdl(Map map) throws Exception {
         //mtd配置
         MtdConfig2 mtdConfig2 = JSON.parseObject(JSON.toJSONString(map), MtdConfig2.class);
+       String mtdId= UuidUtil.getUUID();
+        mtdConfig2.setMtdId(mtdId);
         mtdConfig2.setCreateAt(new Date());
         logger.info("====>插入mtdconfig开始");
         mtdConfigMapper.insert(mtdConfig2);
         logger.info("====>插入mtdconfig成功");
-        //蜜罐配置
-//        List<Map> mapList = (List) MapUtils.getObject(map, "mgList", new ArrayList<>());
-//        for (Map m : mapList) {
-//            HoneypotConfig honeypotConfig = new HoneypotConfig();
-//            BeanUtils.populate(honeypotConfig, m);
-//            honeypotConfig.setCreateAt(new Date());
-//            logger.info("====>插入honeypotConfig开始");
-//            honeypotConfigMapper.insert(honeypotConfig);
-//            logger.info("====>插入honeypotConfig成功");
-//        }
-        //静态ip配置
-//            List<Map> mapList = (List)MapUtils.getObject(map,"mpList",new ArrayList<>());
-//            for(Map m:mapList){
-//                HoneypotConfig honeypotConfig = new HoneypotConfig();
-//                BeanUtils.populate(honeypotConfig,m);
-//                honeypotConfigService.insert(honeypotConfig);
-//            }
         Map<String, Object> mtd_json = new HashMap<String, Object>();
         Map<String, Object> mtd_config = new HashMap<String, Object>();
-//        mtd_config.put("is-mtd-mode", true);
-//        mtd_config.put("dns-address", mtd.getDnsAddress());
-//        mtd_config.put("open-external", mtd.getOpenExternal());
-//        if(mtd.getOpenExternal() == true) {
-//            mtd_config.put("dns-forward-address", mtd.getDnsForwardAddress());
-//            mtd_config.put("external-switch-port", mtd.getExternalSwitchPort());
-//            mtd_config.put("external-switch", mtd.getExternalSwitch());
-//            mtd_config.put("external-address",mtd.getExternalAddress());
-//            mtd_config.put("external-gateway",mtd.getExternalGateway());
-//        }
         //固定ip端口
         List fixPortList = new ArrayList();
-//        Map   fixPortMap = new HashMap();
-//        fixPortMap.put("switch-port",MapUtils.getString(map,"switchPort"));
-//        fixPortList.add(fixPortMap);
         List<Map> fixPort = (List<Map>) MapUtils.getObject(map, "switchPort");
         if (fixPort != null && fixPort.size() > 0) {
             for (Map m : fixPort) {
                 Map fixPortMap = new HashMap();
                 fixPortMap.put("switch-port", MapUtils.getString(m, "id"));
                 fixPortList.add(fixPortMap);
+                //静态端口配置-插入数据库数据
+                FixedPort fixedPort = new FixedPort();
+                fixedPort.setSwitchPort(MapUtils.getString(m, "id"));
+                fixedPort.setCreateAt(new Date());
+                fixedPort.setMtdId(mtdId);
+                logger.info("====>插入fixedPort开始");
+                fixedPortMapper.insert(fixedPort);
+                logger.info("====>插入fixedPort成功");
             }
         }
         mtd_config.put("fixed-port", fixPortList);
-//        mtd_config.put("honeypot-path-idle", MapUtils.getString(map, "honeypotPathIdle"));
+        List mappingPortList = new ArrayList();
+        List  dynamicPortForServicesList = new ArrayList();
+        List<Map> serverList = (List<Map>) MapUtils.getObject(map, "serverList");
+        if(serverList!=null && serverList.size() > 0 ){
+            for (Map m : serverList) {
+                Map  serverMap = new HashMap<>();
+                serverMap.put("switch-port", MapUtils.getString(m, "switchPort"));
+                //交换机服务-插入数据库数据
+                MtdDynamicPort mtdDynamicPort =new MtdDynamicPort();
+                String dynamicPortId= UuidUtil.getUUID();
+                mtdDynamicPort.setDynamicportId(dynamicPortId);
+                mtdDynamicPort.setSwitchPort(MapUtils.getString(m, "switchPort"));
+                mtdDynamicPort.setCreateAt(new Date());
+                mtdDynamicPort.setMtdId(mtdId);
+                logger.info("====>插入mtdDynamicPort开始");
+                mtdDynamicPortMapper.insert(mtdDynamicPort);
+                logger.info("====>插入mtdDynamicPort成功");
+
+                //服务端口截取
+                String serverPorts = MapUtils.getString(m, "serverPort");
+                String[] serverPortArray = serverPorts.split("/");
+                for(int i=0;i<serverPortArray.length;i++){
+                    Map  serverPortMap = new HashMap<>();
+                    serverPortMap.put("service-port",serverPortArray[i]);
+                    //映射端口-插入数据库数据
+                    MtdMappingPort mtdMappingPort = new MtdMappingPort();
+                    mtdMappingPort.setCreateAt(new Date());
+                    mtdMappingPort.setDynamicPortId(dynamicPortId);
+                    mtdMappingPort.setServerPort(serverPortArray[i]);
+                    logger.info("====>插入mtdMappingPort开始");
+                    mtdMappingPortMapper.insert(mtdMappingPort);
+                    logger.info("====>插入mtdMappingPort成功");
+
+                    mappingPortList.add(serverPortMap);
+                }
+                serverMap.put("mapping-port",mappingPortList);
+                dynamicPortForServicesList.add(serverMap);
+            }
+        }
+        mtd_config.put("dynamic-port-for-services", dynamicPortForServicesList);
         mtd_config.put("honeypot-path-idle", "0");
         mtd_config.put("k-path", MapUtils.getString(map, "kPath"));
         mtd_config.put("path-ttl", MapUtils.getString(map, "pathTtl"));
@@ -126,16 +149,10 @@ public class MtdConfigServiceImpl implements MtdConfigService {
             mtd_config.put("is-mtd-mode", false);
         }
 
-        //蜜罐列表
-//        List honeypotList = new ArrayList();
-//        Map   honeypotMap = new HashMap();
-//        honeypotMap.put("honeypot-ip","10.0.0.5");
-//        honeypotMap.put("honeypot-mac","00:0c:29:95:82:5a");
-//        honeypotMap.put("honeypot-switch-port","openflow:11882651047521214913:49");
-//        honeypotList.add(honeypotMap);
-//        mtd_config.put("honeypot-config", honeypotList);
         mtd_config.put("session-idle", MapUtils.getString(map, "sessionIdle"));
-        mtd_config.put("external-address", MapUtils.getString(map, "externalAddress"));
+        mtd_config.put("external-address-for-s-nat", MapUtils.getString(map, "externalAddressForSNat"));
+        mtd_config.put("external-address-for-dns", MapUtils.getString(map, "externalAddressForDns"));
+        mtd_config.put("external-address-for-d-port", MapUtils.getString(map, "externalAddressForDPort"));
 
         String useHoneypot = MapUtils.getString(map, MapUtils.getString(map, "useHoneypot"));
         if ("1".equals(useHoneypot)) {
@@ -158,6 +175,7 @@ public class MtdConfigServiceImpl implements MtdConfigService {
 
         mtd_config.put("external-gateway", MapUtils.getString(map, "externalGateway"));
         mtd_json.put("mtd-config", mtd_config);
+        logger.error("====>mtd_json::"+mtd_json);
         logger.info("====>开始向odl发送保存mtd命令完成");
         String responseStr = (String) RestTemplateUtils.sendUrl(restTemplate, odlIpAndPort + mtdConfigUrl, HttpMethod.PUT, mtd_json);
         logger.info("====>向odl发送保存mtd命令完成");

@@ -111,30 +111,7 @@ var MtdIndex = (function () {
                     var body = layer.getChildFrame('body', index);
                     var mtdForm = body.find("#mtdForm");
                  var jsonData =    mtdForm.serializeJson();
-                    // //组装蜜罐数据结构
-                    // jsonData.mgList = [];
-                    // var mgTr = mtdForm.find("#mGTable").find("tbody > tr"),
-                    //     mg;
-                    // mgTr.each(function () {
-                    //     mg = $(this);
-                    //     jsonData.mgList.push({
-                    //         honeypotIp: mg.find(":input[name='honeypotIp']")[0].value,
-                    //         honeypotMac: mg.find(":input[name='honeypotMac']")[0].value,
-                    //         honeypotSwitchPort: mg.find(":input[name='honeypotSwitchPort']")[0].value
-                    //     })
-                    // });
-                 console.log(jsonData);
-                    //树形菜单数据，子页面对象iframeWin
-                    var iframeWin = window[layero.find('iframe')[0]['name']];
-                    // 调用子页面方法
-                    var chkNode = iframeWin.onCheckNode();
-                    if(chkNode.length==0){
-                        layer.alert("请选择静态配置端口");
-                        return;
-                    }
-                    jsonData.switchPort=chkNode;
                     //表单校验
-
                     var rules = {
                         honeypotIp:{
                             required: true,
@@ -248,8 +225,27 @@ var MtdIndex = (function () {
                     if (!$(mtdForm).valid()) {
                         return;
                     }
-
-
+                    //树形菜单数据，子页面对象iframeWin
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    // 调用子页面方法
+                    var chkNode = iframeWin.onCheckNode();
+                    if(chkNode.length==0){
+                        layer.alert("请选择静态配置端口");
+                        return;
+                    }
+                    jsonData.switchPort=chkNode;
+                    // //组装服务信息
+                    jsonData.serverList = [];
+                    var mgTr = mtdForm.find("#serverTable").find("tbody > tr"),
+                        mg;
+                    mgTr.each(function () {
+                        mg = $(this);
+                        jsonData.serverList.push({
+                            switchPort: mg.find(":input[name='switchPort']")[0].value,
+                            serverPort: mg.find(":input[name='serverPort']")[0].value,
+                        })
+                    });
+                    console.log(jsonData);
 
                     baseTools2.ajaxPost({
                         // bShow:false,

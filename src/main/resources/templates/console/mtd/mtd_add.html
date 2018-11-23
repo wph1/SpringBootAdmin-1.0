@@ -37,13 +37,29 @@
                                        >
                             </div>
 
-                            <label for="externalAddress" class="col-sm-2 control-label">访问外网的地址</label>
+                            <label for="externalAddressForSNat" class="col-sm-2 control-label">内网访问外网IP地址</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="externalAddress" id="externalAddress"
+                                <input type="text" class="form-control" name="externalAddressForSNat" id="externalAddressForSNat"
                                        placeholder="ip地址，如192.168.1.1"
                                       >
                             </div>
                         </div>
+
+                            <div class="form-group">
+                                <label for="externalAddressForDPort" class="col-sm-2 control-label">内网提供的开放服务的地址</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="externalAddressForDPort" id="externalAddressForDPort"
+                                           placeholder="ip地址，如192.168.1.1"
+                                    >
+                                </div>
+
+                                <label for="externalAddressForDns" class="col-sm-2 control-label">dns转发的采用的外网地址</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="externalAddressForDns" id="externalAddressForDns"
+                                           placeholder="ip地址，如192.168.1.1"
+                                    >
+                                </div>
+                            </div>
 
                         <div class="form-group">
                             <label for="dnsForwardAddress" class="col-sm-2 control-label">dns服务器地址</label>
@@ -75,65 +91,39 @@
                                       >
                             </div>
                         </div>
-                        </div>
-                        <!--<div class="box-header with-border">
-                            <h3 class="box-title" ><strong>>蜜罐配置</strong></h3>
-                        </div>-->
-                       <!-- <div class="form-group">
-                            <label class="col-sm-2 control-label">开启蜜罐配置</label>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <table id="serverTable" class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>交换机端口</th>
+                                            <th>服务端口</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <!-- <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
+                                                 <option value=''>请选择交换机</option>
+                                                 </select>-->
+                                                <select id="switch" name="switchPort" class="form-control input-sm">
+                                                    <!-- <option value=''>请选择交换机</option>-->
+                                                </select>
+                                            </td>
+                                            <td><input type="text" class="form-control" name="serverPort"  placeholder="服务端口"></td>
 
-                            <div class="col-sm-6">
-                                <label class="radio-inline">
-                                    <input type="radio" name="useHoneypot" id="useHoneypot1" checked="checked" value="1" check-type="group">启用
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="useHoneypot" id="useHoneypot2" value="0" check-type="group">禁用
-                                </label>
-                            </div>
-                        </div>-->
-                        <!--<div id="miGuanDiv">
-                        <div class="form-group">
-                            <label for="honeypotPathIdle" class="col-sm-2 control-label">蜜罐流表空闲时间</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" name="honeypotPathIdle" id="honeypotPathIdle"
-                                       placeholder="整数，如10"
-                                       >
+                                            <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
+                                                                   onclick="onAddRow(this);"></i>&nbsp;&nbsp;
+                                                <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
+                                                   onclick="onDelRow(this);"></i>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                            <table id="mGTable" class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>蜜罐ip</th>
-                                    <th>蜜罐服务器mac地址</th>
-                                    <th>蜜罐所接交换机</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td><input type="text" class="form-control" name="honeypotIp"  placeholder="ip地址，如192.168.1.1"></td>
-                                    <td><input type="text" class="form-control" name="honeypotMac"  placeholder="mac地址"></td>
-                                    <td>
-                                       &lt;!&ndash; <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
-                                        <option value=''>请选择交换机</option>
-                                        </select>&ndash;&gt;
-                                          <select id="switch" name="honeypotSwitchPort" class="col-sm-12">
-                                               &lt;!&ndash; <option value=''>请选择交换机</option>&ndash;&gt;
-                                           </select>
-                                    </td>
-                                    <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
-                                                           onclick="onAddRow(this);"></i>&nbsp;&nbsp;
-                                        <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
-                                           onclick="onDelRow(this);"></i>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                        </div>-->
                         <div class="box-header with-border">
                             <h3 class="box-title" ><strong>>路径跳变配置</strong></h3>
                         </div>
@@ -232,24 +222,23 @@
         });
     }
     $(document).ready(function () {
-//        loadBarand();
+       loadSwitch()
         //加载ztree树
         loadZtree();
     });
-    function loadBarand() {
-        // var jqBd = formObj.find("#BARAND_ID");
+    function loadSwitch() {
         var jqBd = $("#switch");
         if (jqBd.size() === 0) {
             return false;
         }
         baseTools2.ajaxGet({
             bShow:false,
-            url: "/functionView/switches/getSwitchs",
+            url: "/functionView/switches/switchPortBySwitchId",
             callback: [function (jsonObj) {
                 if (jsonObj.status === 1) {
                     jqBd.html("");
-                    var data = jsonObj.result.switches;
-                    var content = ["<option value=''>请选交换机</option>"];
+                    var data = jsonObj.result.switchPortList;
+                    var content = ["<option value=''>请选交换机端口</option>"];
 //                    for (var og in data) {
 //                        content.push("<optgroup label='" + og + "'>");
                     for (var i = 0; i < data.length; i++) {
@@ -257,8 +246,8 @@
 //                            content.push("<option selected='selected' value='" + data[i].switchesId + "'>" +
 //                                    data[i].switchesName + "</option>");
 //                        } else {
-                            content.push("<option  value='" + data[i].switchesId + "'>" +
-                                    data[i].switchesName + "</option>");
+                        content.push("<option  value='" + data[i].id + "'>" +
+                            data[i].id + "</option>");
 //                        }
                     }
 //                        content.push("</optgroup>");
@@ -274,7 +263,6 @@
             }]
         });
     }
-
     function loadSwitchPort(obj) {
         var $switchPort = $("#switchPort");
 //        if(index==1){//数据回显
