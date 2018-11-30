@@ -1,8 +1,10 @@
 package com.geekcattle.core.es;
 
 import com.geekcattle.model.PeopleTest;
+import com.geekcattle.util.DateUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -27,15 +29,96 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ElasticsearchRestClientUtils {
+
     /**
-     * @param keyword1 关键字1
-     * @param keyword2 关键字2
-     * @param startDate 起始时间
-     * @param endDate 终止时间
+     * 获取时间段内某个时间的攻击数量
+     * @param client
+     * @param startTime
+     * @return
+     * @throws IOException
+     */
+    public static Integer getAttacTypekNum(RestHighLevelClient client, String startTime) throws IOException {
+//        int attackNum = 0;
+//        // 这个sourcebuilder就类似于查询语句中最外层的部分。包括查询分页的起始，
+//        // 查询语句的核心，查询结果的排序，查询结果截取部分返回等一系列配置
+//        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+//        // 查询结果终止处
+//        sourceBuilder.size(0);
+//        // 查询的等待时间
+//        sourceBuilder.timeout(new TimeValue(5, TimeUnit.SECONDS));
+//        // 查询在时间区间范围内的结果
+//        RangeQueryBuilder rangbuilder = QueryBuilders.rangeQuery("date");
+//        if (StringUtils.isNotEmpty(flag) && "1".equals(flag)) {
+//            String endDate = DateUtil.addDateMinut(DateUtil.getCurrentTime(), -1);
+//            rangbuilder.lte(endDate);
+//        } else if (StringUtils.isNotEmpty(flag) && "2".equals(flag)) {
+//            String endDate = DateUtil.addDateMinut(DateUtil.getCurrentTime(), -24);
+//            rangbuilder.lte(endDate);
+//        }
+//
+//        // 等同于bool，将两个查询合并
+//        BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
+//        boolBuilder.must(rangbuilder);
+//        sourceBuilder.query(boolBuilder);
+//        SearchRequest searchRequest = new SearchRequest("honeypot");
+//        searchRequest.types("doc");
+//        searchRequest.source(sourceBuilder);
+//        SearchResponse response = null;
+//        response = client.search(searchRequest);
+//        SearchHits hits = response.getHits();
+//        attackNum = (int) hits.getTotalHits();
+//        System.err.println("查询最近一小时的总数：：" + attackNum);
+        return null;
+    }
+    /**
+     * 查询攻击数量
      *
+     * @param flag 1-最近1小时    2-最近24小时
+     * @return
+     */
+    public static Integer getAttackNum(RestHighLevelClient client, String flag) throws IOException {
+        int attackNum = 0;
+        // 这个sourcebuilder就类似于查询语句中最外层的部分。包括查询分页的起始，
+        // 查询语句的核心，查询结果的排序，查询结果截取部分返回等一系列配置
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        // 查询结果终止处
+        sourceBuilder.size(0);
+        // 查询的等待时间
+        sourceBuilder.timeout(new TimeValue(5, TimeUnit.SECONDS));
+        // 查询在时间区间范围内的结果
+        RangeQueryBuilder rangbuilder = QueryBuilders.rangeQuery("date");
+        if (StringUtils.isNotEmpty(flag) && "1".equals(flag)) {
+            String endDate = DateUtil.addDateMinut(DateUtil.getCurrentTime(), -1);
+            rangbuilder.lte(endDate);
+        } else if (StringUtils.isNotEmpty(flag) && "2".equals(flag)) {
+            String endDate = DateUtil.addDateMinut(DateUtil.getCurrentTime(), -24);
+            rangbuilder.lte(endDate);
+        }
+
+        // 等同于bool，将两个查询合并
+        BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
+        boolBuilder.must(rangbuilder);
+        sourceBuilder.query(boolBuilder);
+        SearchRequest searchRequest = new SearchRequest("honeypot");
+        searchRequest.types("doc");
+        searchRequest.source(sourceBuilder);
+        SearchResponse response = null;
+        response = client.search(searchRequest);
+        SearchHits hits = response.getHits();
+        attackNum = (int) hits.getTotalHits();
+        System.err.println("查询最近一小时的总数：：" + attackNum);
+        return attackNum;
+    }
+
+
+    /**
+     * @param keyword1  关键字1
+     * @param keyword2  关键字2
+     * @param startDate 起始时间
+     * @param endDate   终止时间
      **/
-    public  static SearchResponse pageQueryRequest(String keyword1, String keyword2, String startDate, String endDate,
-                                                   int start, int size,RestHighLevelClient client){
+    public static SearchResponse pageQueryRequest(String keyword1, String keyword2, String startDate, String endDate,
+                                                  int start, int size, RestHighLevelClient client) {
 
         // 这个sourcebuilder就类似于查询语句中最外层的部分。包括查询分页的起始，
         // 查询语句的核心，查询结果的排序，查询结果截取部分返回等一系列配置
@@ -75,8 +158,8 @@ public class ElasticsearchRestClientUtils {
         SearchResponse response = null;
         try {
             response = client.search(searchRequest);
-            SearchHits hits= response.getHits();
-            int totalRecordNum= (int) hits.getTotalHits();
+            SearchHits hits = response.getHits();
+            int totalRecordNum = (int) hits.getTotalHits();
 //            Gson gson = new GsonBuilder()
 //                    .setDateFormat("yyyy-MM-dd")
 //                    .create();
@@ -98,17 +181,18 @@ public class ElasticsearchRestClientUtils {
 
     /**
      * 通过类型分组求和
+     *
      * @param client
      * @return
      */
-    public  static SearchResponse getCountGroupByType(RestHighLevelClient client){
+    public static SearchResponse getCountGroupByType(RestHighLevelClient client) {
 
 
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.size(0);
         // 查询的等待时间
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
-         TermsAggregationBuilder aggregationBuilder = AggregationBuilders.terms("estateIdAgg").field("type.keyword");
+        TermsAggregationBuilder aggregationBuilder = AggregationBuilders.terms("estateIdAgg").field("type.keyword");
 //        aggregationBuilder.order(BucketOrder.count(false));
 //        aggregationBuilder.size(Integer.MAX_VALUE);//todo
         sourceBuilder.aggregation(aggregationBuilder);
@@ -119,7 +203,7 @@ public class ElasticsearchRestClientUtils {
         SearchResponse response = null;
         try {
             response = client.search(searchRequest);
-            SearchHits hits= response.getHits();
+            SearchHits hits = response.getHits();
 //            int totalRecordNum= (int) hits.getTotalHits();
 
 

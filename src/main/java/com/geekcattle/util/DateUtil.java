@@ -18,12 +18,14 @@ import java.util.Map;
  */
 public class DateUtil {
     private static String ymdhms = "yyyy-MM-dd HH:mm:ss";
+    private static String hm = "HH:mm";
     private static String ymd = "yyyy-MM-dd";
     public static SimpleDateFormat ymdSDF = new SimpleDateFormat(ymd);
     private static String year = "yyyy";
     private static String month = "MM";
     private static String day = "dd";
     public static SimpleDateFormat yyyyMMddHHmmss = new SimpleDateFormat(ymdhms);
+    public static SimpleDateFormat HHmm = new SimpleDateFormat(hm);
     public static SimpleDateFormat yearSDF = new SimpleDateFormat(year);
     public static SimpleDateFormat monthSDF = new SimpleDateFormat(month);
     public static SimpleDateFormat daySDF = new SimpleDateFormat(day);
@@ -33,16 +35,87 @@ public class DateUtil {
     public static long DATEMM = 86400L;
 
     /**
+     * 给某个时间增加几分钟
+     * @param day
+     * @param x
+     * @return
+     */
+    public static String addDateMinut(String day, int x)//返回的是字符串型的时间，输入的是String day, int x
+    {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 24小时制
+//引号里面个格式也可以是 HH:mm:ss或者HH:mm等等，很随意的，不过在主函数调用时，要和输入的变
+//量day格式一致
+        Date date = null;
+        try {
+            date = format.parse(day);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        if (date == null)
+            return "";
+        System.out.println("front:" + format.format(date)); //显示输入的日期
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.MINUTE, x);// 24小时制
+        date = cal.getTime();
+        System.out.println("after:" + format.format(date));  //显示更新后的日期
+        cal = null;
+        return format.format(date);
+
+    }
+
+
+    /**
+     * 给时间加上几个小时
+     *
+     * @param day  当前时间 格式：yyyy-MM-dd HH:mm:ss
+     * @param hour 需要加的时间
+     * @return
+     */
+    public static String addDateHour(String day, int hour) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = format.parse(day);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        if (date == null)
+            return "";
+        System.out.println("front:" + format.format(date)); //显示输入的日期
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.HOUR, hour);// 24小时制
+        date = cal.getTime();
+        System.out.println("after:" + format.format(date));  //显示更新后的日期
+        cal = null;
+        return format.format(date);
+
+    }
+
+    /**
      * 获得当前时间(字符串类型)
      * 格式：2014-12-02 10:38:53
+     *
      * @return String
      */
     public static String getCurrentTime() {
         return yyyyMMddHHmmss.format(new Date());
     }
+
+    /**
+     * 获取当前的时分
+     *
+     * @return
+     */
+    public static String getCurrentTimeAndMinute() {
+        return HHmm.format(new Date());
+    }
+
     /**
      * 获得当前时间(日期类型)
      * 格式：2014-12-02 10:38:53
+     *
      * @return String
      */
     public static Date getSysTime() {
@@ -52,6 +125,7 @@ public class DateUtil {
     /**
      * 获取年月日(日期类型)
      * 格式：2014-12-02
+     *
      * @return String
      */
     public static Date getSysDate() {
@@ -61,6 +135,7 @@ public class DateUtil {
     /**
      * 获取年月日(字符串类型)
      * 格式：2014-12-02
+     *
      * @return String
      */
     public static String getCurrentDate() {
@@ -88,6 +163,7 @@ public class DateUtil {
     /**
      * 可以获取后退N天的日期
      * 格式：传入2 得到2014-11-30
+     *
      * @param backDay
      * @return String
      */
@@ -101,6 +177,7 @@ public class DateUtil {
 
     /**
      * 获取当前的年、月、日
+     *
      * @return String
      */
     public static String getCurrentYear() {
@@ -117,6 +194,7 @@ public class DateUtil {
 
     /**
      * 获取今天0点开始的秒数
+     *
      * @return long
      */
     public static long getTimeNumberToday() {
@@ -134,6 +212,7 @@ public class DateUtil {
     /**
      * 获取今天的日期
      * 格式：20141202
+     *
      * @return String
      */
     public static String getTodateString() {
@@ -144,6 +223,7 @@ public class DateUtil {
     /**
      * 获取昨天的日期
      * 格式：20141201
+     *
      * @return String
      */
     public static String getYesterdayString() {
@@ -154,6 +234,7 @@ public class DateUtil {
 
     /**
      * 获得昨天零点
+     *
      * @return Date
      */
     public static Date getYesterDayZeroHour() {
@@ -167,6 +248,7 @@ public class DateUtil {
 
     /**
      * 把long型日期转String ；---OK
+     *
      * @param date   long型日期；
      * @param format 日期格式；
      * @return
@@ -181,6 +263,7 @@ public class DateUtil {
 
     /**
      * 获得今天零点
+     *
      * @return Date
      */
     public static Date getTodayZeroHour() {
@@ -193,6 +276,7 @@ public class DateUtil {
 
     /**
      * 获得昨天23时59分59秒
+     *
      * @return
      */
     public static Date getYesterDay24Hour() {
@@ -206,6 +290,7 @@ public class DateUtil {
 
     /**
      * String To Date ---OK
+     *
      * @param date   待转换的字符串型日期；
      * @param format 转化的日期格式
      * @return 返回该字符串的日期型数据；
@@ -221,6 +306,7 @@ public class DateUtil {
 
     /**
      * 获得指定日期所在的自然周的第一天，即周日
+     *
      * @param date 日期
      * @return 自然周的第一天
      */
@@ -234,6 +320,7 @@ public class DateUtil {
 
     /**
      * 获得指定日期所在的自然周的最后一天，即周六
+     *
      * @param date
      * @return
      */
@@ -247,6 +334,7 @@ public class DateUtil {
 
     /**
      * 获得指定日期所在当月第一天
+     *
      * @param date
      * @return
      */
@@ -260,6 +348,7 @@ public class DateUtil {
 
     /**
      * 获得指定日期所在当月最后一天
+     *
      * @param date
      * @return
      */
@@ -275,6 +364,7 @@ public class DateUtil {
 
     /**
      * 获得指定日期的下一个月的第一天
+     *
      * @param date
      * @return
      */
@@ -289,6 +379,7 @@ public class DateUtil {
 
     /**
      * 获得指定日期的下一个月的最后一天
+     *
      * @param date
      * @return
      */
@@ -304,6 +395,7 @@ public class DateUtil {
 
     /**
      * 求某一个时间向前多少秒的时间(currentTimeToBefer)---OK
+     *
      * @param givedTime        给定的时间
      * @param interval         间隔时间的毫秒数；计算方式 ：n(天)*24(小时)*60(分钟)*60(秒)(类型)
      * @param format_Date_Sign 输出日期的格式；如yyyy-MM-dd、yyyyMMdd等；
