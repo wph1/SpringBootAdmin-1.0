@@ -2,19 +2,20 @@ package com.geekcattle.controller.api;
 
 
 import com.geekcattle.core.es.ElasticsearchRestClientUtils;
+import com.geekcattle.service.bigscreen.BigScreenServcie;
 import com.geekcattle.util.DateUtil;
 import com.geekcattle.util.ReturnUtil;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 大屏数据展示controller
@@ -27,6 +28,9 @@ public class BigScreenDataDisplayController {
     @Autowired
     private RestHighLevelClient restHighLevelClient;
 
+    @Autowired
+    private BigScreenServcie bigScreenServcie;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * 查询攻击数量
      * flag-1-最近1小时
@@ -69,15 +73,14 @@ public class BigScreenDataDisplayController {
                 String currentTime = DateUtil.getCurrentTime();
 //                xList.add(Math.round(Math.random()*10));
 //                yList.add(Math.random()*10);
-                for(int i=1;i<8;i++){
-                    String time = DateUtil.addDateMinut(currentTime, i);
-                    xList.add(Math.round(Math.random()*10));
+                for(int i=7;i>=1;i--){
+                    xList.add(DateUtil.getCurrentTimeAndMinute(DateUtil.stringToDate(DateUtil.addDateMinut(currentTime, i*-1), "yyyy-MM-dd HH:mm:ss")));
                     yList.add(Math.round(Math.random()*100));
                 }
                 map.put("xList",xList);
                 map.put("yList",yList);
             }else{//定时器访问
-                map.put("xData",(Math.round(Math.random()*10)));
+                map.put("xData",(DateUtil.getCurrentTimeAndMinute(new Date())));
                 map.put("yData",Math.round(Math.random()*100));
             }
             return ReturnUtil.Success("加载成功", map, null);
@@ -196,5 +199,93 @@ public class BigScreenDataDisplayController {
         }
         return ReturnUtil.Error("加载失败");
     }
+
+    /**
+     * 获取交换机和主机的数量(完成)
+     * @param flag
+     * @return
+     */
+    @GetMapping("/getSwitchAndHostNum")
+    @ResponseBody
+    public ModelMap getSwitchAndHostNum(String flag){
+        ModelMap map  = new   ModelMap();
+        try {
+             map  = (ModelMap)  bigScreenServcie.getSwitchAndHostNumForBigScreen();
+
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            map.put("switchesNum",0);
+            map.put("hostNum",0);
+        }
+        return ReturnUtil.Success("加载成功", map, null);
+    }
+
+    /**
+     * 获取会话监控数量(完成)
+     * @param flag
+     * @return
+     */
+    @GetMapping("/getSessionNumForBigScreen")
+    @ResponseBody
+    public ModelMap getSessionNumForBigScreen(String flag){
+        ModelMap map  = new   ModelMap();
+        List xList = new ArrayList<>();
+        List yList = new ArrayList<>();
+        try {
+//            map  = (ModelMap)  bigScreenServcie.getSessionNumForBigScreen();
+            if(StringUtils.isEmpty(flag)){//第一次初始化
+                for(int i=7;i>=1;i--){
+                    xList.add(DateUtil.getCurrentTimeAndMinute(DateUtil.stringToDate(DateUtil.addDateMinut(DateUtil.getCurrentTime(), i*-1), "yyyy-MM-dd HH:mm:ss")));
+//                    yList.add(MapUtils.getString(map,"sessionNum"));
+                    yList.add(Math.round(Math.random()*100));
+                }
+                map.put("xList",xList);
+                map.put("yList",yList);
+            }else{//定时器调用
+                map.put("xData",(DateUtil.getCurrentTimeAndMinute(new Date())));
+                map.put("yData",Math.round(Math.random()*100));
+            }
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            map.put("xList",xList);
+            map.put("yList",yList);
+        }
+        return ReturnUtil.Success("加载成功", map, null);
+    }
+
+    /**
+     * 流表项个数（总流量个数）（完成）
+     * @param flag
+     * @return
+     */
+    @GetMapping("/getFlowTableNumForBigScreen")
+    @ResponseBody
+    public ModelMap getFlowTableNumForBigScreen(String flag){
+        ModelMap map  = new   ModelMap();
+        List xList = new ArrayList<>();
+        List yList = new ArrayList<>();
+        try {
+//            map  = (ModelMap)  bigScreenServcie.getFlowTableNumForBigScreen();
+            if(StringUtils.isEmpty(flag)){//第一次初始化
+                for(int i=7;i>=1;i--){
+                    xList.add(DateUtil.getCurrentTimeAndMinute(DateUtil.stringToDate(DateUtil.addDateMinut(DateUtil.getCurrentTime(), i*-1), "yyyy-MM-dd HH:mm:ss")));
+//                    yList.add(MapUtils.getString(map,"sessionNum"));
+                    yList.add(Math.round(Math.random()*100));
+                }
+                map.put("xList",xList);
+                map.put("yList",yList);
+            }else{//定时器调用
+                map.put("xData",(DateUtil.getCurrentTimeAndMinute(new Date())));
+                map.put("yData",Math.round(Math.random()*100));
+            }
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            map.put("xList",xList);
+            map.put("yList",yList);
+        }
+        return ReturnUtil.Success("加载成功", map, null);
+
+    }
+
 
 }

@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class DateUtil {
     private static String ymdhms = "yyyy-MM-dd HH:mm:ss";
-    private static String hm = "HH:mm";
+    private static String hm = "mm:ss";
     private static String ymd = "yyyy-MM-dd";
     public static SimpleDateFormat ymdSDF = new SimpleDateFormat(ymd);
     private static String year = "yyyy";
@@ -111,7 +111,24 @@ public class DateUtil {
     public static String getCurrentTimeAndMinute() {
         return HHmm.format(new Date());
     }
-
+    public static String getCurrentTimeAndMinute(Date date) {
+        return HHmm.format(date);
+    }
+    /**
+     * 字符串转换成日期
+     * @param str
+     * @return date
+     */
+    public static Date StrToDate(String str) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
     /**
      * 获得当前时间(日期类型)
      * 格式：2014-12-02 10:38:53
