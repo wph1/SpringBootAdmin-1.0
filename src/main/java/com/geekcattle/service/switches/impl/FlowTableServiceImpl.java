@@ -24,6 +24,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
@@ -45,6 +46,8 @@ public class FlowTableServiceImpl implements FlowTableService {
     private FlowTableDetailsMapper flowTableDetailsMapper;
     @Autowired
     private FlowInstructionMapper flowInstructionMapper;
+    @Value("${odlIpAndPort}")
+    private String odlIpAndPort;
 
     /**
      * 根据条件查询流表数据
@@ -67,7 +70,7 @@ public class FlowTableServiceImpl implements FlowTableService {
             //交换机名称
             String switchesName = s.getSwitchesName();
             logger.info("====> 交换机名称："+switchesName);
-            String url_switch = "http://10.10.216.116:8181/restconf/operational/opendaylight-inventory:nodes/node/"+switchesName+"/flow-node-inventory:table/0";
+            String url_switch = odlIpAndPort+"/restconf/operational/opendaylight-inventory:nodes/node/"+switchesName+"/flow-node-inventory:table/0";
             String username = "admin";
             String password = "admin";
             HttpRequest.setBasicAuth(PasswordUtil.getBasicAuthStr(username,password));

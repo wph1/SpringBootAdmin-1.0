@@ -68,7 +68,7 @@ public class FlowSessionServcieImpl implements FlowSessionServcie {
     @Override
     public void getFlowsessionInfoByOdl() {
         logger.info("====> 向odl服务器发送会话请求开始");
-        String url_switch = "http://10.10.216.116:8181/restconf/operational/dip-data:flow-sessions-list";
+        String url_switch = odlIpAndPort+"/restconf/operational/dip-data:flow-sessions-list";
         String username = "admin";
         String password = "admin";
         HttpRequest.setBasicAuth(PasswordUtil.getBasicAuthStr(username, password));

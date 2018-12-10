@@ -16,6 +16,7 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
@@ -32,6 +33,8 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
     private SwitchesNewMapper switchesNewMapper;
     @Autowired
     private SwitchesNodeConnectorMapper switchesNodeConnectorMapper;
+    @Value("${odlIpAndPort}")
+    private String odlIpAndPort;
 
     /**
      * 交换机列表查询
@@ -56,7 +59,7 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
         switchesNodeConnectorMapper.deleteAll();
         logger.info("====> 交换机信息入库之前，进行清库处理,清库处理完成");
         logger.info("====> 向odl服务器发送请求开始");
-        String url_switch = "http://10.10.216.116:8181/restconf/operational/opendaylight-inventory:nodes";
+        String url_switch = odlIpAndPort+"/restconf/operational/opendaylight-inventory:nodes";
         String username = "admin";
         String password = "admin";
         HttpRequest.setBasicAuth(PasswordUtil.getBasicAuthStr(username, password));

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,8 @@ import com.google.gson.reflect.TypeToken;
 
 @Controller
 public class TopologyController {
+	@Value("${odlIpAndPort}")
+	private String odlIpAndPort;
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	private List<OldPacket> oldPacketList = new ArrayList<>();
 	public class OldPacket {	//记录刷新前的历史包数据，用以和当前时刻进行比较，从而推断出流量变化情况
@@ -67,8 +70,8 @@ public class TopologyController {
     @RequestMapping(value = "/admin/function/topologyData", method = {RequestMethod.GET})
     @ResponseBody
     public Map<String,Object> TopologyData() {      
-    	String url_switchData = "http://10.10.216.116:8181/restconf/operational/network-topology:network-topology/topology/flow:1";//获取交换机之间的链路信息
-    	String url_hostData = "http://10.10.216.116:8181/restconf/operational/opendaylight-inventory:nodes";//获取主机信息以及主机与交换机之间的链路信息
+    	String url_switchData = odlIpAndPort+"/restconf/operational/network-topology:network-topology/topology/flow:1";//获取交换机之间的链路信息
+    	String url_hostData = odlIpAndPort+"/restconf/operational/opendaylight-inventory:nodes";//获取主机信息以及主机与交换机之间的链路信息
         String username = "admin";
         String password = "admin";
     	HttpRequest.setBasicAuth(getBasicAuthStr(username,password));
