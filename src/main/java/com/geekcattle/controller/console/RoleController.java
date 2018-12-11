@@ -31,10 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * author geekcattle
- * date 2016/10/21 0021 下午 15:58
- */
+
 @Controller
 @RequestMapping("/console/role")
 public class RoleController {

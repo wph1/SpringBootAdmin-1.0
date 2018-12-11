@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-/**
- * author geekcattle
- * date 2016/10/21 0021 下午 15:58
- */
+
 @Controller
 @RequestMapping("/console/member")
 public class UserController {

@@ -37,10 +37,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * author geekcattle
- * date 2016/10/21 0021 下午 15:58
- */
+
 @Controller
 @RequestMapping("/console/menu")
 @RequiresAuthentication

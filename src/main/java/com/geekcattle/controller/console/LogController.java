@@ -22,10 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-/**
- * author geekcattle
- * date 2017/1/6 0006 上午 11:35
- */
 @Controller
 @RequestMapping("/console/log")
 public class LogController {
