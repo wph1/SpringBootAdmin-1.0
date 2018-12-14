@@ -142,7 +142,7 @@ public class MtdConfigServiceImpl implements MtdConfigService {
         mtd_config.put("honeypot-path-idle", "0");
         mtd_config.put("k-path", MapUtils.getString(map, "kPath"));
         mtd_config.put("path-ttl", MapUtils.getString(map, "pathTtl"));
-        String isMtdMode = MapUtils.getString(map, MapUtils.getString(map, "isMtdMode"));
+        String isMtdMode = MapUtils.getString(map, "isMtdMode");
         if ("1".equals(isMtdMode)) {
             mtd_config.put("is-mtd-mode", true);
         } else {
@@ -154,15 +154,16 @@ public class MtdConfigServiceImpl implements MtdConfigService {
         mtd_config.put("external-address-for-dns", MapUtils.getString(map, "externalAddressForDns"));
         mtd_config.put("external-address-for-d-port", MapUtils.getString(map, "externalAddressForDPort"));
 
-        String useHoneypot = MapUtils.getString(map, MapUtils.getString(map, "useHoneypot"));
-        if ("1".equals(useHoneypot)) {
+        String useHoneypot = MapUtils.getString(map, "useHoneypot");
+//        if ("1".equals(useHoneypot)) {
             mtd_config.put("use-honeypot", true);
-        } else {
-            mtd_config.put("use-honeypot", false);
-        }
+            mtd_config.put("open-external", true);
+//        } else {
+//            mtd_config.put("use-honeypot", false);
+//        }
 
-        String isPathMutation = MapUtils.getString(map, MapUtils.getString(map, "isPathMutation"));
-        if ("1".equals(useHoneypot)) {
+        String isPathMutation = MapUtils.getString(map, "isPathMutation");
+        if ("1".equals(isPathMutation)) {
             mtd_config.put("is-path-mutation", true);
         } else {
             mtd_config.put("is-path-mutation", false);
