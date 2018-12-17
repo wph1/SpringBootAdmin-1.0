@@ -237,72 +237,75 @@ public class TopologyController {
         	topology_id = topology_id.substring(0,4);//  	
         //	if ("flow".equals(topology_id)) {    因为现在获取的只有交换机信息，因此不需要在通过id来判断该节点是交换机还是主机了，但是如果拓扑中能够获取到主机信息的话，则需要将此句放开
         	List<Links> links = list.getLink();
-			for(Links list_links : links) {
-	        	int iterationTag = 0;
-	        	int sourceTag = 0;
-	            Map<String,Object>linkData = new HashMap<String,Object>();
-	            String sourceNode = list_links.getSource().getSourceNode();
-	            String targetNode = list_links.getDestination().getDestNode();    
-	            String src_port = list_links.getSource().getSourceTp();
-	            String dst_port = list_links.getDestination().getDestTp();            
-	            if(recordList != null) { //避免链路重复画两次，凡是画过得节点都记录一下，每次再画链路的时候，比较源和目的节点是否记录过。
-	            	for(String record : recordList) {
-	            		if(record.equals(src_port)||record.equals(dst_port)) {//表明针对该节点的链路已经画过了
-	            			iterationTag = 1;
-	            			break;
-	            		}
-	            	}
-	            }
-	            if(iterationTag == 1) {
-	            	continue;
-	            }
-	            recordList.add(src_port);
-	            recordList.add(dst_port);
-	            String linkType = "static";
-	            for(String linkId : dynamicList) {
-	            	if(linkId.equals(src_port)||(linkId.equals(dst_port))) {
-	    	            linkType = "dynamic";
-	    	            for(String linkSourceId : sourceList) {    	            	
-	    	            	if(linkSourceId.equals(src_port)) {
-	    	    	            sourceTag = 1;
-	    	            	}
-	    	            }
-	            	}
-	            }
-	            linkData.put("type", linkType); 
-	            if(sourceTag == 0) {//说明源节点和目的节点弄反了，需要交换
-	            	String temp = sourceNode;
-	            	sourceNode = targetNode;
-	            	targetNode = temp; 	
-	            	temp = src_port;
-	            	src_port = dst_port;
-	            	dst_port = temp;
-	            }
-	            linkData.put("source", sourceNode);
-	            linkData.put("target", targetNode);  
-	            String src_forename = src_port.substring(0, 8);
-	            String dst_forename = dst_port.substring(0, 8);
-	            if("openflow".equals(src_forename)) {//根据ID名字判断源节点类型以及目的节点类型，因为在展示拓扑的时候，只有交换机显示端口号，所以要区分节点类型
-	            	src_port = src_port.replaceAll(sourceNode, "");
-	            	src_port = src_port.replaceAll(":", "");
-	                linkData.put("src_port", src_port);  
-	                linkData.put("src_type", "open");
-	            }
-	            else {
-	                linkData.put("src_type", "host");
-	            }
-	            if("openflow".equals(dst_forename)) {
-	            	dst_port = dst_port.replaceAll(targetNode, "");
-	            	dst_port = dst_port.replaceAll(":", "");
-	                linkData.put("dst_port", dst_port);  
-	                linkData.put("dst_type", "open");
-	            } 
-	            else {
-	                linkData.put("dst_type", "host");
-	            }                 
-	            linkData.put("bandwidth", "");                    
-	            linkList.add(linkData);
+        	if(links!=null){
+				for(Links list_links : links) {
+					int iterationTag = 0;
+					int sourceTag = 0;
+					Map<String,Object>linkData = new HashMap<String,Object>();
+					String sourceNode = list_links.getSource().getSourceNode();
+					String targetNode = list_links.getDestination().getDestNode();
+					String src_port = list_links.getSource().getSourceTp();
+					String dst_port = list_links.getDestination().getDestTp();
+					if(recordList != null) { //避免链路重复画两次，凡是画过得节点都记录一下，每次再画链路的时候，比较源和目的节点是否记录过。
+						for(String record : recordList) {
+							if(record.equals(src_port)||record.equals(dst_port)) {//表明针对该节点的链路已经画过了
+								iterationTag = 1;
+								break;
+							}
+						}
+					}
+					if(iterationTag == 1) {
+						continue;
+					}
+					recordList.add(src_port);
+					recordList.add(dst_port);
+					String linkType = "static";
+					for(String linkId : dynamicList) {
+						if(linkId.equals(src_port)||(linkId.equals(dst_port))) {
+							linkType = "dynamic";
+							for(String linkSourceId : sourceList) {
+								if(linkSourceId.equals(src_port)) {
+									sourceTag = 1;
+								}
+							}
+						}
+					}
+					linkData.put("type", linkType);
+					if(sourceTag == 0) {//说明源节点和目的节点弄反了，需要交换
+						String temp = sourceNode;
+						sourceNode = targetNode;
+						targetNode = temp;
+						temp = src_port;
+						src_port = dst_port;
+						dst_port = temp;
+					}
+					linkData.put("source", sourceNode);
+					linkData.put("target", targetNode);
+					String src_forename = src_port.substring(0, 8);
+					String dst_forename = dst_port.substring(0, 8);
+					if("openflow".equals(src_forename)) {//根据ID名字判断源节点类型以及目的节点类型，因为在展示拓扑的时候，只有交换机显示端口号，所以要区分节点类型
+						src_port = src_port.replaceAll(sourceNode, "");
+						src_port = src_port.replaceAll(":", "");
+						linkData.put("src_port", src_port);
+						linkData.put("src_type", "open");
+					}
+					else {
+						linkData.put("src_type", "host");
+					}
+					if("openflow".equals(dst_forename)) {
+						dst_port = dst_port.replaceAll(targetNode, "");
+						dst_port = dst_port.replaceAll(":", "");
+						linkData.put("dst_port", dst_port);
+						linkData.put("dst_type", "open");
+					}
+					else {
+						linkData.put("dst_type", "host");
+					}
+					linkData.put("bandwidth", "");
+					linkList.add(linkData);
+				}
 			}
+
 			//链路信息
 			data.put("links", linkList);
 			System.out.println(data+"\n");
