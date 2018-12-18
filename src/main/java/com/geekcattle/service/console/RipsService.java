@@ -174,11 +174,13 @@ public class RipsService implements RipsServiceInterface{
                 String date=dateformat1.format(new Date());
                 binding.setCreateTime(date);
                 binding.setNode( MapUtils.getString(m,"name"));
+
                 binding.setSubnet(MapUtils.getString(map,"id"));
                 bindingMapper.insert(binding);
                 logger.info("====> 插入绑定数据成功");
                 Map<String,Object>bindConfData = new HashMap<String,Object>();
-                bindConfData.put("node", MapUtils.getString(m,"name"));
+                Rips rip = networkMapper.findById(MapUtils.getString(m, "name"));
+                bindConfData.put("node", rip.getNet().trim());
 //            String subnetId = ripsMapper.selectByname(list_bind.getSubnet()).getId();
                 bindConfData.put("subnet", MapUtils.getString(map,"id"));
                 bindingConfList.add(bindConfData);

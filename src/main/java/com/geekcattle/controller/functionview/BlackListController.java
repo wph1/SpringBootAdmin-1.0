@@ -48,6 +48,14 @@ public class BlackListController {
      * 黑名单列表页跳转
      * @return
      */
+    @GetMapping(value = "/blackListIndex2")
+    public String index2() {
+        return "/console/blacklist/black_index2";
+    }
+    /**
+     * 黑名单列表页跳转
+     * @return
+     */
     @GetMapping(value = "/blackListIndex")
     public String index() {
         return "/console/blacklist/black_index";

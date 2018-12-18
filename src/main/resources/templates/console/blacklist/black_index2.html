@@ -1,0 +1,324 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="console/header">
+</head>
+<body>
+<section class="content-header">
+    <h1>黑名单配置</h1>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12"><!-- <div class="col-md-6 col-md-offset-3">-->
+            <div class="box box-primary">
+              <!--  <div class="box-header with-border">
+                    <h3 class="box-title" >黑名单配置</h3>
+                </div>-->
+                <div class="box-body">
+                    <form class="form-horizontal" name="balckForm" id="balckForm" role="form">
+                        <div class="box-header with-border">
+                            <h3 class="box-title" ><strong>>黑名单配置</strong></h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">开启黑名单</label>
+
+                            <div class="col-sm-6">
+                                <label class="radio-inline">
+                                    <input type="radio" name="isUseBlackList" id="isUseBlackList1" checked="checked" value="1" check-type="group">启用
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="isUseBlackList" id="isUseBlackList2" value="0" check-type="group">禁用
+                                </label>
+                            </div>
+                        </div>
+                        <div id="blackDiv">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="table-responsive">
+                                        <table id="blackTable" class="table table-bordered text-nowrap">
+                                            <thead>
+                                            <tr>
+                                                <th>黑名单ip</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td><input type="text" class="form-control" name="blackListIp"  placeholder="ip地址，如192.168.1.1"></td>
+                                                <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
+                                                                       onclick="onAddRow(this);"></i>&nbsp;&nbsp;
+                                                    <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
+                                                       onclick="onDelRow(this);"></i>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-header with-border">
+                            <h3 class="box-title" ><strong>>蜜罐配置</strong></h3>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <table id="mGTable" class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>蜜罐ip</th>
+                                        <th>蜜罐服务器mac地址</th>
+                                        <th>蜜罐服务器gateway地址</th>
+                                        <th>蜜罐所接交换机端口</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><input type="text" class="form-control" name="honeypotIp"  placeholder="ip地址，如192.168.1.1"></td>
+                                        <td><input type="text" class="form-control" name="honeypotMac"  placeholder="mac地址"></td>
+                                        <td><input type="text" class="form-control" name="honeypotGateway"  placeholder="gateway地址"></td>
+                                        <td>
+                                            <!-- <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
+                                             <option value=''>请选择交换机</option>
+                                             </select>-->
+                                            <select id="switch" name="honeypotSwitchPort" class="form-control input-sm">
+                                                <!-- <option value=''>请选择交换机</option>-->
+                                            </select>
+                                        </td>
+                                        <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
+                                                               onclick="onAddRow(this);"></i>&nbsp;&nbsp;
+                                            <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
+                                               onclick="onDelRow(this);"></i>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="form-group">
+                        <div class="zTreeDemoBackground left" class="col-sm-12">
+                            <button type="button" class="btn btn-primary" id="blackBtn">配置</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=1019"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        initValidate();
+        loadSwitch();
+    });
+    function loadSwitch() {
+        var jqBd = $("#switch");
+        if (jqBd.size() === 0) {
+            return false;
+        }
+        baseTools2.ajaxGet({
+            bShow:false,
+            url: "/functionView/switches/switchPortBySwitchId",
+            callback: [function (jsonObj) {
+                if (jsonObj.status === 1) {
+                    jqBd.html("");
+                    var data = jsonObj.result.switchPortList;
+                    var content = ["<option value=''>请选交换机端口</option>"];
+//                    for (var og in data) {
+//                        content.push("<optgroup label='" + og + "'>");
+                    for (var i = 0; i < data.length; i++) {
+//                        if (data[i].switchesId == obj) {
+//                            content.push("<option selected='selected' value='" + data[i].switchesId + "'>" +
+//                                    data[i].switchesName + "</option>");
+//                        } else {
+                        content.push("<option  value='" + data[i].id + "'>" +
+                            data[i].id + "</option>");
+//                        }
+                    }
+//                        content.push("</optgroup>");
+
+//                    }
+                    jqBd.append(content.join(""));
+//                    if(index==1){//先判断是数据回显还是，自己选择的
+////                        loadSeries(obj,'1');
+//                    }
+//                } else
+//                    alert(jsonObj.msg);
+                }
+            }]
+        });
+    }
+
+
+    function onAddRow(obj) {
+        var trObj = obj.parentNode.parentNode,
+            tbody = trObj.parentNode,
+            tabObj = tbody.parentNode;
+        tbody.insertRow(trObj.rowIndex).innerHTML = tbody.rows[0].innerHTML
+            .replace("baseValid-error", "");
+    }
+
+    function onDelRow(obj) {
+        var tr = obj.parentNode.parentNode,
+            tbody = tr.parentNode;
+        if (tr.rowIndex === 1) {
+            layer.alert('不允许删除!', {icon: 6});
+            return;
+        }
+        layer.confirm('确定删除吗?', function(){
+            tbody.removeChild(tr);
+            layer.closeAll();
+        });
+    }
+    //是否开启mtd配置按钮
+    $("input[name='isUseBlackList']").change(
+        function() {
+            var id = $("input[name='isUseBlackList']:checked").val();
+            if (id == 1) {
+                $("#blackDiv").show();
+            }else if (id == 0){
+                $("#blackDiv").hide();
+            }
+        });
+    //提交配置数据操作
+    $('#blackBtn').click(function(){
+        var balckForm = $("#balckForm");
+        //表单校验
+        var rules = {
+            blackListIp:{
+                required: true,
+                validateIpAddress:true
+            },
+            honeypotIp:{
+                required: true,
+                validateIpAddress:true
+            },
+            isUseBlackList:{
+                required: true
+            },
+            honeypotGateway:{
+                required: true,
+                validateIpAddress:true
+            },
+            honeypotMac:{
+                required: true,
+                validateMacAddress:true
+            },
+            honeypotSwitchPort:{
+                required: true
+            }
+        };
+        var messages = {
+            blackListIp:{
+                required: "黑名单ip不能为空"
+            },
+            honeypotIp:{
+                required: "蜜罐ip不能为空"
+            },
+            isUseBlackList:{
+                required: "请选择黑名单配置",
+            },
+            honeypotGateway:{
+                required: "请输入蜜罐网关",
+            },
+            honeypotMac:{
+                required: "请输入蜜罐服务器mac地址"
+            },
+            honeypotSwitchPort:{
+                required: "请选择蜜罐交换机端口"
+            }
+
+        };
+        var jsonData =    balckForm.serializeJson();
+        //组装蜜罐数据结构
+        jsonData.mgList = [];
+        var mgTr = $("#mGTable").find("tbody > tr"),
+            mg;
+        mgTr.each(function () {
+            mg = $(this);
+            jsonData.mgList.push({
+                honeypotIp: mg.find(":input[name='honeypotIp']")[0].value,
+                honeypotMac: mg.find(":input[name='honeypotMac']")[0].value,
+                honeypotGateway: mg.find(":input[name='honeypotGateway']")[0].value,
+                honeypotSwitchPort: mg.find(":input[name='honeypotSwitchPort']")[0].value
+            })
+        });
+        //组装黑名单数据结构
+        jsonData.blackList = [];
+        var blackTr = balckForm.find("#blackTable").find("tbody > tr"),
+            black;
+        blackTr.each(function () {
+            black = $(this);
+            jsonData.blackList.push({
+                blackListIp: black.find(":input[name='blackListIp']")[0].value,
+            })
+        });
+        console.log(jsonData);
+        baseTools2.validateForm($(balckForm), rules, messages);
+        if (!$(balckForm).valid()) {
+            return;
+        }
+        baseTools2.ajaxPost({
+            // bShow:false,
+            url: "/functionView/blackList/blackSave",
+            params: {  'STR_JSON': JSON.stringify(jsonData) },
+            callback: [function (jsonObj, xhrArgs) {
+                switch (parseInt(jsonObj.status)) {
+                    //失败
+                    case 0:
+                        layer.alert(jsonObj.msg, {icon: 1},function () {
+                            layer.closeAll();
+                        });
+                        break;
+                    //成功
+                    case 1:
+                        layer.alert(jsonObj.msg, {icon: 1},function () {
+                            layer.closeAll();
+                            // $table.bootstrapTable('refresh',  {url: '/functionView/blackList/blackList'});
+                        });
+                        break;
+                    default:
+                }
+            }]
+        });
+    });
+    //多个name属性校验
+    function initValidate() {
+        if ($.validator) {
+            $.validator.prototype.elements = function () {
+                var validator = this,
+                    rulesCache = {};
+                // select all valid inputs inside the form (no submit or reset buttons)
+                return $([]).add($(this.currentForm)
+                    .find("input, select, textarea")
+                    .not(":submit, :reset, :image, [disabled]")
+                    .not(this.settings.ignore)
+                    .filter(function () {
+                        if (!this.name && validator.settings.debug && window.console) {
+                            console.error("%o has no name assigned", this);
+                        }
+                        //注释这行代码
+                        // select only the first element for each name, and only those with rules specified
+                        //if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+                        //    return false;
+                        //}
+                        rulesCache[this.name] = true;
+                        return true;
+                    }));
+            }
+        }
+    }
+</script>
+</body>
+
+</html>
+<style type="text/css">
+    .form-horizontal .control-label{
+        text-align:left;
+    }
+</style>

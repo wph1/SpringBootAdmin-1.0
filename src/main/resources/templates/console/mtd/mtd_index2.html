@@ -1,0 +1,554 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="console/header">
+</head>
+<body>
+<!--<section class="content-header">
+    <h1>mtd配置管理</h1>
+</section>-->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12"><!-- <div class="col-md-6 col-md-offset-3">-->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title" >Mtd配置</h3>
+                </div>
+                <div class="box-body">
+                    <form class="form-horizontal" name="mtdForm" id="mtdForm" role="form">
+                        <div class="box-header with-border">
+                            <h3 class="box-title" ><strong>>Mtd配置</strong></h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">开启mtd配置</label>
+
+                            <div class="col-sm-6">
+                                <label class="radio-inline">
+                                    <input type="radio" name="isMtdMode" id="isMtdMode1" checked="checked" value="1" check-type="group">启用
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="isMtdMode" id="isMtdMode2" value="0" check-type="group">禁用
+                                </label>
+                            </div>
+                        </div>
+                        <div id="mtdDiv">
+                            <div class="form-group">
+                                <label for="sessionIdle" class="col-sm-2 control-label">流表最大空闲时间</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="sessionIdle" id="sessionIdle"
+                                           placeholder="整数，如10"
+                                    >
+                                </div>
+
+                                <label for="externalAddressForSNat" class="col-sm-2 control-label">内网访问外网IP地址</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="externalAddressForSNat" id="externalAddressForSNat"
+                                           placeholder="ip地址，如192.168.1.1"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="externalAddressForDPort" class="col-sm-2 control-label">内网提供的开放服务的地址</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="externalAddressForDPort" id="externalAddressForDPort"
+                                           placeholder="ip地址，如192.168.1.1"
+                                    >
+                                </div>
+
+                                <label for="externalAddressForDns" class="col-sm-2 control-label">dns转发的采用的外网地址</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="externalAddressForDns" id="externalAddressForDns"
+                                           placeholder="ip地址，如192.168.1.1"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dnsForwardAddress" class="col-sm-2 control-label">dns服务器地址</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="dnsForwardAddress" id="dnsForwardAddress"
+                                           placeholder="ip地址，如192.168.1.1"
+                                    >
+                                </div>
+
+                                <label for="dnsAddress" class="col-sm-2 control-label">内部dns服务器地址</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="dnsAddress" id="dnsAddress"
+                                           placeholder="ip地址，如192.168.1.1"
+                                    >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="externalSwitchPort" class="col-sm-2 control-label">出外网的端口</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="externalSwitchPort" id="externalSwitchPort"
+                                           placeholder="整数，如80"
+                                    >
+                                </div>
+
+                                <label for="externalGateway" class="col-sm-2 control-label">出外网的网关</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="externalGateway" id="externalGateway"
+                                           placeholder="ip地址，如192.168.1.1"
+                                    >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <table id="serverTable" class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>交换机端口</th>
+                                            <th>服务端口</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <!-- <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
+                                                 <option value=''>请选择交换机</option>
+                                                 </select>-->
+                                                <select id="switch" name="switchPort" class="form-control input-sm">
+                                                    <!-- <option value=''>请选择交换机</option>-->
+                                                </select>
+                                            </td>
+                                            <td><input type="text" class="form-control" name="serverPort"  placeholder="服务端口，多个使用/分割"></td>
+
+                                            <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
+                                                                   onclick="onAddRow(this);"></i>&nbsp;&nbsp;
+                                                <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
+                                                   onclick="onDelRow(this);"></i>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-header with-border">
+                            <h3 class="box-title" ><strong>>路径跳变配置</strong></h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">开启路径跳变</label>
+
+                            <div class="col-sm-6">
+                                <label class="radio-inline">
+                                    <input type="radio" name="isPathMutation" id="isPathMutation1" value="1" checked="checked" check-type="group">启用
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="isPathMutation" id="isPathMutation2" value="0" check-type="group">禁用
+                                </label>
+                            </div>
+                        </div>
+                        <div id="luJingTiaoBianDiv">
+                            <div class="form-group">
+                                <label for="kPath" class="col-sm-2 control-label">可跳变的最大路径数</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="kPath" id="kPath"
+                                           placeholder="整数，如10"
+                                    >
+                                </div>
+
+                                <label for="pathTtl" class="col-sm-2 control-label">路径跳变周期</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="pathTtl" id="pathTtl"
+                                           placeholder="整数，如10"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="box-header with-border">
+                            <h3 class="box-title" ><strong>>静态端口配置</strong></h3>
+                        </div>
+                        <!-- <div class="form-group">
+                             <div class="col-sm-12">
+
+                             </div>
+                         </div>-->
+                        <div class="form-group">
+                            <div class="zTreeDemoBackground left" class="col-sm-12">
+                                <ul id="treeMultiple" class="ztree"
+                                    style=" overflow-y: auto"></ul>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="form-group">
+                        <div class="zTreeDemoBackground left" class="col-sm-12">
+                            <button type="button" class="btn btn-primary" id="mtdBtn">配置</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:include="console/footer"></div>
+<script type="text/javascript" src="/static/commons/include.web.ui.js?dm=1019"></script>
+<script type="text/javascript">
+    var setting = {
+        check: {
+            enable: true,
+            chkStyle: "checkbox",
+            chkboxType: {"Y": "s", "N": "ps"}
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            onCheck: onCheckNode    //回调函数,获取选节点
+        }
+    };
+
+    function onCheckNode() {
+        var chkNodeArr;
+        var nodeJson = [];
+        console.log("触发点击事件");
+        chkNodeArr = zTreeObj.getCheckedNodes();    //true获取选中节点,false未选中节点,默认为true
+        for (var i = 0; i < chkNodeArr.length; i++) {
+            nodeJson[i] = {"name": chkNodeArr[i].name, "id": chkNodeArr[i].id};
+        }
+        //console.log(chkNodeArr);
+        var  chkNodeStr = JSON.stringify(nodeJson);
+        return nodeJson;
+    }
+    var  zTreeObj;
+    function loadZtree(){
+        baseTools2.ajaxGet({
+            url: "/functionView/switches/getSwitchsAndPortForZtree",
+            callback: [function (jsonObj) {
+                if (jsonObj.status === 1) {
+                    var zNodes = jsonObj.result.switches;
+                    zTreeObj=   $.fn.zTree.init($("#treeMultiple"), setting, zNodes);
+                }
+            }]
+        });
+    }
+    $(document).ready(function () {
+        initValidate();
+        loadSwitch()
+        //加载ztree树
+        loadZtree();
+    });
+    function loadSwitch() {
+        var jqBd = $("#switch");
+        if (jqBd.size() === 0) {
+            return false;
+        }
+        baseTools2.ajaxGet({
+            bShow:false,
+            url: "/functionView/switches/switchPortBySwitchId",
+            callback: [function (jsonObj) {
+                if (jsonObj.status === 1) {
+                    jqBd.html("");
+                    var data = jsonObj.result.switchPortList;
+                    var content = ["<option value=''>请选交换机端口</option>"];
+                    for (var i = 0; i < data.length; i++) {
+                        content.push("<option  value='" + data[i].id + "'>" +
+                            data[i].id + "</option>");
+                    }
+                    jqBd.append(content.join(""));
+                }
+            }]
+        });
+    }
+    function loadSwitchPort(obj) {
+        var $switchPort = $("#switchPort");
+        var switchesId = obj.value;
+        baseTools2.ajaxGet({
+            url:"/functionView/switches/switchPortBySwitchId",
+            bShow: false,
+            params: {switchesId:switchesId},
+            callback: [function (jsonObj) {
+                if (jsonObj.status === 1) {
+                    $switchPort.html("");
+                    var data = jsonObj.result.switchPortList;
+                    var content = ["<option value=''>请选择端口</option>"];
+                    for (var i = 0; i < data.length; i++) {
+                        content.push("<option  value='" + data[i].id + "'>" +
+                            data[i].id + "</option>");
+                    }
+                    $switchPort.append(content.join(""));
+                }
+            }]
+        });
+    }
+    function btn(){
+        var d=  $("#ripForm");
+        if (!$(d).valid()) {
+            return;
+        }
+        console.log("校验通过");
+        baseTools2.ajaxSubmitForm($(d), d.attr('action'));
+    }
+    function onAddRow(obj) {
+        var trObj = obj.parentNode.parentNode,
+            tbody = trObj.parentNode,
+            tabObj = tbody.parentNode;
+        tbody.insertRow(trObj.rowIndex).innerHTML = tbody.rows[0].innerHTML
+            .replace("baseValid-error", "");
+    }
+
+    function onDelRow(obj) {
+        var tr = obj.parentNode.parentNode,
+            tbody = tr.parentNode;
+        if (tr.rowIndex === 1) {
+            layer.alert('不允许删除!', {icon: 6});
+            return;
+        }
+        layer.confirm('确定删除吗?', function(){
+            tbody.removeChild(tr);
+            layer.closeAll();
+        });
+    }
+    //是否开启mtd配置按钮
+    $("input[name='isMtdMode']").change(
+        function() {
+            var id = $("input[name='isMtdMode']:checked").val();
+            if (id == 1) {
+                $("#mtdDiv").show();
+            }else if (id == 0){
+                $("#mtdDiv").hide();
+            }
+        });
+    //是否开启路径跳变
+    $("input[name='isPathMutation']").change(
+        function() {
+            var id = $("input[name='isPathMutation']:checked").val();
+            if (id == 1) {
+                $("#luJingTiaoBianDiv").show();
+            }else if (id == 0){
+                $("#luJingTiaoBianDiv").hide();
+            }
+        });
+    //提交配置数据操作
+    $('#mtdBtn').click(function(){
+        var mtdForm = $("#mtdForm");
+        var jsonData =    mtdForm.serializeJson();
+        //表单校验
+        var rules = {
+            honeypotIp:{
+                required: true,
+                validateIpAddress:true
+            },
+            serverPort:{
+                required: true
+            },
+            switchPort:{
+                required: true
+            },
+            isMtdMode:{
+                required: true
+            },
+            sessionIdle:{
+                required: true,
+                digits:true
+            },
+            externalAddress:{
+                required: true,
+                validateIpAddress:true
+            },
+            dnsForwardAddress:{
+                required: true,
+                validateIpAddress:true
+            },
+            externalAddressForDPort:{
+                required: true,
+                validateIpAddress:true
+            },
+            dnsAddress:{
+                required: true,
+                validateIpAddress:true
+            },
+            externalSwitchPort:{
+                required: true
+            },
+            externalGateway:{
+                required: true,
+                validateIpAddress:true
+            },
+            externalAddressForDns:{
+                required: true,
+                validateIpAddress:true
+            },
+            useHoneypot:{
+                required: true
+            },
+            honeypotPathIdle:{
+                required: true,
+                digits:true
+            },
+            honeypotMac:{
+                required: true
+            },
+            // honeypotSwitchPort:{
+            //     required: true
+            // },
+            isPathMutation:{
+                required: true
+            },
+            pathTtl:{
+                required: true,
+                digits:true
+            },
+            kPath:{
+                required: true,
+                digits:true
+            }
+        };
+        var messages = {
+            switchPort:{
+                required: "请选择交换机端口"
+            },
+            serverPort:{
+                required: "服务端口不能为空"
+            },
+            honeypotIp:{
+                required: "蜜罐ip不能为空"
+            },
+            isMtdMode:{
+                required: "请选择mtd配置",
+            },
+            sessionIdle:{
+                required: "不能为空",
+                digits:"请输入整数"
+            },
+            externalAddress:{
+                required: "访问外网地址不能为空"
+            },
+            dnsForwardAddress:{
+                required: "dns服务器地址不能为空"
+            },
+            externalAddressForDPort:{
+                required: "内网提供的开放服务的地址不能为空"
+            },
+            externalAddressForDns:{
+                required: "dns转发的采用的外网地址不能为空"
+            },
+            dnsAddress:{
+                required: "内部dns服务器地址不能为空"
+            },
+            externalSwitchPort:{
+                required: "出外网的端口不能为空"
+            },
+            externalGateway:{
+                required: "出外网的网关不能为空"
+            },
+            useHoneypot:{
+                required: "请选择蜜罐配置"
+            },
+            honeypotPathIdle:{
+                required: "流表最大空闲时间不能为空",
+                digits:"请输入整数"
+            },
+            honeypotMac:{
+                required: "请输入蜜罐服务器mac地址"
+            },
+            // honeypotSwitchPort:{
+            //     required: "请选择蜜罐交换机"
+            // },
+            isPathMutation:{
+                required: "请选择路径跳变配置"
+            },
+            pathTtl:{
+                required: "路径跳变周期不能为空",
+                digits:"路径跳变周期必须为整数"
+            },
+            kPath:{
+                required: "可跳变的最大路径数",
+                digits:"可调变的最大路径数为整数"
+            }
+
+        };
+        baseTools2.validateForm($(mtdForm), rules, messages);
+        if (!$(mtdForm).valid()) {
+            return false;
+        }
+        //树形菜单数据，子页面对象iframeWin
+        // var iframeWin = window[layero.find('iframe')[0]['name']];
+        // 调用子页面方法
+        var chkNode = onCheckNode();
+        if(chkNode.length==0){
+            layer.alert("请选择静态配置端口");
+            return false;
+        }
+        jsonData.switchPort=chkNode;
+        // //组装服务信息
+        jsonData.serverList = [];
+        var mgTr = $("#serverTable").find("tbody > tr"),
+            mg;
+        mgTr.each(function () {
+            mg = $(this);
+            jsonData.serverList.push({
+                switchPort: mg.find(":input[name='switchPort']")[0].value,
+                serverPort: mg.find(":input[name='serverPort']")[0].value,
+            })
+        });
+        console.log(jsonData);
+
+        baseTools2.ajaxPost({
+            // bShow:false,
+            url: "/functionView/mtd/mtdSave",
+            params: {  'STR_JSON': JSON.stringify(jsonData) },
+            callback: [function (jsonObj, xhrArgs) {
+                console.log("回调函数..........");
+                switch (parseInt(jsonObj.status)) {
+                    //失败
+                    case 0:
+                        layer.alert(jsonObj.msg, {icon: 1},function () {
+                            layer.closeAll();
+                        });
+                        break;
+                    //成功
+                    case 1:
+                        layer.alert(jsonObj.msg, {icon: 1},function () {
+                            layer.closeAll();
+                            // $table.bootstrapTable('refresh',  {url: '/functionView/mtd/mtdList'});
+                        });
+                        break;
+                    default:
+                }
+            }]
+        });
+    });
+    //多个name属性校验
+    function initValidate() {
+        if ($.validator) {
+            $.validator.prototype.elements = function () {
+                var validator = this,
+                    rulesCache = {};
+                // select all valid inputs inside the form (no submit or reset buttons)
+                return $([]).add($(this.currentForm)
+                    .find("input, select, textarea")
+                    .not(":submit, :reset, :image, [disabled]")
+                    .not(this.settings.ignore)
+                    .filter(function () {
+                        if (!this.name && validator.settings.debug && window.console) {
+                            console.error("%o has no name assigned", this);
+                        }
+                        //注释这行代码
+                        // select only the first element for each name, and only those with rules specified
+                        //if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+                        //    return false;
+                        //}
+                        rulesCache[this.name] = true;
+                        return true;
+                    }));
+            }
+        }
+    }
+</script>
+</body>
+
+</html>
+<style type="text/css">
+    .form-horizontal .control-label{
+        text-align:left;
+    }
+</style>
