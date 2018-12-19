@@ -10,6 +10,8 @@
     <result column="black_list_ip" property="blackListIp" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
-
+<delete id="deleteAll">
+  delete  from black_list;
+</delete>
 
 </mapper>

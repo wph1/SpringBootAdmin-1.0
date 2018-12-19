@@ -3,9 +3,11 @@ package com.geekcattle.service.switches.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.geekcattle.mapper.mtd.FixedPortMapper;
 import com.geekcattle.mapper.switches.SwitchesNewMapper;
 import com.geekcattle.mapper.switches.SwitchesNodeConnectorMapper;
 import com.geekcattle.model.console.HttpRequest;
+import com.geekcattle.model.mtd.FixedPort;
 import com.geekcattle.model.switches.SwitchesNew;
 import com.geekcattle.model.switches.SwitchesNodeConnector;
 import com.geekcattle.service.switches.SwitchesNewService;
@@ -31,6 +33,8 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private SwitchesNewMapper switchesNewMapper;
+    @Autowired
+    private FixedPortMapper fixedPortMapper;
     @Autowired
     private SwitchesNodeConnectorMapper switchesNodeConnectorMapper;
     @Value("${odlIpAndPort}")
@@ -194,6 +198,7 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
             map.put("pId", 0);
             map.put("name", switches.getSwitchesName());
             map.put("nocheck", true);//父节点不被选中
+//            map.put("open",true);//节点展开
             //获取某个交换机的所有端口
             Example example = new Example(SwitchesNodeConnector.class);
             example.createCriteria().andCondition("switches_id = ", switches.getSwitchesId());
@@ -204,6 +209,12 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
                 portMap.put("id", switchesNodeConnector.getId());
                 portMap.put("pId", switchesNodeConnector.getSwitchesId());
                 portMap.put("name", switchesNodeConnector.getId());
+                List<String> fixedPorts = fixedPortMapper.getAllSwitchPort();
+                if(fixedPorts.contains(switchesNodeConnector.getId())){//端口已经被选定
+                    portMap.put("checked", true);//节点选中
+                    map.put("open",true);//父节点展开
+                }
+
                 list.add(portMap);
             }
 

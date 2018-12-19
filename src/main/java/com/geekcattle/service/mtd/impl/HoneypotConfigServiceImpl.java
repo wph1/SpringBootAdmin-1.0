@@ -6,6 +6,8 @@ import com.geekcattle.service.mtd.HoneypotConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class HoneypotConfigServiceImpl implements HoneypotConfigService {
     @Autowired
@@ -17,5 +19,10 @@ public class HoneypotConfigServiceImpl implements HoneypotConfigService {
     @Override
     public void insert(HoneypotConfig honeypotConfig) {
         honeypotConfigMapper.insert(honeypotConfig);
+    }
+
+    @Override
+    public List<HoneypotConfig> getAllHoneypotConfig() {
+        return honeypotConfigMapper.selectAll();
     }
 }

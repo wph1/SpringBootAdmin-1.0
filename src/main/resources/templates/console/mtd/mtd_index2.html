@@ -17,6 +17,7 @@
                 </div>
                 <div class="box-body">
                     <form class="form-horizontal" name="mtdForm" id="mtdForm" role="form">
+                        <input type="hidden" th:value="${switchesAndServerPortList}"/>
                         <div class="box-header with-border">
                             <h3 class="box-title" ><strong>>Mtd配置</strong></h3>
                         </div>
@@ -25,10 +26,10 @@
 
                             <div class="col-sm-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="isMtdMode" id="isMtdMode1" checked="checked" value="1" check-type="group">启用
+                                    <input type="radio" name="isMtdMode" id="isMtdMode1" th:checked="${isMtdMode==1?true:false}"  value="1" check-type="group">启用
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="isMtdMode" id="isMtdMode2" value="0" check-type="group">禁用
+                                    <input type="radio" name="isMtdMode" id="isMtdMode2" th:checked="${isMtdMode==0?true:false}" value="0" check-type="group">禁用
                                 </label>
                             </div>
                         </div>
@@ -36,14 +37,14 @@
                             <div class="form-group">
                                 <label for="sessionIdle" class="col-sm-2 control-label">流表最大空闲时间</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="sessionIdle" id="sessionIdle"
+                                    <input type="text" class="form-control" name="sessionIdle" id="sessionIdle" th:value="${mtdConfig.sessionIdle}"
                                            placeholder="整数，如10"
                                     >
                                 </div>
 
                                 <label for="externalAddressForSNat" class="col-sm-2 control-label">内网访问外网IP地址</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="externalAddressForSNat" id="externalAddressForSNat"
+                                    <input type="text" class="form-control" name="externalAddressForSNat" id="externalAddressForSNat" th:value="${mtdConfig.externalAddressForSNat}"
                                            placeholder="ip地址，如192.168.1.1"
                                     >
                                 </div>
@@ -52,14 +53,14 @@
                             <div class="form-group">
                                 <label for="externalAddressForDPort" class="col-sm-2 control-label">内网提供的开放服务的地址</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="externalAddressForDPort" id="externalAddressForDPort"
+                                    <input type="text" class="form-control" name="externalAddressForDPort" id="externalAddressForDPort" th:value="${mtdConfig.externalAddressForDPort}"
                                            placeholder="ip地址，如192.168.1.1"
                                     >
                                 </div>
 
                                 <label for="externalAddressForDns" class="col-sm-2 control-label">dns转发的采用的外网地址</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="externalAddressForDns" id="externalAddressForDns"
+                                    <input type="text" class="form-control" name="externalAddressForDns" id="externalAddressForDns" th:value="${mtdConfig.externalAddressForDns}"
                                            placeholder="ip地址，如192.168.1.1"
                                     >
                                 </div>
@@ -69,14 +70,14 @@
                                 <label for="dnsForwardAddress" class="col-sm-2 control-label">dns服务器地址</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" name="dnsForwardAddress" id="dnsForwardAddress"
-                                           placeholder="ip地址，如192.168.1.1"
+                                           placeholder="ip地址，如192.168.1.1" th:value="${mtdConfig.dnsForwardAddress}"
                                     >
                                 </div>
 
                                 <label for="dnsAddress" class="col-sm-2 control-label">内部dns服务器地址</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" name="dnsAddress" id="dnsAddress"
-                                           placeholder="ip地址，如192.168.1.1"
+                                           placeholder="ip地址，如192.168.1.1" th:value="${mtdConfig.dnsAddress}"
                                     >
                                 </div>
                             </div>
@@ -84,14 +85,14 @@
                                 <label for="externalSwitchPort" class="col-sm-2 control-label">出外网的端口</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" name="externalSwitchPort" id="externalSwitchPort"
-                                           placeholder="整数，如80"
+                                           placeholder="整数，如80" th:value="${mtdConfig.externalSwitchPort}"
                                     >
                                 </div>
 
                                 <label for="externalGateway" class="col-sm-2 control-label">出外网的网关</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" name="externalGateway" id="externalGateway"
-                                           placeholder="ip地址，如192.168.1.1"
+                                           placeholder="ip地址，如192.168.1.1" th:value="${mtdConfig.externalGateway}"
                                     >
                                 </div>
                             </div>
@@ -106,7 +107,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
+                                        <tr th:if="${isMtdMode} == 1"  th:each="entries:${switchesAndServerPortList}">
                                             <td>
                                                 <!-- <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
                                                  <option value=''>请选择交换机</option>
@@ -115,7 +116,24 @@
                                                     <!-- <option value=''>请选择交换机</option>-->
                                                 </select>
                                             </td>
-                                            <td><input type="text" class="form-control" name="serverPort"  placeholder="服务端口，多个使用/分割"></td>
+                                            <td><input type="text" class="form-control" name="serverPort"  placeholder="服务端口，多个使用/分割" th:value="${entries}"></td>
+
+                                            <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
+                                                                   onclick="onAddRow(this);"></i>&nbsp;&nbsp;
+                                                <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
+                                                   onclick="onDelRow(this);"></i>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${isMtdMode} == 0" >
+                                            <td>
+                                                <!-- <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
+                                                 <option value=''>请选择交换机</option>
+                                                 </select>-->
+                                                <select id="switch" name="switchPort" class="form-control input-sm">
+                                                    <!-- <option value=''>请选择交换机</option>-->
+                                                </select>
+                                            </td>
+                                            <td><input type="text" class="form-control" name="serverPort"  placeholder="服务端口，多个使用/分割" ></td>
 
                                             <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
                                                                    onclick="onAddRow(this);"></i>&nbsp;&nbsp;
@@ -136,10 +154,10 @@
 
                             <div class="col-sm-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="isPathMutation" id="isPathMutation1" value="1" checked="checked" check-type="group">启用
+                                    <input type="radio" name="isPathMutation" id="isPathMutation1" value="1" th:checked="${IsPathMutation==1?true:false}" check-type="group">启用
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="isPathMutation" id="isPathMutation2" value="0" check-type="group">禁用
+                                    <input type="radio" name="isPathMutation" id="isPathMutation2"  th:checked="${IsPathMutation==0?true:false}" value="0" check-type="group">禁用
                                 </label>
                             </div>
                         </div>
@@ -148,14 +166,14 @@
                                 <label for="kPath" class="col-sm-2 control-label">可跳变的最大路径数</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" name="kPath" id="kPath"
-                                           placeholder="整数，如10"
+                                           placeholder="整数，如10"  th:value="${mtdConfig.kPath}"
                                     >
                                 </div>
 
                                 <label for="pathTtl" class="col-sm-2 control-label">路径跳变周期</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" name="pathTtl" id="pathTtl"
-                                           placeholder="整数，如10"
+                                           placeholder="整数，如10"  th:value="${mtdConfig.pathTtl}"
                                     >
                                 </div>
                             </div>
@@ -165,11 +183,6 @@
                         <div class="box-header with-border">
                             <h3 class="box-title" ><strong>>静态端口配置</strong></h3>
                         </div>
-                        <!-- <div class="form-group">
-                             <div class="col-sm-12">
-
-                             </div>
-                         </div>-->
                         <div class="form-group">
                             <div class="zTreeDemoBackground left" class="col-sm-12">
                                 <ul id="treeMultiple" class="ztree"
@@ -314,6 +327,14 @@
             if (id == 1) {
                 $("#mtdDiv").show();
             }else if (id == 0){
+                $("input[name='sessionIdle']").val("");
+                $("input[name='externalAddressForSNat']").val("");
+                $("input[name='externalAddressForDPort']").val("");
+                $("input[name='externalAddressForDns']").val("");
+                $("input[name='dnsForwardAddress']").val("");
+                $("input[name='dnsAddress']").val("");
+                $("input[name='externalSwitchPort']").val("");
+                $("input[name='externalGateway']").val("");
                 $("#mtdDiv").hide();
             }
         });
@@ -324,6 +345,8 @@
             if (id == 1) {
                 $("#luJingTiaoBianDiv").show();
             }else if (id == 0){
+                $("input[name='kPath']").val("");
+                $("input[name='pathTtl']").val("");
                 $("#luJingTiaoBianDiv").hide();
             }
         });

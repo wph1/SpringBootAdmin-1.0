@@ -9,4 +9,8 @@
     <result column="server_port" property="serverPort" jdbcType="VARCHAR" />
     <result column="dynamic_port_id" property="dynamicPortId" jdbcType="VARCHAR" />
   </resultMap>
+
+  <delete id="deleteAll" >
+    delete  from  mtd_mapping_port;
+  </delete>
 </mapper>

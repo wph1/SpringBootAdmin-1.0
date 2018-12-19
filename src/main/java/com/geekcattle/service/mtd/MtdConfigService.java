@@ -20,6 +20,17 @@ public interface MtdConfigService {
      void insert(MtdConfig2 mtdConfig2);
 
     /**
+     * 获取所有mtd配置数据
+     * @return
+     */
+    List<MtdConfig2> getMtdConfig2();
+
+    /**
+     *获取交换机端口和服务端口
+     * @return
+     */
+    List<Map<Object,Object>> getMtdDynamicPortAndMappingPort();
+    /**
      * 插入mtd全局配置
      * @param map
      */

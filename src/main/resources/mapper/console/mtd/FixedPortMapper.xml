@@ -10,4 +10,12 @@
     <result column="mtd_id" property="mtdId" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <delete id="deleteAll" >
+    delete  from  fixed_port;
+  </delete>
+
+  <select id="getAllSwitchPort" resultType="String">
+    select switch_port from fixed_port;
+  </select>
 </mapper>

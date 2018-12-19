@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +52,20 @@ public class MtdController {
      * @return
      */
     @GetMapping(value = "/mtdIndex2")
-    public String index2() {
+    public String index2(Model model) {
+        List<MtdConfig2> mtdConfig2 = mtdConfigService.getMtdConfig2();
+        //交换机和端口配置
+        model.addAttribute("switchesAndServerPortList",mtdConfigService.getMtdDynamicPortAndMappingPort());
+        //mtd全局配置
+        model.addAttribute("mtdConfig",mtdConfig2.size()==0?new MtdConfig2():mtdConfig2.get(0));
+        if(mtdConfig2!=null&&mtdConfig2.size()>0){
+            MtdConfig2 m =  mtdConfig2.get(0);
+            model.addAttribute("isMtdMode",m.getIsMtdMode());
+            model.addAttribute("IsPathMutation",m.getIsPathMutation());
+        }else{
+            model.addAttribute("isMtdMode",0);
+            model.addAttribute("IsPathMutation",0);
+        }
         return "/console/mtd/mtd_index2";
     }
     /**

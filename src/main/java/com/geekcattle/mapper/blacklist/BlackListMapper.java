@@ -6,4 +6,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface BlackListMapper extends CustomerMapper<BlackList> {
+    void deleteAll();
 }

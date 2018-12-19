@@ -14,7 +14,12 @@ public class BlackList extends BaseEntity implements Serializable {
     @Column(name = "black_list_id")
     @GeneratedValue(generator = "UUID")
     private String blackListId;
-
+    /**
+     * 0-源ip，1-目的ip
+     * 默认值0
+     */
+    @Column(name = "flag")
+    private int flag;
     /**
      * 是否开启黑名单，1-开启，0-关闭
      */
@@ -27,6 +32,14 @@ public class BlackList extends BaseEntity implements Serializable {
     @Column(name = "create_time")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
     private Date createTime;
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
 
     /**
      * @return black_list_id

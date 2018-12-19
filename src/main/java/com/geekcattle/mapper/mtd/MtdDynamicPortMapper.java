@@ -6,4 +6,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface MtdDynamicPortMapper extends CustomerMapper<MtdDynamicPort> {
+    int deleteAll();
 }

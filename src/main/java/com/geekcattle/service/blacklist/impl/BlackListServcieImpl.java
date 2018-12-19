@@ -14,6 +14,7 @@ import com.geekcattle.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,24 @@ public class BlackListServcieImpl implements BlackListServcie {
          return blackListMapper.selectAll();
      }
 
+    @Override
+    public List<BlackList> getBlackListByFlag(Integer flag) {
+        List list = new ArrayList();
+        BlackList blackList = new BlackList();
+        blackList.setFlag(flag);
+        if("2".equals(flag)){
+            list=  blackListMapper.selectAll();
+        }else{
+            list = blackListMapper.select(blackList);
+        }
+        return  list;
+    }
+
+    @Override
+    public List<BlackList> selectAll() {
+        return  blackListMapper.selectAll();
+    }
+
 
     /**
      * 添加黑名单，并配置odl
@@ -61,15 +80,28 @@ public class BlackListServcieImpl implements BlackListServcie {
     @Override
     @Transactional
     public void saveBlackListAndOdl(Map mapList) throws Exception{
+        honeypotConfigMapper.deleteAll();
+        blackListMapper.deleteAll();
+        Map<String,Object>blackJson = new HashMap<String,Object>();
+        Map<String,Object>bindingConf = new HashMap<String,Object>();
         //蜜罐
         List<Map> honeyList = (List) MapUtils.getObject(mapList,"mgList",new ArrayList<>());
-        //黑名单
+        //是否开启黑名单配置   1-开启
+        String isUseBlackList =  MapUtils.getString(mapList,"isUseBlackList","");
+        if(StringUtils.isNotEmpty(isUseBlackList)&&"1".equals(isUseBlackList)){
+            bindingConf.put("use-blacklist", true);
+
+        //黑名单源ip集合
         List<Map> blackList = (List) MapUtils.getObject(mapList,"blackList",new ArrayList<>());
-        //蜜罐
-        List<Map> honeyListToOdl = new ArrayList<>();
-        //黑名单
-        List<Map> blackListToOdl = new ArrayList<>();
-        //插入黑名单
+        //黑名单目的ip集合
+        List<Map> dstListIp = (List) MapUtils.getObject(mapList,"dstListIp",new ArrayList<>());
+
+        //黑名单源ip
+        List<Map> srcBlackListToOdl = new ArrayList<>();
+        //黑名单目的ip
+        List<Map> dstBlackListToOdl = new ArrayList<>();
+        logger.info("====>开始插入黑名单源ip");
+        //插入黑名单源ip列表
         for(Map balck:blackList){
             BlackList blackList1 =  new BlackList();
             BeanUtils.populate(blackList1,balck);
@@ -77,8 +109,30 @@ public class BlackListServcieImpl implements BlackListServcie {
             blackListMapper.insert(blackList1);
             Map toOdl = new HashMap();
             toOdl.put("ip",MapUtils.getString(balck,"blackListIp"));
-            blackListToOdl.add(toOdl);
+            srcBlackListToOdl.add(toOdl);
         }
+        logger.info("====>插入黑名单源ip成功");
+        logger.info("====>开始插入黑名单目的ip");
+        //插入目的ip
+        for(Map dstBlack:dstListIp){
+            BlackList blackList1 =  new BlackList();
+            dstBlack.put("blackListIp",MapUtils.getString(dstBlack,"dstListIp"));
+            BeanUtils.populate(blackList1,dstBlack);
+            blackList1.setCreateTime(new Date());
+            blackList1.setFlag(1);//1-目的ip
+            blackListMapper.insert(blackList1);
+            Map toOdl = new HashMap();
+            toOdl.put("ip",MapUtils.getString(dstBlack,"dstListIp"));
+            dstBlackListToOdl.add(toOdl);
+        }
+        logger.info("====>插入目的ip成功");
+            bindingConf.put("src-list",srcBlackListToOdl );
+            bindingConf.put("dst-list",dstBlackListToOdl );
+        }else{//黑名单关闭
+            bindingConf.put("use-blacklist", false);
+        }
+        //蜜罐
+        List<Map> honeyListToOdl = new ArrayList<>();
         //插入蜜罐
         for(Map honey:honeyList){
             HoneypotConfig honeypotConfig = new HoneypotConfig();
@@ -92,14 +146,9 @@ public class BlackListServcieImpl implements BlackListServcie {
             toOdl.put("honeypot-switch-port",honeypotConfig.getHoneypotSwitchPort());
             honeyListToOdl.add(toOdl);
         }
-
-        Map<String,Object>blackJson = new HashMap<String,Object>();
-        Map<String,Object>bindingConf = new HashMap<String,Object>();
-        bindingConf.put("use-blacklist", true);
-        bindingConf.put("dst-list",blackListToOdl );
         bindingConf.put("honeypot-config", honeyListToOdl);
         blackJson.put("ip-blacklist", bindingConf);
-        String responseStr = (String)  RestTemplateUtils.sendUrl(restTemplate,odlIpAndPort+blackListUrl, HttpMethod.PUT,blackJson);
+//        String responseStr = (String)  RestTemplateUtils.sendUrl(restTemplate,odlIpAndPort+blackListUrl, HttpMethod.PUT,blackJson);
         logger.info("====>向odl发送保存配置黑名单命令完成");
     }
     /**

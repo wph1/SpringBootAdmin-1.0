@@ -18,6 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
 
@@ -62,6 +63,32 @@ public class MtdConfigServiceImpl implements MtdConfigService {
         mtdConfigMapper.insert(mtdConfig2);
     }
 
+    @Override
+    public List<MtdConfig2> getMtdConfig2() {
+        List<MtdConfig2> mtdConfig2s = mtdConfigMapper.selectAll();
+        return mtdConfig2s;
+    }
+
+    @Override
+    public List<Map<Object, Object>> getMtdDynamicPortAndMappingPort() {
+        List list = new ArrayList();
+        List<MtdDynamicPort> mtdDynamicPortList = mtdDynamicPortMapper.selectAll();
+        for(MtdDynamicPort mtdDynamicPort:mtdDynamicPortList){
+            Map map = new HashMap();
+            Example example = new Example(MtdDynamicPort.class);
+            example.createCriteria().andCondition("dynamic_port_id=",  mtdDynamicPort.getDynamicportId());
+            List<MtdMappingPort> mtdMappingPortList = mtdMappingPortMapper.selectByExample(example);
+            String portStr="";
+            for (MtdMappingPort mtdMappingPort:mtdMappingPortList){
+                portStr += mtdMappingPort.getServerPort()+"/";
+            }
+            map.put(mtdDynamicPort.getSwitchPort(),portStr.substring(0,portStr.length()-1));
+            list.add(portStr.substring(0,portStr.length()-1));
+        }
+
+        return list;
+    }
+
     /**
      * 插入mtd配置
      *
@@ -70,6 +97,11 @@ public class MtdConfigServiceImpl implements MtdConfigService {
     @Override
     @Transactional
     public void insertMtdConfigAndOdl(Map map) throws Exception {
+        //插入之前全部清除
+        mtdConfigMapper.deleteAll();
+        mtdMappingPortMapper.deleteAll();
+        mtdDynamicPortMapper.deleteAll();
+        fixedPortMapper.deleteAll();
         //mtd配置
         MtdConfig2 mtdConfig2 = JSON.parseObject(JSON.toJSONString(map), MtdConfig2.class);
        String mtdId= UuidUtil.getUUID();
@@ -178,7 +210,7 @@ public class MtdConfigServiceImpl implements MtdConfigService {
         mtd_json.put("mtd-config", mtd_config);
         logger.error("====>mtd_json::"+mtd_json);
         logger.info("====>开始向odl发送保存mtd命令完成");
-        String responseStr = (String) RestTemplateUtils.sendUrl(restTemplate, odlIpAndPort + mtdConfigUrl, HttpMethod.PUT, mtd_json);
+//        String responseStr = (String) RestTemplateUtils.sendUrl(restTemplate, odlIpAndPort + mtdConfigUrl, HttpMethod.PUT, mtd_json);
         logger.info("====>向odl发送保存mtd命令完成");
 
     }

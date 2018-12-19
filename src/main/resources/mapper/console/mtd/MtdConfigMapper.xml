@@ -20,4 +20,8 @@
     <result column="external_gateway" property="externalGateway" jdbcType="VARCHAR" />
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <delete id="deleteAll" >
+    delete  from  mtd_config;
+  </delete>
 </mapper>

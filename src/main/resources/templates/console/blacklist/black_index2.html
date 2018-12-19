@@ -25,27 +25,71 @@
 
                             <div class="col-sm-6">
                                 <label class="radio-inline">
-                                    <input type="radio" name="isUseBlackList" id="isUseBlackList1" checked="checked" value="1" check-type="group">启用
+                                    <input type="radio" name="isUseBlackList" id="isUseBlackList1" th:checked="${isUseBlack==1?true:false}" value="1" check-type="group">启用
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="isUseBlackList" id="isUseBlackList2" value="0" check-type="group">禁用
+                                    <input type="radio" name="isUseBlackList" id="isUseBlackList2" th:checked="${isUseBlack==0?true:false}"  value="0" check-type="group">禁用
                                 </label>
                             </div>
                         </div>
-                        <div id="blackDiv">
+                        <div id="blackDiv" >
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <div class="table-responsive">
                                         <table id="blackTable" class="table table-bordered text-nowrap">
                                             <thead>
                                             <tr>
-                                                <th>黑名单ip</th>
+                                                <th>黑名单源ip</th>
                                                 <th>操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            <tr  th:if="${#lists.isEmpty(srcBlackList)}">
+                                                <td><input type="text" class="form-control" name="blackListIp"  placeholder="ip地址，如192.168.1.1" ></td>
+                                                <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
+                                                                       onclick="onAddRow(this);"></i>&nbsp;&nbsp;
+                                                    <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
+                                                       onclick="onDelRow(this);"></i>
+                                                </td>
+                                            </tr>
+
+                                            <tr th:if="${not #lists.isEmpty(srcBlackList)}" th:each="entries:${srcBlackList}">
+                                                <td><input type="text" class="form-control" name="blackListIp"  placeholder="ip地址，如192.168.1.1" th:value="${entries['blackListIp']}"></td>
+                                                <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
+                                                                       onclick="onAddRow(this);"></i>&nbsp;&nbsp;
+                                                    <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
+                                                       onclick="onDelRow(this);"></i>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="table-responsive">
+                                        <table id="blackTable2" class="table table-bordered text-nowrap">
+                                            <thead>
                                             <tr>
-                                                <td><input type="text" class="form-control" name="blackListIp"  placeholder="ip地址，如192.168.1.1"></td>
+                                                <th>黑名单目的ip</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr  th:if="${#lists.isEmpty(dstBlackList)}">
+                                                    <td><input type="text" class="form-control" name="dstListIp"  placeholder="ip地址，如192.168.1.1" ></td>
+                                                    <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
+                                                                           onclick="onAddRow(this);"></i>&nbsp;&nbsp;
+                                                        <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
+                                                           onclick="onDelRow(this);"></i>
+                                                    </td>
+                                                </tr>
+
+                                            <tr th:if="${not  #lists.isEmpty(dstBlackList)}" th:each="entries:${dstBlackList}" >
+                                                <td><input type="text" class="form-control" name="dstListIp"  placeholder="ip地址，如192.168.1.1"  th:value="${entries['blackListIp']}"></td>
                                                 <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
                                                                        onclick="onAddRow(this);"></i>&nbsp;&nbsp;
                                                     <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
@@ -75,15 +119,15 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td><input type="text" class="form-control" name="honeypotIp"  placeholder="ip地址，如192.168.1.1"></td>
-                                        <td><input type="text" class="form-control" name="honeypotMac"  placeholder="mac地址"></td>
-                                        <td><input type="text" class="form-control" name="honeypotGateway"  placeholder="gateway地址"></td>
+                                    <tr th:each="entries:${honeypotConfigList}">
+                                        <td><input type="text" class="form-control" name="honeypotIp"  th:value="${entries['honeypotIp']}" placeholder="ip地址，如192.168.1.1"></td>
+                                        <td><input type="text" class="form-control" name="honeypotMac"  th:value="${entries['honeypotMac']}" placeholder="mac地址"></td>
+                                        <td><input type="text" class="form-control" name="honeypotGateway" th:value="${entries['honeypotGateway']}"  placeholder="gateway地址"></td>
                                         <td>
                                             <!-- <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
                                              <option value=''>请选择交换机</option>
                                              </select>-->
-                                            <select id="switch" name="honeypotSwitchPort" class="form-control input-sm">
+                                            <select id="switch" name="honeypotSwitchPort" class="form-control input-sm" th:value="${entries['honeypotSwitchPort']}" >
                                                 <!-- <option value=''>请选择交换机</option>-->
                                             </select>
                                         </td>
@@ -194,6 +238,10 @@
                 required: true,
                 validateIpAddress:true
             },
+            dstListIp:{
+                required: true,
+                validateIpAddress:true
+            },
             honeypotIp:{
                 required: true,
                 validateIpAddress:true
@@ -215,7 +263,10 @@
         };
         var messages = {
             blackListIp:{
-                required: "黑名单ip不能为空"
+                required: "黑名单源ip不能为空"
+            },
+            dstListIp:{
+                required: "黑名单目的ip不能为空"
             },
             honeypotIp:{
                 required: "蜜罐ip不能为空"
@@ -248,7 +299,7 @@
                 honeypotSwitchPort: mg.find(":input[name='honeypotSwitchPort']")[0].value
             })
         });
-        //组装黑名单数据结构
+        //组装黑名单源ip
         jsonData.blackList = [];
         var blackTr = balckForm.find("#blackTable").find("tbody > tr"),
             black;
@@ -256,6 +307,17 @@
             black = $(this);
             jsonData.blackList.push({
                 blackListIp: black.find(":input[name='blackListIp']")[0].value,
+            })
+        });
+
+        //组装黑名单目的ip
+        jsonData.dstListIp = [];
+        var blackTr2 = balckForm.find("#blackTable2").find("tbody > tr"),
+            black2;
+        blackTr2.each(function () {
+            black2 = $(this);
+            jsonData.dstListIp.push({
+                dstListIp: black2.find(":input[name='dstListIp']")[0].value,
             })
         });
         console.log(jsonData);

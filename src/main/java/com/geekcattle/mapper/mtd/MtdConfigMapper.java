@@ -6,4 +6,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface MtdConfigMapper extends CustomerMapper<MtdConfig2> {
+   int deleteAll();
 }

@@ -2,6 +2,7 @@ package com.geekcattle.controller.functionview;
 
 
 import com.geekcattle.model.blacklist.BlackList;
+import com.geekcattle.model.mtd.HoneypotConfig;
 import com.geekcattle.model.virtualipconf.VirtualIpConf;
 import com.geekcattle.service.blacklist.BlackListServcie;
 import com.geekcattle.service.mtd.FixedPortService;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +51,23 @@ public class BlackListController {
      * @return
      */
     @GetMapping(value = "/blackListIndex2")
-    public String index2() {
+    public String index2(Model model) {
+        //源ip
+        model.addAttribute("srcBlackList",blackListServcie.getBlackListByFlag(0)==null?new ArrayList<>():blackListServcie.getBlackListByFlag(0));
+        //目的ip
+        model.addAttribute("dstBlackList",blackListServcie.getBlackListByFlag(1)==null?new ArrayList<>():blackListServcie.getBlackListByFlag(1));
+        //蜜罐列表
+        List<HoneypotConfig> honeypotConfigList = honeypotConfigService.getAllHoneypotConfig();
+        model.addAttribute("honeypotConfigList",honeypotConfigList);
+        //黑名单是否开启
+        List<BlackList> blackListByFlag = blackListServcie.selectAll();
+        if(blackListByFlag.size()==0){//黑名单关闭
+            model.addAttribute("blackListByFlag",0);
+            model.addAttribute("isUseBlack",0);
+        }else{
+            model.addAttribute("blackListByFlag",1);
+            model.addAttribute("isUseBlack",1);
+        }
         return "/console/blacklist/black_index2";
     }
     /**
