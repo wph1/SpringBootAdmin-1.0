@@ -37,7 +37,7 @@ public class Timer {
     @Autowired
     private HoneypotLogServcie honeypotLogServcie;
 
-//    @Scheduled(cron = "0 0/5 * * * *")//300秒执行一次（5分钟）
+//    @Scheduled(cron = "0/5 * * * * *")//（5s执行一次）
 //    public void sessionTimer() {//会话定时器
 //        //获取当前时间
 //        LocalDateTime localDateTime = LocalDateTime.now();
