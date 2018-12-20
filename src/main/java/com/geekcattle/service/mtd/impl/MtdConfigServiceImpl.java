@@ -211,7 +211,7 @@ public class MtdConfigServiceImpl implements MtdConfigService {
         mtd_json.put("mtd-config", mtd_config);
         logger.error("====>mtd_json::"+mtd_json);
         logger.info("====>开始向odl发送保存mtd命令完成");
-//        String responseStr = (String) RestTemplateUtils.sendUrl(restTemplate, odlIpAndPort + mtdConfigUrl, HttpMethod.PUT, mtd_json);
+        String responseStr = (String) RestTemplateUtils.sendUrl(restTemplate, odlIpAndPort + mtdConfigUrl, HttpMethod.PUT, mtd_json);
         logger.info("====>向odl发送保存mtd命令完成");
 
     }
