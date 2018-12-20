@@ -146,4 +146,19 @@ public class BlackListController {
         }
     }
 
+
+    /**
+     * 获取蜜罐列表
+     * @return 蜜罐列表
+     */
+    @RequestMapping(value = "/getHoneypotConfigList", method = {RequestMethod.GET})
+    @ResponseBody
+    public ModelMap getHoneypotConfigList() {
+        ModelMap map = new ModelMap();
+        map.put("honeyptConfigList", honeypotConfigService.getAllHoneypotConfig());
+        return ReturnUtil.Success("加载成功", map, null);
+    }
+
+
+
 }

@@ -45,7 +45,7 @@
                                             </thead>
                                             <tbody>
                                             <tr  th:if="${#lists.isEmpty(srcBlackList)}">
-                                                <td><input type="text" class="form-control" name="blackListIp"  placeholder="ip地址，如192.168.1.1" ></td>
+                                                <td><input type="text"  class="form-control" th:disabled="${isUseBlack==0?true:false}" name="blackListIp"  placeholder="ip地址，如192.168.1.1" ></td>
                                                 <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
                                                                        onclick="onAddRow(this);"></i>&nbsp;&nbsp;
                                                     <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
@@ -80,7 +80,7 @@
                                             </thead>
                                             <tbody>
                                                 <tr  th:if="${#lists.isEmpty(dstBlackList)}">
-                                                    <td><input type="text" class="form-control" name="dstListIp"  placeholder="ip地址，如192.168.1.1" ></td>
+                                                    <td><input type="text"  class="form-control" th:disabled="${isUseBlack==0?true:false}" name="dstListIp"  placeholder="ip地址，如192.168.1.1" ></td>
                                                     <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
                                                                            onclick="onAddRow(this);"></i>&nbsp;&nbsp;
                                                         <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
@@ -119,19 +119,19 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="entries:${honeypotConfigList}">
-                                        <td><input type="text" class="form-control" name="honeypotIp"  th:value="${entries['honeypotIp']}" placeholder="ip地址，如192.168.1.1"></td>
-                                        <td><input type="text" class="form-control" name="honeypotMac"  th:value="${entries['honeypotMac']}" placeholder="mac地址"></td>
-                                        <td><input type="text" class="form-control" name="honeypotGateway" th:value="${entries['honeypotGateway']}"  placeholder="gateway地址"></td>
+                                    <tr >
+                                        <td><input type="text" class="form-control" name="honeypotIp"   placeholder="ip地址，如192.168.1.1"></td>
+                                        <td><input type="text" class="form-control" name="honeypotMac"  placeholder="mac地址"></td>
+                                        <td><input type="text" class="form-control" name="honeypotGateway"   placeholder="gateway地址"></td>
                                         <td>
                                             <!-- <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
                                              <option value=''>请选择交换机</option>
                                              </select>-->
-                                            <select id="switch" name="honeypotSwitchPort" class="form-control input-sm" th:value="${entries['honeypotSwitchPort']}" >
+                                            <select id="switch" name="honeypotSwitchPort" class="form-control input-sm"  >
                                                 <!-- <option value=''>请选择交换机</option>-->
                                             </select>
                                         </td>
-                                        <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
+                                        <td class="do_work"><i id="addRow" class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
                                                                onclick="onAddRow(this);"></i>&nbsp;&nbsp;
                                             <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
                                                onclick="onDelRow(this);"></i>
@@ -159,7 +159,58 @@
     $(document).ready(function () {
         initValidate();
         loadSwitch();
+
     });
+    function loadHoneypt(){
+        baseTools2.ajaxGet({
+            bShow:false,
+            url: "/functionView/blackList/getHoneypotConfigList",
+            callback: [function (jsonObj) {
+                if (jsonObj.status === 1) {
+                   var honeyptLength =  jsonObj.result.honeyptConfigList.length;
+                   var honeypt =  jsonObj.result.honeyptConfigList;
+                    if(honeyptLength == 1){
+                        //直接赋值
+                        var mgTr = $("#mGTable").find("tbody > tr"),
+                            mg;
+                        mgTr.each(function () {
+                            mg = $(this);
+                                 mg.find(":input[name='honeypotIp']")[0].value=honeypt[0].honeypotIp;
+                                mg.find(":input[name='honeypotMac']")[0].value=honeypt[0].honeypotMac;
+                                mg.find(":input[name='honeypotGateway']")[0].value=honeypt[0].honeypotGateway;
+                                mg.find(":input[name='honeypotSwitchPort']")[0].value=honeypt[0].honeypotSwitchPort;
+                        });
+                    }else if(honeyptLength > 1){
+                        //先遍历蜜罐，点击添加按钮确定表格
+                        for(var i=0;i<honeyptLength-1;i++){
+                                $("#addRow").click();
+                        }
+                        var mgTr = $("#mGTable").find("tbody > tr"),
+                            mg;
+                        //再一行一行赋值
+                        for(var i=0;i<honeypt.length;i++){
+                            mgTr.each(function (index,element) {
+                                if(index==i){
+                                    mg = $(this);
+                                    mg.find(":input[name='honeypotIp']")[0].value=honeypt[i].honeypotIp;
+                                    mg.find(":input[name='honeypotMac']")[0].value=honeypt[i].honeypotMac;
+                                    mg.find(":input[name='honeypotGateway']")[0].value=honeypt[i].honeypotGateway;
+                                    mg.find(":input[name='honeypotSwitchPort']")[0].value=honeypt[i].honeypotSwitchPort;
+                                }
+                            });
+                        }
+                    }else{
+                        //不做任何处理
+                    }
+
+                }
+            }]
+        });
+
+    }
+
+
+
     function loadSwitch() {
         var jqBd = $("#switch");
         if (jqBd.size() === 0) {
@@ -193,7 +244,9 @@
 //                    }
 //                } else
 //                    alert(jsonObj.msg);
+
                 }
+                loadHoneypt();
             }]
         });
     }
@@ -219,14 +272,17 @@
             layer.closeAll();
         });
     }
-    //是否开启mtd配置按钮
+    //是否开启黑名单配置按钮
     $("input[name='isUseBlackList']").change(
         function() {
             var id = $("input[name='isUseBlackList']:checked").val();
             if (id == 1) {
-                $("#blackDiv").show();
+                // $("#blackDiv").show();
+                $("input[name='blackListIp']").attr("disabled", false);
+                $("input[name='dstListIp']").attr("disabled", false);
             }else if (id == 0){
-                $("#blackDiv").hide();
+                $("input[name='blackListIp']").attr("disabled", true);
+                $("input[name='dstListIp']").attr("disabled", true);
             }
         });
     //提交配置数据操作

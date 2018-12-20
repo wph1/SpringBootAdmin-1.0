@@ -148,7 +148,7 @@ public class BlackListServcieImpl implements BlackListServcie {
         }
         bindingConf.put("honeypot-config", honeyListToOdl);
         blackJson.put("ip-blacklist", bindingConf);
-        String responseStr = (String)  RestTemplateUtils.sendUrl(restTemplate,odlIpAndPort+blackListUrl, HttpMethod.PUT,blackJson);
+//        String responseStr = (String)  RestTemplateUtils.sendUrl(restTemplate,odlIpAndPort+blackListUrl, HttpMethod.PUT,blackJson);
         logger.info("====>向odl发送保存配置黑名单命令完成");
     }
     /**
