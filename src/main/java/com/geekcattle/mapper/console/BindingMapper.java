@@ -12,7 +12,13 @@ public interface BindingMapper extends CustomerMapper<Binding>{
     void deleteById(String id);
     
     List<Binding> selectAllBindings();
-    
+
+    /**
+     * 选择已经绑定的交换机
+     * @return
+     */
+    List<String> selectBindSwitch();
+
     void insertBinding(Binding bind);
     
     Integer selectCountByNode(String node);

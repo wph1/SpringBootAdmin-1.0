@@ -3,9 +3,11 @@ package com.geekcattle.service.switches.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.geekcattle.mapper.console.BindingMapper;
 import com.geekcattle.mapper.mtd.FixedPortMapper;
 import com.geekcattle.mapper.switches.SwitchesNewMapper;
 import com.geekcattle.mapper.switches.SwitchesNodeConnectorMapper;
+import com.geekcattle.model.console.Binding;
 import com.geekcattle.model.console.HttpRequest;
 import com.geekcattle.model.mtd.FixedPort;
 import com.geekcattle.model.switches.SwitchesNew;
@@ -35,6 +37,8 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
     private SwitchesNewMapper switchesNewMapper;
     @Autowired
     private FixedPortMapper fixedPortMapper;
+    @Autowired
+    private BindingMapper bindingMapper;
     @Autowired
     private SwitchesNodeConnectorMapper switchesNodeConnectorMapper;
     @Value("${odlIpAndPort}")
@@ -154,7 +158,9 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
         //获取所有交换机
         List<SwitchesNew> switchesNews = switchesNewMapper.selectAll();
         //把别人选择过的去掉
-
+        List<SwitchesNew> newSwitchesNews = new ArrayList<>();
+        //已经绑定的交换机列表
+        List<String> bingSwitch = bindingMapper.selectBindSwitch();
         //包装zTree
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = null;
@@ -162,6 +168,9 @@ public class SwitchesNewServiceImpl implements SwitchesNewService {
             map = new HashMap<>();
             //Role role=functions.get(i);
             SwitchesNew fun = switchesNews.get(i);
+            if(bingSwitch.contains(fun.getSwitchesName())){
+                continue;
+            }
             map.put("id", fun.getSwitchesId());
             map.put("pId", 0);
             map.put("name", fun.getSwitchesName());

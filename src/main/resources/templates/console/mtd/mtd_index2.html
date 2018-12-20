@@ -37,14 +37,14 @@
                             <div class="form-group">
                                 <label for="sessionIdle" class="col-sm-2 control-label">流表最大空闲时间</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="sessionIdle" id="sessionIdle" th:value="${mtdConfig.sessionIdle}"
+                                    <input type="text" class="form-control" th:disabled="${isMtdMode==0?true:false}" name="sessionIdle" id="sessionIdle" th:value="${mtdConfig.sessionIdle}"
                                            placeholder="整数，如10"
                                     >
                                 </div>
 
                                 <label for="externalAddressForSNat" class="col-sm-2 control-label">内网访问外网IP地址</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="externalAddressForSNat" id="externalAddressForSNat" th:value="${mtdConfig.externalAddressForSNat}"
+                                    <input type="text" class="form-control"  th:disabled="${isMtdMode==0?true:false}" name="externalAddressForSNat" id="externalAddressForSNat" th:value="${mtdConfig.externalAddressForSNat}"
                                            placeholder="ip地址，如192.168.1.1"
                                     >
                                 </div>
@@ -53,14 +53,14 @@
                             <div class="form-group">
                                 <label for="externalAddressForDPort" class="col-sm-2 control-label">内网提供的开放服务的地址</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="externalAddressForDPort" id="externalAddressForDPort" th:value="${mtdConfig.externalAddressForDPort}"
+                                    <input type="text" class="form-control" th:disabled="${isMtdMode==0?true:false}" name="externalAddressForDPort" id="externalAddressForDPort" th:value="${mtdConfig.externalAddressForDPort}"
                                            placeholder="ip地址，如192.168.1.1"
                                     >
                                 </div>
 
                                 <label for="externalAddressForDns" class="col-sm-2 control-label">dns转发的采用的外网地址</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="externalAddressForDns" id="externalAddressForDns" th:value="${mtdConfig.externalAddressForDns}"
+                                    <input type="text" class="form-control" th:disabled="${isMtdMode==0?true:false}" name="externalAddressForDns" id="externalAddressForDns" th:value="${mtdConfig.externalAddressForDns}"
                                            placeholder="ip地址，如192.168.1.1"
                                     >
                                 </div>
@@ -69,14 +69,14 @@
                             <div class="form-group">
                                 <label for="dnsForwardAddress" class="col-sm-2 control-label">dns服务器地址</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="dnsForwardAddress" id="dnsForwardAddress"
+                                    <input type="text" class="form-control" th:disabled="${isMtdMode==0?true:false}" name="dnsForwardAddress" id="dnsForwardAddress"
                                            placeholder="ip地址，如192.168.1.1" th:value="${mtdConfig.dnsForwardAddress}"
                                     >
                                 </div>
 
                                 <label for="dnsAddress" class="col-sm-2 control-label">内部dns服务器地址</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="dnsAddress" id="dnsAddress"
+                                    <input type="text" class="form-control" th:disabled="${isMtdMode==0?true:false}" name="dnsAddress" id="dnsAddress"
                                            placeholder="ip地址，如192.168.1.1" th:value="${mtdConfig.dnsAddress}"
                                     >
                                 </div>
@@ -84,14 +84,14 @@
                             <div class="form-group">
                                 <label for="externalSwitchPort" class="col-sm-2 control-label">出外网的端口</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="externalSwitchPort" id="externalSwitchPort"
+                                    <input type="text" class="form-control" th:disabled="${isMtdMode==0?true:false}" name="externalSwitchPort" id="externalSwitchPort"
                                            placeholder="整数，如80" th:value="${mtdConfig.externalSwitchPort}"
                                     >
                                 </div>
 
                                 <label for="externalGateway" class="col-sm-2 control-label">出外网的网关</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="externalGateway" id="externalGateway"
+                                    <input type="text" class="form-control" th:disabled="${isMtdMode==0?true:false}" name="externalGateway" id="externalGateway"
                                            placeholder="ip地址，如192.168.1.1" th:value="${mtdConfig.externalGateway}"
                                     >
                                 </div>
@@ -107,35 +107,19 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:if="${isMtdMode} == 1"  th:each="entries:${switchesAndServerPortList}">
+
+                                        <tr  >
                                             <td>
                                                 <!-- <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
                                                  <option value=''>请选择交换机</option>
                                                  </select>-->
-                                                <select id="switch" name="switchPort" class="form-control input-sm">
+                                                <select id="switch" th:disabled="${isMtdMode==0?true:false}" name="switchPort" class="form-control input-sm">
                                                     <!-- <option value=''>请选择交换机</option>-->
                                                 </select>
                                             </td>
-                                            <td><input type="text" class="form-control" name="serverPort"  placeholder="服务端口，多个使用/分割" th:value="${entries}"></td>
+                                            <td><input type="text" class="form-control"  th:disabled="${isMtdMode==0?true:false}" name="serverPort"  placeholder="服务端口，多个使用/分割" ></td>
 
-                                            <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
-                                                                   onclick="onAddRow(this);"></i>&nbsp;&nbsp;
-                                                <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
-                                                   onclick="onDelRow(this);"></i>
-                                            </td>
-                                        </tr>
-                                        <tr th:if="${isMtdMode} == 0" >
-                                            <td>
-                                                <!-- <select id="honeypotSwitchPort" name="honeypotSwitchPort"  >
-                                                 <option value=''>请选择交换机</option>
-                                                 </select>-->
-                                                <select id="switch" name="switchPort" class="form-control input-sm">
-                                                    <!-- <option value=''>请选择交换机</option>-->
-                                                </select>
-                                            </td>
-                                            <td><input type="text" class="form-control" name="serverPort"  placeholder="服务端口，多个使用/分割" ></td>
-
-                                            <td class="do_work"><i class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
+                                            <td class="do_work"><i id="addRow" class="fa fa-plus" style="cursor:pointer;padding: 10px;" title="添加一条"
                                                                    onclick="onAddRow(this);"></i>&nbsp;&nbsp;
                                                 <i class="fa fa-times" style="cursor:pointer;padding: 10px;" title="删除一条"
                                                    onclick="onDelRow(this);"></i>
@@ -165,14 +149,14 @@
                             <div class="form-group">
                                 <label for="kPath" class="col-sm-2 control-label">可跳变的最大路径数</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="kPath" id="kPath"
+                                    <input type="text" th:disabled="${IsPathMutation==0?true:false}" class="form-control" name="kPath" id="kPath"
                                            placeholder="整数，如10"  th:value="${mtdConfig.kPath}"
                                     >
                                 </div>
 
                                 <label for="pathTtl" class="col-sm-2 control-label">路径跳变周期</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="pathTtl" id="pathTtl"
+                                    <input type="text" th:disabled="${IsPathMutation==0?true:false}" class="form-control" name="pathTtl" id="pathTtl"
                                            placeholder="整数，如10"  th:value="${mtdConfig.pathTtl}"
                                     >
                                 </div>
@@ -249,6 +233,51 @@
         //加载ztree树
         loadZtree();
     });
+    function loadHoneypt(){
+        baseTools2.ajaxGet({
+            bShow:false,
+            url: "/functionView/mtd/switchesAndServerPortList",
+            callback: [function (jsonObj) {
+                if (jsonObj.status === 1) {
+                    var honeyptLength =  jsonObj.result.switchesAndServerPortList.length;
+                    var honeypt =  jsonObj.result.switchesAndServerPortList;
+                    if(honeyptLength == 1){
+                        //直接赋值
+                        var mgTr = $("#serverTable").find("tbody > tr"),
+                            mg;
+                        mgTr.each(function () {
+                            mg = $(this);
+                            mg.find(":input[name='switchPort']")[0].value=honeypt[0].switchPort;
+                            mg.find(":input[name='serverPort']")[0].value=honeypt[0].serverPort;
+                        });
+                    }else if(honeyptLength > 1){
+                        //先遍历蜜罐，点击添加按钮确定表格
+                        for(var i=0;i<honeyptLength-1;i++){
+                            $("#addRow").click();
+                        }
+                        var mgTr = $("#serverTable").find("tbody > tr"),
+                            mg;
+                        //再一行一行赋值
+                        for(var i=0;i<honeypt.length;i++){
+                            mgTr.each(function (index,element) {
+                                if(index==i){
+                                    mg = $(this);
+                                    mg.find(":input[name='switchPort']")[0].value=honeypt[i].switchPort;
+                                    mg.find(":input[name='serverPort']")[0].value=honeypt[i].serverPort;
+                                }
+                            });
+                        }
+                    }else{
+                        //不做任何处理
+                    }
+
+                }
+            }]
+        });
+
+    }
+
+
     function loadSwitch() {
         var jqBd = $("#switch");
         if (jqBd.size() === 0) {
@@ -268,6 +297,7 @@
                     }
                     jqBd.append(content.join(""));
                 }
+                loadHoneypt();
             }]
         });
     }
@@ -325,17 +355,29 @@
         function() {
             var id = $("input[name='isMtdMode']:checked").val();
             if (id == 1) {
-                $("#mtdDiv").show();
+                // $("#mtdDiv").show();
+                $("input[name='sessionIdle']").attr("disabled", false);
+                $("input[name='externalAddressForSNat']").attr("disabled", false);
+                $("input[name='externalAddressForDPort']").attr("disabled", false);
+                $("input[name='externalAddressForDns']").attr("disabled", false);
+                $("input[name='dnsForwardAddress']").attr("disabled", false);
+                $("input[name='dnsAddress']").attr("disabled", false);
+                $("input[name='externalSwitchPort']").attr("disabled", false);
+                $("input[name='externalGateway']").attr("disabled", false);
+                $("select[name='switchPort']").attr("disabled", false);
+                $("input[name='serverPort']").attr("disabled", false);
             }else if (id == 0){
-                $("input[name='sessionIdle']").val("");
-                $("input[name='externalAddressForSNat']").val("");
-                $("input[name='externalAddressForDPort']").val("");
-                $("input[name='externalAddressForDns']").val("");
-                $("input[name='dnsForwardAddress']").val("");
-                $("input[name='dnsAddress']").val("");
-                $("input[name='externalSwitchPort']").val("");
-                $("input[name='externalGateway']").val("");
-                $("#mtdDiv").hide();
+                $("input[name='sessionIdle']").attr("disabled", true);
+                $("input[name='externalAddressForSNat']").attr("disabled", true);
+                $("input[name='externalAddressForDPort']").attr("disabled", true);
+                $("input[name='externalAddressForDns']").attr("disabled", true);
+                $("input[name='dnsForwardAddress']").attr("disabled", true);
+                $("input[name='dnsAddress']").attr("disabled", true);
+                $("input[name='externalSwitchPort']").attr("disabled", true);
+                $("input[name='externalGateway']").attr("disabled", true);
+                $("select[name='switchPort']").attr("disabled", true);
+                $("input[name='serverPort']").attr("disabled", true);
+                // $("#mtdDiv").hide();
             }
         });
     //是否开启路径跳变
@@ -343,11 +385,13 @@
         function() {
             var id = $("input[name='isPathMutation']:checked").val();
             if (id == 1) {
-                $("#luJingTiaoBianDiv").show();
+                // $("#luJingTiaoBianDiv").show();
+                $("input[name='kPath']").attr("disabled", false);
+                $("input[name='pathTtl']").attr("disabled", false);
             }else if (id == 0){
-                $("input[name='kPath']").val("");
-                $("input[name='pathTtl']").val("");
-                $("#luJingTiaoBianDiv").hide();
+                $("input[name='kPath']").attr("disabled", true);
+                $("input[name='pathTtl']").attr("disabled", true);
+                // $("#luJingTiaoBianDiv").hide();
             }
         });
     //提交配置数据操作
@@ -504,15 +548,19 @@
         jsonData.switchPort=chkNode;
         // //组装服务信息
         jsonData.serverList = [];
-        var mgTr = $("#serverTable").find("tbody > tr"),
-            mg;
-        mgTr.each(function () {
-            mg = $(this);
-            jsonData.serverList.push({
-                switchPort: mg.find(":input[name='switchPort']")[0].value,
-                serverPort: mg.find(":input[name='serverPort']")[0].value,
-            })
-        });
+        console.log("输入框的值："+$("input:radio[name='isMtdMode']:checked").val());
+        if($("input:radio[name='isMtdMode']:checked").val()==1){//开启mtd配置
+            var mgTr = $("#serverTable").find("tbody > tr"),
+                mg;
+            mgTr.each(function () {
+                mg = $(this);
+                jsonData.serverList.push({
+                    switchPort: mg.find(":input[name='switchPort']")[0].value,
+                    serverPort: mg.find(":input[name='serverPort']")[0].value,
+                })
+            });
+        }
+
         console.log(jsonData);
 
         baseTools2.ajaxPost({

@@ -16,7 +16,11 @@
   <select id="selectCountByNode" parameterType="String"  resultType="java.lang.Integer">
   	  	select count(*) from binding where node = #{node};
   </select>
-  
+
+
+    <select id="selectBindSwitch"   resultType="java.lang.String">
+    SELECT b.node as node FROM binding b;
+  </select>
   <!--根据用户名获取用户信息-->
   <select id="insertBinding" parameterType="Binding">
     insert into binding(id, node, subnet,create_time)  values(#{id}, #{node}, #{subnet},  #{createTime});

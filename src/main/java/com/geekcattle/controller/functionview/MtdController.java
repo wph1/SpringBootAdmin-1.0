@@ -94,6 +94,18 @@ public class MtdController {
     }
 
     /**
+     * 获取动态端口映射和服务端口
+     * @return
+     */
+    @GetMapping(value = "/switchesAndServerPortList")
+    @ResponseBody
+    public ModelMap switchesAndServerPortList() {
+        ModelMap map = new ModelMap();
+        map.put("switchesAndServerPortList",mtdConfigService.getMtdDynamicPortAndMappingPort());
+        return ReturnUtil.Success("加载成功", map, null);
+    }
+
+    /**
      * mtd配置添加页面
      * @return
      */

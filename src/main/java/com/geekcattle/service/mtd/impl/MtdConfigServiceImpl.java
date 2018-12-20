@@ -82,8 +82,9 @@ public class MtdConfigServiceImpl implements MtdConfigService {
             for (MtdMappingPort mtdMappingPort:mtdMappingPortList){
                 portStr += mtdMappingPort.getServerPort()+"/";
             }
-            map.put(mtdDynamicPort.getSwitchPort(),portStr.substring(0,portStr.length()-1));
-            list.add(portStr.substring(0,portStr.length()-1));
+            map.put("switchPort",mtdDynamicPort.getSwitchPort());
+            map.put("serverPort",portStr.substring(0,portStr.length()-1));
+            list.add(map);
         }
 
         return list;
@@ -210,7 +211,7 @@ public class MtdConfigServiceImpl implements MtdConfigService {
         mtd_json.put("mtd-config", mtd_config);
         logger.error("====>mtd_json::"+mtd_json);
         logger.info("====>开始向odl发送保存mtd命令完成");
-        String responseStr = (String) RestTemplateUtils.sendUrl(restTemplate, odlIpAndPort + mtdConfigUrl, HttpMethod.PUT, mtd_json);
+//        String responseStr = (String) RestTemplateUtils.sendUrl(restTemplate, odlIpAndPort + mtdConfigUrl, HttpMethod.PUT, mtd_json);
         logger.info("====>向odl发送保存mtd命令完成");
 
     }
